@@ -5,7 +5,7 @@ const bodyParse = require('body-parser');
 const {readdirSync} = require('fs');
 
 const app = express();
-const port = 5000
+const port = 5000;
 
 app.use(morgan('dev'));
 app.use(cors());
