@@ -1,0 +1,363 @@
+<html>
+  <head>
+   <style>
+
+        #dropdown {
+            background-color: #00000033;
+            width: 95%;
+            font-size: 16px;
+            padding: 5px;
+        }
+        .dropdown-item {
+            display: block;
+            text-decoration: none;
+            text-align: left;
+            color: white;
+            margin-top: 2px;
+        }
+        .dropdown-item:hover {
+            background-color: rgba(0, 204, 255, 0.459);
+        }
+
+        #input {
+            width: 200px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        #toggle {
+            width: 100px;
+            font-size: 16px;
+        }
+
+        .box {
+            width: 60%;
+            border: 2px ;
+            height: 70px;
+            overflow-y: scroll;
+            scroll-behavior: smooth; /* <--- */
+        }
+
+       
+       
+       
+        /* The container   Radio Check   */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #d4d2d2;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+       
+      
+   
+   </style>
+
+
+  </head>
+    
+  <body>
+
+    <!--
+      <button id="toggle"> Search ..</button>
+      <div id="dropdown">
+          <input type="text" id="input" placeholder="Search device ...">
+      </div>
+-->
+ <br>
+
+        <button id="toggle"> Search </button>
+          <span class='box' id="boxmain">
+            <span id='dropdown'>
+                <input type="text" id="input" value=""   placeholder="Search device ...">
+            </span>
+        </span>
+    
+  
+
+<script>
+
+    
+
+const devices = ['Desktops', 'Laptops',
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches1', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Tablets', 'Mobile phones', 'Smart watches', 
+     'Gaming consoles', 'Hand-held consoles'];
+    function filterDropDown(button, dropdown, input, items) {
+        //create dropdown items from list of items
+        for (let i=0; i<items.length; i++) {
+            let dropdown_item = document.createElement('a');
+            dropdown_item.setAttribute('href', '#'+items[i]);
+            dropdown_item.setAttribute('onclick',"test(this)");
+            dropdown_item.setAttribute('class', 'dropdown-item');
+            dropdown_item.innerHTML = items[i];
+            dropdown.appendChild(dropdown_item);
+        }
+        // hide the dropdown list
+        dropdown.style.display = 'none';
+        boxmain.style.display = 'none'; 
+        //make the button toggle the display of dropdown
+        button.addEventListener('click', function () {
+            if (dropdown.style.display == 'none'){
+                dropdown.style.display = 'block'; 
+                boxmain.style.display = 'block'; 
+                
+            }else{
+                dropdown.style.display = 'none';
+                boxmain.style.display = 'none'; 
+            }
+                
+        });
+
+        input.addEventListener('input', function () {
+            let dropdown_items = dropdown.querySelectorAll('.dropdown-item');
+            if (!dropdown_items)
+                return false;
+            for (let i=0; i<dropdown_items.length; i++) {
+                if (dropdown_items[i].innerHTML.toUpperCase().includes(input.value.toUpperCase())){
+                    dropdown_items[i].style.display = 'block';
+                    //boxmain.style[i].display = 'block'; 
+                
+                }else{
+                    dropdown_items[i].style.display = 'none'; 
+                    //boxmain.style[i].display = 'none'; 
+                }    
+            }
+        });
+    }
+     function test(obj){
+        alert(obj.getAttribute('href'))
+        document.getElementById('input').value = obj.getAttribute('href');
+        //dropdown.style.display = 'none';
+        //boxmain.style.display = 'none'; 
+
+     }
+  
+    //call filterDropDown function
+    filterDropDown(
+        document.getElementById('toggle'),
+        document.getElementById('dropdown'),
+        document.getElementById('input'),
+        devices
+    )
+
+    function showdiv(){
+       
+        var div = document.getElementById('div_show');
+        // hide
+        div.style.visibility = 'hidden';
+        // OR
+            div.style.display = 'none';
+
+        // show
+        //div.style.visibility = 'visible';
+        // OR
+        //div.style.display = 'block';  
+
+    }
+
+    function changeType(elemThis){
+
+        let tyetrf = elemThis.value
+        let div_show = document.getElementById('div_show');
+
+        if(tyetrf == "cash"){
+            
+            document.getElementById("div_cash").style.display = 'inline';
+            document.getElementById("div_tranfer").style.display = 'none';
+
+            // OR
+           // div.style.display = 'none';
+
+        }else{
+        // show
+            //call function Tranfer Money
+            document.getElementById("div_cash").style.display = 'none';
+            document.getElementById("div_tranfer").style.display = 'inline';
+
+
+        }
+
+    }
+
+
+
+</script>      
+      
+       <br>
+       <br>
+        <div>
+          <button onclick="showdiv()"> showDate</button>
+        </div>
+        
+        <br>
+        <br>
+        <br>
+        
+            <span>
+            </span>
+            
+            <span>
+            </span>    
+
+            <br>
+             <table>
+                <tr>
+                    <td>
+                        <label class="container">
+                            <input type="radio" name="typecheck" value="cash" checked="true" onchange="changeType(this)"> เงินสด  
+                            <span class="checkmark"></span>
+                          </label>
+
+                    </td>
+                    <td>
+                        <label class="container">
+                            <input type="radio" name="typecheck" value="tranfer" onchange="changeType(this)"> โอนเงิน
+                            <span class="checkmark"></span>
+                          </label>    
+            
+                    </td>
+                </tr>
+
+              </table>
+      
+          
+
+            
+            <div id="div_cash" style="display:inline;"> 
+
+               <input type="text"  >
+               <div>
+                <button> OK </button>
+               </div>
+            </div>   
+
+            <div id="div_tranfer" style="display:none;"> 
+
+                <input type="text"  value=" โอนเงิน 555" >
+                <div>
+                 <button> โอนงิน... 555</button>
+                </div>
+             </div>   
+  
+
+
+  
+    </body>
+</html>

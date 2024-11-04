@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q POS|สินค้า</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/front-end/css/menu.css">
+    <!--  
+    <link rel="stylesheet" href="dist/css/search-list.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/front-end/dist/css/bootstrap-select.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/front-end/dist/js/bootstrap-select.js"></script>
+    -->
+    <script src="/front-end/js/jsalert.min.js"></script>
+
+   <Style>
+
+    @font-face {
+        font-family:'kanit';
+        src: url('fonts/kanit/Kanit-Regular.ttf');
+    }       
+    body{
+        font-family: 'kanit';
+    }
+
+    .showDate{
+        font-size: 13px;
+        color: #5abdce;
+        font-weight: bold;
+        text-align: left;
+        padding: 17px;
+    }
+    .child {
+        height: 1000px;
+        margin: 10px;
+        border: 0px solid;
+        background-color: #ececea;
+    }
+
+    .container {
+      padding: 16px;
+    }
+
+
+    /* =================== Modal Content */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      border-radius: 2% ;
+
+    }
+
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+  .close:hover,
+  .close:focus {
+    color: red; 
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
+    /* ======================Modal */
+
+  *{
+    box-sizing: border-box;
+  }
+
+    input[type=text], select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      font-size: medium;
+      
+    }
+
+    label {
+      padding: 12px 12px 12px 0;
+      display: inline-block;
+    }
+    .btn_save{
+      background-color: #04754c;
+      color: white;
+      border-radius: 20px;
+      padding: 14px 20px;
+      font-size:19px;
+      font-weight: bold;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+
+    }
+
+    .btn_save:hover {
+      background-color: #45a049;
+    }
+
+    .container {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+
+    .col-25 {
+      float: left;
+      width: 25%;
+      margin-top: 6px;
+    }
+
+    .col-75 {
+      float: left;
+      width: 75%;
+      margin-top: 6px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 600px) {
+      .col-25, .col-75, input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+      }
+    }
+
+  .myInput {
+    background-position: left ;
+    background-size: 18px;
+    font-size: 17px;
+    font-weight: bold;
+  }
+
+  .btn_search {
+    float: right;
+    padding: 10px;
+    background: #2196F3;
+    color: white;
+    font-size: 17px;
+    border: 2px solid rgb(206, 80, 42);
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+    border-radius: 50% ;
+  }
+  .btn_search:hover {
+    background: #092cc9;
+  }
+  .title{
+    font-size: 19px;
+    color: #092cc9;
+    font-weight: bold;
+  }
+  .inp_qty{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: medium;
+  }
+
+
+</Style>
+</head>
+<body>
+    <div class="child"> 
+        <div class="topnav" id="myTopnav">
+            <a href="#home" class="active">Home</a>
+            <a href="/front-end/sell.html">ขาย</a>
+            <a href="/front-end/product.html">สินค้า</a>
+            <a href="#รายงาน">รายงาน</a>
+            <a href="#User">ข้อมูลผู้ใช้</a>
+            <a href="#Exit" alt="ิกลับไปหน้า Login" ><img src="/front-end/images/exit_2.jpg" alt="ิกลับไปหน้า Login" style="width:40px;height:30px;"></a>
+            <div id="id_date" class="showDate" > 12/12/2054 | Id: 5682   </div>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+              <i class="fa fa-bars"></i>
+            </a>
+          </div>
+          <br>
+          <div style="overflow-x:auto;"> 
+            <table style="width:100%">
+              <tr>
+                <th style="width:50% ;text-align: left"> <button id="myBtn">สินค้า +</button> </th>
+                <th style=" text-align: right "> <button type="submit" class="btn_search" title="กดค้นหาสินค้า" > <i class="fa fa-search"></i></button> </th>
+                <th style=" text-align: left">  <input placeholder="ค้นหาสินค้า ..." type="text" class="myInput"></th>
+                <th style="text-align: left">   </th>
+
+              </tr>
+            </table>
+          </div>
+          <br>
+          <div style="overflow-x:auto;">
+            <table>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Points1</th>
+                <th>Points2</th>
+                <th>Points3</th>
+                <th>Points4</th>
+                <th>Points5</th>
+                <th>Points6</th>
+                <th>Points75</th>
+                
+              </tr>
+              <tr>
+                <td>Jill</td>
+                <td>Smith</td>
+                <td>50</td>
+                <td>50</td>
+                <td>50</td>
+                <td>50</td>
+                <td>50</td>
+                <td>50</td>
+                <td>50</td>
+              </tr>
+              <tr>
+                <td>Eve</td>
+                <td>Jackson</td>
+                <td>94</td>
+                <td>94</td>
+                <td>94</td>
+                <td>94</td>
+                <td>94</td>
+                <td>94</td>
+                <td>94</td>
+              </tr>
+              <tr>
+                <td>Adam</td>
+                <td>Johnson</td>
+                <td>67</td>
+                <td>67</td>
+                <td>67</td>
+                <td>67</td>
+                <td>67</td>
+                <td>67</td>
+                <td>67</td>
+              </tr>
+            </table>
+          </div>
+          
+          <!-- The Modal -->
+          <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close" title="===>ปิด">&times;</span>
+              <p class="title">เพิ่มสินค้า</p>
+              <div class="row">
+                <div class="col-25">
+                  <label for="fname">ชื่อสินค้า</label>
+                </div>
+                <div class="col-75">
+                  <input type="text" id="fname" name="firstname" placeholder="ชื่อสินค้า..">
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-25">
+                  <label for="lname">คีย์ลัดค้นหา</label>
+                </div>
+                <div class="col-75">
+                  <input type="text" id="lname" name="lastname" placeholder="คีย์ลัดค้นหา..">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-25">
+                  <label for="lname">ราคาต่อหน่วย</label>
+                </div>
+                <div class="col-75">
+                  <input type="number" id="qty" name="qty" class="inp_qty" min="1" value="0.00" >
+                </div>
+              </div>
+              
+              <!-- 
+              <div class="row">
+                <div class="col-25">
+                  <label for="country">Country</label>
+                </div>
+              
+                <div class="col-75">
+                  <select id="country" name="country">
+                    <option value="australia">Australia</option>
+                    <option value="canada">Canada</option>
+                    <option value="usa">USA</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-25">
+                  <label for="subject">Subject</label>
+                </div>
+                <div class="col-75">
+                  <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+                </div>
+              </div>
+            -->
+            <br>
+
+              <div class="row">
+                <input type="submit" class="btn_save"  value="Submit">
+              </div>
+            
+            
+            </div>
+
+          </div>
+
+    
+    </div>    
+
+    <script>
+
+      let modal = document.getElementById("myModal");
+      let btn = document.getElementById("myBtn");
+      let span = document.getElementsByClassName("close")[0];
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+      window.onclick = function(event) {
+       if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+      function myFunction() {
+          var x = document.getElementById("myTopnav");
+          if (x.className === "topnav") {
+          x.className += " responsive";
+          } else {
+          x.className = "topnav";
+          }
+      }
+    </script>
+</body>
+</html>
