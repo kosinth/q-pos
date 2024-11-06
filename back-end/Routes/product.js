@@ -4,6 +4,7 @@ const mysql = require('mysql2/promise');
 const conn = require('../config/configdb');
 
 router.get('/getuser', async(req, res) => {
+    
     try{
         const db = await conn('TestDB');
         const results = await db.query('SELECT *,DATE_FORMAT(dt_timestamp, "%d/%m/%Y") AS "dt_name" FROM Register;');
