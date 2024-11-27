@@ -35,7 +35,7 @@
         padding: 17px;
     }
     .child {
-        height: 1000px;
+        height: auto;
         margin: 10px;
         border: 0px solid;
         background-color: #ececea;
@@ -195,8 +195,10 @@
 
 </Style>
 </head>
-<body>
-    <div class="child"> 
+<body >
+    
+    <div class="child">
+  
         <div class="topnav" id="myTopnav">
             <a href="#home" class="active">Home</a>
             <a href="/front-end/sell.html">ขาย</a>
@@ -208,8 +210,9 @@
             <a href="javascript:void(0);" class="icon" onclick="myFunction()">
               <i class="fa fa-bars"></i>
             </a>
-          </div>
-          <br>
+        </div>
+        <br>
+        
           <div style="overflow-x:auto;"> 
             <table style="width:100%">
               <tr>
@@ -221,7 +224,12 @@
               </tr>
             </table>
           </div>
+          
           <br>
+        
+          <div id="product" style="overflow-x:auto;"> </div>
+        
+          <!-- This is a comment 
           <div style="overflow-x:auto;">
             <table>
               <tr>
@@ -271,7 +279,9 @@
               </tr>
             </table>
           </div>
-          
+        -->
+          <div id="errMsg" > </div>
+
           <!-- The Modal -->
           <div id="myModal" class="modal">
             <!-- Modal content -->
@@ -336,7 +346,7 @@
             
             </div>
 
-          </div>
+        </div>
 
     
     </div>    
@@ -366,5 +376,10 @@
           }
       }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- เพิ่ม script axios เข้ามา-->   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/front-end/js/product.js"></script>
+
 </body>
 </html>

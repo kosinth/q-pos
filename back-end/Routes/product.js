@@ -3,8 +3,17 @@ const router = express.Router();
 const mysql = require('mysql2/promise');
 const conn = require('../config/configdb');
 
+
+
+// app.get('/user/:shopid/:id',async(req,res) =>{
+//     const id = req.params.id
+//     const shopid = req.params.shopid
+//     console.log(shopid)
+//     //const db = await conn('TestDB');
+//     const db = await conn(shopid);
+
 // Get all procudt
-router.get('/getallproduct', async(req, res) => {
+router.get('/getall', async(req, res) => {
     
     const db = await conn('TestDB');
     if(db){
@@ -25,7 +34,7 @@ router.get('/getallproduct', async(req, res) => {
     }else{
         res.status(500).json({
             err : 'มีข้อผิดพลาด : ',
-            msg : 'Error : file name->product.js |api path :/getallproduct |Connection to Database fail ---> Error Access denied'   
+            msg : 'Error : file name->product.js | api path :/getall |Connection to Database fail ---> Error Access denied'   
         })
     }  
 
@@ -73,7 +82,7 @@ router.get('/product/:id',async(req,res)=>{
 
 })
 
-//post create -Insert
+//post Insert - create
 router.post('/product', async(req,res)=>{
 
     let product = req.body
@@ -104,7 +113,6 @@ router.post('/product', async(req,res)=>{
             msg : 'Error:file name->product.js|path api post[/product]|Connection to Database fail ---> Error Access denied'   
         })
     }    
-
 
 })
 
@@ -143,7 +151,6 @@ router.put('/product/:id',async(req,res)=>{
             msg : 'Error:file name->product.js|path api put[/product/:id]| Connection to Database fail ---> Error Access denied'   
         })
     }    
-
 
 })
 
