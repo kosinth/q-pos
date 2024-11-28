@@ -18,12 +18,12 @@ router.get('/getall', async(req, res) => {
     const db = await conn('TestDB');
     if(db){
         try{
-            const results = await db.query('SELECT *,DATE_FORMAT(dt_timestamp, "%d/%m/%Y") AS "dt_name" FROM Register;');
+            const results = await db.query('SELECT *,DATE_FORMAT(prodt_timestamp, "%d/%m/%Y") AS "dt_name" FROM tbProduct;');
             res.json(results[0]);
             db.end();
 
         }catch(error){
-            console.error('Error : file name->product.js |api path :/getallproduct' ,error.message);
+            console.error('Error : file name->product.js | api path :/getall' ,error.message);
             res.status(500).json({
                 err : 'มีข้อผิดพลาด : ',
                 msg : error.message
@@ -49,7 +49,7 @@ router.get('/product/:id',async(req,res)=>{
     if(db){
 
         try{
-            const results = await db.query('SELECT * FROM  Register WHERE ID = ?',id)
+            const results = await db.query('SELECT * FROM  tbProduct WHERE prodt_id = ?',id)
             //console.log('result : ',results[0].length)
             if (results[0].length>0){
                 res.json({ 
@@ -90,7 +90,7 @@ router.post('/product', async(req,res)=>{
     const db = await conn('TestDB');
     if(db){
         try{
-            const results = await db.query('INSERT INTO Register  SET ?',product)
+            const results = await db.query('INSERT INTO tbProduct  SET ?',product)
             //console.log('result : ',results)
             // Close the connection
              res.json({
@@ -126,7 +126,7 @@ router.put('/product/:id',async(req,res)=>{
         try{
             //let user = req.body
             const results = await db.query(
-                'UPDATE Register SET ? WHERE id = ? ',
+                'UPDATE tbProduct SET ? WHERE prodt_id = ? ',
                 [updateProduct,id]
             )
             //console.log('result : ',results)
@@ -161,7 +161,7 @@ router.delete('/product/:id',async(req,res)=>{
     const db = await conn('TestDB');
     if(db){
         try{
-            const results = await db.query('DELETE FROM Register WHERE ID = ?',id)
+            const results = await db.query('DELETE FROM tbProduct WHERE prodt_id = ?',id)
             //console.log('result : ',results[0].length)
             res.json({
                 product : 'delete Ok',

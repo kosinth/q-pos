@@ -1,4 +1,7 @@
 
+let mode = 'CREATE'
+let selectedId = ''
+
 window.onload = async ()=>{
     await loadData()
 }
@@ -14,32 +17,24 @@ const loadData = async() =>{
         const userDom = document.getElementById('product')
         let htmlData = '<div style="overflow-x:auto;">'
         htmlData += '<table >'
-        htmlData +=  '<tr>'
-        htmlData += '<th>Id</th>'
-        htmlData += '<th>ชื่อ</th>'
-        htmlData += '<th>นามสกุล</th>'
-        htmlData += '<th>เพศ</th>'
-        htmlData += '<th>อายุ</th>'
-        htmlData += '<th>โปรแกรม</th>'
-        htmlData += '<th>สิ่งที่สนใจ</th>'
-        htmlData += '<th>ที่อยู่</th>'
+        htmlData +=  '<tr>' 
+        htmlData += '<th ">รหัสสินค้า</th>'
+        htmlData += '<th>ชื่อสินค้า</th>'
+        htmlData += '<th>คีย์ลัดค้นห้า</th>'
+        htmlData += '<th>ราคา</th>'
 
         htmlData += '</tr>'
         for (let i =0;i<response.data.length;i++){
-            let user = response.data[i]
+            let product = response.data[i]
                 htmlData += ' <tr>'
                 //table row
-                htmlData += `<td>${user.Id}</td>`
-                htmlData += `<td>${user.Fname}</td>`
-                htmlData += `<td>${user.Lname}</td>`
-                htmlData += `<td>${user.Sex}</td>`
-                htmlData += `<td>${user.Age}</td>`
-                htmlData += `<td>${user.Program}</td>`
-                htmlData += `<td>${user.Interest}</td>`
-                htmlData += `<td>${user.Address}</td>`
-                //htmlData += `<td> <button class='edit' data-id='${'EDIT'} ${user.Id}'> Edit</button> </td>`
-                htmlData += `<td> <a href='register.html?id=${user.Id}'> <button >Edit </button> </a> </td>`
-                htmlData += `<td> <button class='delete' data-id='${user.Id}^${user.Fname}'> Delete</button> </td>`
+                htmlData += `<td style="text-align:center;" >${product.prodt_id }</td>`
+                htmlData += `<td style="text-align:left;">${product.prodt_name}</td>`
+                htmlData += `<td style="text-align:center;">${product.prodt_short}</td>`
+                htmlData += `<td style="text-align:center;">${product.prodt_price}</td>`
+                //htmlData += `<td> <a href='register.html?id=${product.Id}'> <button >Edit </button> </a> </td>`
+                htmlData += `<td> <button class='edit' data-id='${'EDIT'}^${product.prodt_id }^${product.prodt_name }^${product.prodt_short }^${product.prodt_price }'> Edit</button> </td>`
+                htmlData += `<td> <button class='delete' data-id='${product.prodt_id }^${product.prodt_name}'> Delete</button> </td>`
                 htmlData += ' </tr>'
 
         }
@@ -69,7 +64,6 @@ const loadData = async() =>{
                 }).then(async(result) => {
                     if (result.isConfirmed) {
                         try{
-
                             await axios.delete(`http://localhost:5000/api/product/${arrDelId[0]}`)
                             console.log('Delete success...')
                         }catch(err){
@@ -92,8 +86,31 @@ const loadData = async() =>{
         for(let j=0;j<editDom.length;j++){
             editDom[j].addEventListener('click',(event)=>{
                 editId =  event.target.dataset.id
-                const arrEdtId = editId.split(" ")
-                console.log('EDIT -->',arrEdtId[0] + "  " + arrEdtId[1])
+                const arrEdtId = editId.split("^")
+                mode = arrEdtId[0] 
+                selectedId = arrEdtId[1]
+
+                console.log('EDIT -->',mode + "  " + selectedId + "  " + arrEdtId[2]+ "  " + arrEdtId[3]+ "  " + arrEdtId[4])
+                if(mode=='CREATE'){
+                    document.getElementById('title').innerText = 'เพิ่มสินค้า'
+                }else{
+                    document.getElementById('title').innerText = 'แก้ไขสินค้า'
+
+                    let productDom = document.querySelector('input[name=productName]')
+                    let shortcutDom = document.querySelector('input[name=shortcut]')
+                    let qtyDom = document.querySelector('input[name=qty]')
+                    
+                    productDom.value = arrEdtId[2]
+                    shortcutDom.value =arrEdtId[3]
+                    qtyDom.value = arrEdtId[4]
+                    let messageresDom = document.getElementById('message')
+                    messageresDom.className = 'message clear'
+                    document.getElementById('savebtn').disabled = false;
+                    document.getElementById('savebtn').style.backgroundColor = '#04754c'
+                
+
+                 }    
+                displayMoal()
             })
         }
 
@@ -108,6 +125,105 @@ const loadData = async() =>{
 
 }
 
+const onclicksubmit = async() =>{
+    
+   
+    let productDom = document.querySelector('input[name=productName]')
+    let shortcutDom = document.querySelector('input[name=shortcut]')
+    let qtyDom = document.querySelector('input[name=qty]')
+    let messageresDom = document.getElementById('message')
 
+    let procudtData = {
+        prodt_name: productDom.value,
+        prodt_short: shortcutDom.value,
+        prodt_price: qtyDom.value
+    }
+    
+    try{
+        console.log('send Data : ',procudtData)
+        const errors = validateData(procudtData)
+        if(errors.length>0){
+             throw {
+                 message : 'กรอกข้อมูลไม่ครบ',
+                 errors : errors
+             }
+            
+        }
+        
+        let msg = 'บันทึกข้อมูลเรียบร้อย !'
+        if(mode=='CREATE'){
+            const response = await axios.post('http://localhost:5000/api/product',procudtData)
+            await loadData()
+        }else{
+            const response = await axios.put(`http://localhost:5000/api/product/${selectedId}`,procudtData)
+            await loadData()
+            msg = 'แก้ไขข้อมูลเรียบร้อย !'
+        }
+    
+        messageresDom.innerText = msg
+        messageresDom.className = 'message success'
 
+        let btnsave = document.getElementById('savebtn')
+        btnsave.disabled = 'true'
+        btnsave.style.backgroundColor = '#888'        
+        // console.log('response : ', "  ===>"+response.message )
 
+    }catch(error){
+         
+        //console.log(' ERRR ' , error.message)
+        let messageDOM = `มีปัญหาเกิดขึ้น ${error.message}`
+        if (error.errors && error.errors.length > 0) {
+            messageDOM = '<div>'
+            messageDOM += `<div>${error.message}</div>`
+            messageDOM += '<ul>'
+            for (let i = 0; i < error.errors.length; i++) {
+                messageDOM += `<li>${error.errors[i]}</li>`
+            }
+            messageDOM += '</ul>'
+            messageDOM += '</div>'
+        }
+        messageresDom.innerHTML = messageDOM
+        messageresDom.className = 'message danger'
+
+    }
+
+}
+
+const validateData =(prodtData) =>{
+ 
+    let errors=[]
+    if (!prodtData.prodt_name){
+        errors.push('กรุณากรอกชื่อสินค้า')
+    }
+    if (!prodtData.prodt_short){
+        errors.push('กรุณากรอกคีย์ลัด')
+    }
+    
+    if(!prodtData.prodt_price){
+        errors.push('กรุณากรอกราคาต่อหน่วย')
+    }else{
+        let cntqty =  parseInt(prodtData.prodt_price)
+        //console.log(cntqty)
+        if(cntqty<=0 ){
+            errors.push('กรุณากรอกราคาต่อหน่วย')
+        }
+    }
+    return errors
+
+}
+
+cleardata =()=>{
+
+    let productDom = document.querySelector('input[name=productName]')
+    let shortcutDom = document.querySelector('input[name=shortcut]')
+    let qtyDom = document.querySelector('input[name=qty]')
+    let messageresDom = document.getElementById('message')
+
+    productDom.value =''
+    shortcutDom.value =''
+    qtyDom.value = '0.00'
+    messageresDom.className = 'message clear'
+    document.getElementById('savebtn').disabled = false;
+    document.getElementById('savebtn').style.backgroundColor = '#04754c'
+
+}

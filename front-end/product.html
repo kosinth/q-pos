@@ -38,15 +38,36 @@
         height: auto;
         margin: 10px;
         border: 0px solid;
-        background-color: #ececea;
+        background-color: #f8f8f2; 
+        
     }
 
     .container {
       padding: 16px;
     }
 
+/* ========= table  */
+    table {
+        border-collapse: collapse;
+      }
+      
+      th{
+        text-align: center;
 
-    /* =================== Modal Content */
+      }
+      tr:nth-child(even) {
+        background-color: #def7f7;
+      }
+      
+      th {
+        background-color: #4f504f;
+        color: rgb(228, 86, 86);
+        font-size: 20px;
+        width: 100px;
+      }
+
+    /* =================== M
+    odal Content */
     .modal {
       display: none; /* Hidden by default */
       position: fixed; /* Stay in place */
@@ -192,14 +213,44 @@
     font-size: medium;
   }
 
+  .tb {width:100%;}
+  .th1{
+    width:50%; 
+    text-align: left;
+    background-color: #f8f8f2; 
+  }
+  .th2 {text-align:right; background-color: #f8f8f2;}
+  .th3 {text-align:left; background-color: #f8f8f2;}  
+  .th4 {text-align:left; background-color: #f8f8f2;}
+
+  .message{
+            background-color:lightslategray;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: none;
+
+        }
+        .message.success{
+            background-color: rgb(101, 165, 101);
+            display: block;
+        }
+
+        .message.danger{
+            background-color:  rgb(228, 86, 86);
+            display: block;
+        }
+        .message.clear{
+            display: none;
+        }
 
 </Style>
+
 </head>
 <body >
     
     <div class="child">
   
-        <div class="topnav" id="myTopnav">
+         <div class="topnav" id="myTopnav">
             <a href="#home" class="active">Home</a>
             <a href="/front-end/sell.html">ขาย</a>
             <a href="/front-end/product.html">สินค้า</a>
@@ -211,16 +262,17 @@
               <i class="fa fa-bars"></i>
             </a>
         </div>
-        <br>
+        
+          <br>
         
           <div style="overflow-x:auto;"> 
-            <table style="width:100%">
+            
+            <table class="tb" >
               <tr>
-                <th style="width:50% ;text-align: left"> <button id="myBtn">สินค้า +</button> </th>
-                <th style=" text-align: right "> <button type="submit" class="btn_search" title="กดค้นหาสินค้า" > <i class="fa fa-search"></i></button> </th>
-                <th style=" text-align: left">  <input placeholder="ค้นหาสินค้า ..." type="text" class="myInput"></th>
-                <th style="text-align: left">   </th>
-
+                <th class="th1"><button id="myBtn">สินค้า +</button> </th>
+                <th class="th2"><button type="submit" class="btn_search" title="กดค้นหาสินค้า" > <i class="fa fa-search"></i></button> </th>
+                <th class="th3"><input placeholder="ค้นหาสินค้า ..." type="text" class="myInput"></th>
+                <th class="th4"></th>
               </tr>
             </table>
           </div>
@@ -229,71 +281,20 @@
         
           <div id="product" style="overflow-x:auto;"> </div>
         
-          <!-- This is a comment 
-          <div style="overflow-x:auto;">
-            <table>
-              <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Points1</th>
-                <th>Points2</th>
-                <th>Points3</th>
-                <th>Points4</th>
-                <th>Points5</th>
-                <th>Points6</th>
-                <th>Points75</th>
-                
-              </tr>
-              <tr>
-                <td>Jill</td>
-                <td>Smith</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Eve</td>
-                <td>Jackson</td>
-                <td>94</td>
-                <td>94</td>
-                <td>94</td>
-                <td>94</td>
-                <td>94</td>
-                <td>94</td>
-                <td>94</td>
-              </tr>
-              <tr>
-                <td>Adam</td>
-                <td>Johnson</td>
-                <td>67</td>
-                <td>67</td>
-                <td>67</td>
-                <td>67</td>
-                <td>67</td>
-                <td>67</td>
-                <td>67</td>
-              </tr>
-            </table>
-          </div>
-        -->
           <div id="errMsg" > </div>
 
           <!-- The Modal -->
           <div id="myModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
-              <span class="close" title="===>ปิด">&times;</span>
-              <p class="title">เพิ่มสินค้า</p>
+              <span class="close" title="--> ปิด">&times;</span>
+              <p class="title" id="title">เพิ่มสินค้า</p>
               <div class="row">
                 <div class="col-25">
                   <label for="fname">ชื่อสินค้า</label>
                 </div>
                 <div class="col-75">
-                  <input type="text" id="fname" name="firstname" placeholder="ชื่อสินค้า..">
+                  <input type="text" id="productName" name="productName" placeholder="ชื่อสินค้า..">
                 </div>
               </div>
               
@@ -302,7 +303,7 @@
                   <label for="lname">คีย์ลัดค้นหา</label>
                 </div>
                 <div class="col-75">
-                  <input type="text" id="lname" name="lastname" placeholder="คีย์ลัดค้นหา..">
+                  <input type="text" id="shortcut" name="shortcut" placeholder="คีย์ลัดค้นหา..">
                 </div>
               </div>
               <div class="row">
@@ -314,70 +315,61 @@
                 </div>
               </div>
               
-              <!-- 
-              <div class="row">
-                <div class="col-25">
-                  <label for="country">Country</label>
-                </div>
-              
-                <div class="col-75">
-                  <select id="country" name="country">
-                    <option value="australia">Australia</option>
-                    <option value="canada">Canada</option>
-                    <option value="usa">USA</option>
-                  </select>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-25">
-                  <label for="subject">Subject</label>
-                </div>
-                <div class="col-75">
-                  <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-                </div>
-              </div>
-            -->
-            <br>
+              <br>
+              <div id="message" class="message "> </div>
 
               <div class="row">
-                <input type="submit" class="btn_save"  value="Submit">
+                <input type="submit" id="savebtn" class="btn_save"  value="บันทึกข้อมูล" onclick="onclicksubmit()">
               </div>
-            
             
             </div>
-
-        </div>
+          </div>
 
     
     </div>    
 
     <script>
 
-      let modal = document.getElementById("myModal");
-      let btn = document.getElementById("myBtn");
-      let span = document.getElementsByClassName("close")[0];
-      btn.onclick = function() {
-        modal.style.display = "block";
+    let btn = document.getElementById("myBtn");
+    btn.onclick = function() {
+      mode = 'CREATE'
+      selectedId = ''
+      console.log(mode)
+      if(mode=='CREATE'){
+        document.getElementById('title').innerText = 'เพิ่มสินค้า'
       }
+      cleardata()
+      displayMoal()
+    }
+      
+    function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+        x.className += " responsive";
+        } else {
+        x.className = "topnav";
+        }
+    }
+    
+    function displayMoal(){
+      let modal = document.getElementById("myModal");
+      let span = document.getElementsByClassName("close")[0];
+      modal.style.display = "block";
+      
       span.onclick = function() {
         modal.style.display = "none";
       }
       window.onclick = function(event) {
-       if (event.target == modal) {
+        if (event.target == modal) {
           modal.style.display = "none";
         }
       }
-      function myFunction() {
-          var x = document.getElementById("myTopnav");
-          if (x.className === "topnav") {
-          x.className += " responsive";
-          } else {
-          x.className = "topnav";
-          }
-      }
+
+    }
+    
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- เพิ่ม script axios เข้ามา-->   
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- เพิ่ม script axios -->   
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/front-end/js/product.js"></script>
 
