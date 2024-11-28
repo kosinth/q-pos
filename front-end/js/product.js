@@ -18,7 +18,7 @@ const loadData = async() =>{
         let htmlData = '<div style="overflow-x:auto;">'
         htmlData += '<table >'
         htmlData +=  '<tr>' 
-        htmlData += '<th ">รหัสสินค้า</th>'
+        htmlData += '<th ">รหัส</th>'
         htmlData += '<th>ชื่อสินค้า</th>'
         htmlData += '<th>คีย์ลัดค้นห้า</th>'
         htmlData += '<th>ราคา</th>'
