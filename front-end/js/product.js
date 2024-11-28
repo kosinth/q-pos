@@ -18,10 +18,10 @@ const loadData = async() =>{
         let htmlData = '<div style="overflow-x:auto;">'
         htmlData += '<table >'
         htmlData +=  '<tr>' 
-        htmlData += '<th ">รหัส</th>'
-        htmlData += '<th>ชื่อสินค้า</th>'
-        htmlData += '<th>คีย์ลัดค้นห้า</th>'
-        htmlData += '<th>ราคา</th>'
+        htmlData += '<th style="width:10%;" >รหัส</th>'
+        htmlData += '<th style="width:50%;">ชื่อสินค้า</th>'
+        htmlData += '<th style="width:25%;">คีย์ลัดค้นหา</th>'
+        htmlData += '<th style="width:40%;">ราคา</th>'
 
         htmlData += '</tr>'
         for (let i =0;i<response.data.length;i++){
@@ -31,9 +31,10 @@ const loadData = async() =>{
                 htmlData += `<td style="text-align:center;" >${product.prodt_id }</td>`
                 htmlData += `<td style="text-align:left;">${product.prodt_name}</td>`
                 htmlData += `<td style="text-align:center;">${product.prodt_short}</td>`
-                htmlData += `<td style="text-align:center;">${product.prodt_price}</td>`
+                htmlData += `<td style="text-align:right;">${product.prodt_price}</td>`
+                htmlData += `<td style="width:25%;">  </td>`
                 //htmlData += `<td> <a href='register.html?id=${product.Id}'> <button >Edit </button> </a> </td>`
-                htmlData += `<td> <button class='edit' data-id='${'EDIT'}^${product.prodt_id }^${product.prodt_name }^${product.prodt_short }^${product.prodt_price }'> Edit</button> </td>`
+                htmlData += `<td> <button class='edit' data-id='${'EDIT'}^${product.prodt_id }^${product.prodt_name }^${product.prodt_short }^${product.prodt_price }'>Edit</button> </td>`
                 htmlData += `<td> <button class='delete' data-id='${product.prodt_id }^${product.prodt_name}'> Delete</button> </td>`
                 htmlData += ' </tr>'
 
@@ -109,7 +110,7 @@ const loadData = async() =>{
                     document.getElementById('savebtn').style.backgroundColor = '#04754c'
                 
 
-                 }    
+                }    
                 displayMoal()
             })
         }
