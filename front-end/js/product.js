@@ -3,23 +3,36 @@ let mode = 'CREATE'
 let selectedId = ''
 
 window.onload = async ()=>{
-    await loadData()
+    await loadData('')
 }
 
-const loadData = async() =>{
+const loadData = async(curr) =>{    
 
     let errmsg = document.getElementById('errMsg')
-    console.log('on Load')
     try{
-        const response = await axios.get('http://localhost:5000/api/getall')
+        let response = ''
+        if(curr){
+            //console.log(' xxx ',curr)
+            // call api search name
+            response = await axios.get(`http://localhost:5000/api/product/search/${curr}`)
+            console.log(' Get data length : ',response.data.length)
+            if(response.data.length==0){
+                document.getElementById('divsearch').innerText ='ไม่พบข้อมูล..'
+            }else{
+                document.getElementById('divsearch').innerText =''
+            }
 
+        }else{
+            //call api get all product
+            response = await axios.get('http://localhost:5000/api/product/getall')
+        }    
         console.log(' Get data : ',response.data)
         const userDom = document.getElementById('product')
         let htmlData = '<div style="overflow-x:auto;">'
         htmlData += '<table >'
         htmlData +=  '<tr>' 
         htmlData += '<th style="width:10%;" >รหัส</th>'
-        htmlData += '<th style="width:50%;">ชื่อสินค้า</th>'
+        htmlData += '<th style="width:40%;">ชื่อสินค้า</th>'
         htmlData += '<th style="width:25%;">คีย์ลัดค้นหา</th>'
         htmlData += '<th style="width:40%;">ราคา</th>'
 
@@ -28,10 +41,11 @@ const loadData = async() =>{
             let product = response.data[i]
                 htmlData += ' <tr>'
                 //table row
+                let priceunit = setAmountFormatTh(product.prodt_price)
                 htmlData += `<td style="text-align:center;" >${product.prodt_id }</td>`
                 htmlData += `<td style="text-align:left;">${product.prodt_name}</td>`
                 htmlData += `<td style="text-align:center;">${product.prodt_short}</td>`
-                htmlData += `<td style="text-align:right;">${product.prodt_price}</td>`
+                htmlData += `<td style="text-align:right;">${priceunit}</td>`
                 htmlData += `<td style="width:25%;">  </td>`
                 //htmlData += `<td> <a href='register.html?id=${product.Id}'> <button >Edit </button> </a> </td>`
                 htmlData += `<td> <button class='edit' data-id='${'EDIT'}^${product.prodt_id }^${product.prodt_name }^${product.prodt_short }^${product.prodt_price }'>Edit</button> </td>`
@@ -70,7 +84,7 @@ const loadData = async() =>{
                         }catch(err){
                             console.log('Error: ',err.message)            
                         }
-                        loadData()
+                        loadData('')
                         return true;
                     }
                     else{
@@ -103,7 +117,9 @@ const loadData = async() =>{
                     
                     productDom.value = arrEdtId[2]
                     shortcutDom.value =arrEdtId[3]
-                    qtyDom.value = arrEdtId[4]
+                    qtyDom.value = setAmountFormat(arrEdtId[4])
+                    let alert = document.getElementById('infor')
+                    alert.innerText = "";
                     let messageresDom = document.getElementById('message')
                     messageresDom.className = 'message clear'
                     document.getElementById('savebtn').disabled = false;
@@ -116,6 +132,7 @@ const loadData = async() =>{
         }
 
     }catch(err){
+        console.log(err.message)
         if(err.response){
             console.log(err.response.data.message)
             errmsg.innerText = err.response.data.err + " " +err.response.data.msg
@@ -127,7 +144,6 @@ const loadData = async() =>{
 }
 
 const onclicksubmit = async() =>{
-    
    
     let productDom = document.querySelector('input[name=productName]')
     let shortcutDom = document.querySelector('input[name=shortcut]')
@@ -137,7 +153,7 @@ const onclicksubmit = async() =>{
     let procudtData = {
         prodt_name: productDom.value,
         prodt_short: shortcutDom.value,
-        prodt_price: qtyDom.value
+        prodt_price: clearAmount(qtyDom.value)
     }
     
     try{
@@ -154,10 +170,10 @@ const onclicksubmit = async() =>{
         let msg = 'บันทึกข้อมูลเรียบร้อย !'
         if(mode=='CREATE'){
             const response = await axios.post('http://localhost:5000/api/product',procudtData)
-            await loadData()
+            await loadData('')
         }else{
             const response = await axios.put(`http://localhost:5000/api/product/${selectedId}`,procudtData)
-            await loadData()
+            await loadData('')
             msg = 'แก้ไขข้อมูลเรียบร้อย !'
         }
     
@@ -226,5 +242,79 @@ cleardata =()=>{
     messageresDom.className = 'message clear'
     document.getElementById('savebtn').disabled = false;
     document.getElementById('savebtn').style.backgroundColor = '#04754c'
+    let alert = document.getElementById('infor')
+    alert.innerText = "";
 
 }
+
+ setAmountFormatTh =(amount)=>{
+
+    formattest = Intl.NumberFormat('th-TH', {
+    style: 'currency',
+    currency: 'THB',
+    }).format(amount)
+    return formattest
+
+ }
+
+ setAmount =(currElement)=>{
+
+    let alert = document.getElementById('infor')
+    alert.innerText = "";
+    let number = currElement.value;
+    number = number.replace(/,/g, '')
+    //console.log(' zzz ',number)
+    if(!isNaN(parseFloat(number)) && !isNaN(number)) {
+        let formatter = new Intl.NumberFormat('en-US');
+        let cstr = number.toString();
+        let formattedNumber = formatter.format(cstr);
+        //console.log(' aaa ',formattedNumber); 
+        let idx = formattedNumber.search(/\./);
+        console.log('Serch' +idx); 
+        if(idx==-1){
+            currElement.value = formattedNumber + ".00"
+        }else{
+            currElement.value = formattedNumber + "0"
+        }
+        document.getElementById("savebtn").disabled = false;
+        document.getElementById("savebtn").style.backgroundColor = '#04754c';
+        
+
+    }else{
+        alert.style.color = "red";
+        alert.style.fontWeight = 'blod';
+        alert.innerText = "!กรุณา กรอกข้อมูลเป็นตัวเลข..";
+        document.getElementById("savebtn").disabled = true;
+        document.getElementById("savebtn").style.backgroundColor = '#a6acaf';
+    }   
+
+ }
+
+ setAmountFormat =(amount)=>{
+
+    formattest = new Intl.NumberFormat().format(amount)
+    console.log('xxxx' +formattest); 
+    let idx = formattest.search(/\./);
+    console.log('Serch ' +idx); 
+    let returnval = ''
+    if(idx==-1){
+        returnval = formattest + ".00"
+    }else{
+        returnval = formattest + "0"
+    }
+    return returnval
+
+ }
+
+ clearAmount =(amount)=>{
+    
+    return amount.replace(/,/g, '')
+
+ }
+
+ const searchName = async()=>{
+
+    let searchN = document.getElementById('search').value
+    await loadData(searchN)
+
+ }

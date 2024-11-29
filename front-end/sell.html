@@ -807,8 +807,8 @@ function createOption( text, value, data ) {
     alert.innerText = "";
     let number = currElement.value;
     number = number.replace(/,/g, '')
-    console.log(number)
-    if(!isNaN(parseFloat(number))) {
+    //console.log(number)
+    if(!isNaN(parseFloat(number)) && !isNaN(number)) {
     let formatter = new Intl.NumberFormat('en-US');
     let cstr = number.toString();
     let formattedNumber = formatter.format(cstr);

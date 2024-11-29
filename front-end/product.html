@@ -270,9 +270,9 @@
             <table class="tb" >
               <tr>
                 <th class="th1"><button id="myBtn">สินค้า +</button> </th>
-                <th class="th2"><button type="submit" class="btn_search" title="กดค้นหาสินค้า" > <i class="fa fa-search"></i></button> </th>
-                <th class="th3"><input placeholder="ค้นหาสินค้า ..." type="text" class="myInput"></th>
-                <th class="th4"></th>
+                <th class="th2"><button type="submit" class="btn_search" title="กดค้นหาสินค้า" onclick="searchName()" > <i class="fa fa-search"></i></button> </th>
+                <th class="th3"><input id="search" placeholder="ค้นหาสินค้า ..." type="text" class="myInput" >  </th>
+                <th class="th4"> <div id="divsearch" style="font-size: 12px;"> </div> </th>
               </tr>
             </table>
           </div>
@@ -311,7 +311,11 @@
                   <label for="lname">ราคาต่อหน่วย</label>
                 </div>
                 <div class="col-75">
+                <!--
                   <input type="number" id="qty" name="qty" class="inp_qty" min="1" value="0.00" >
+                --> 
+                  <input type="text" id="qty" name="qty" class="inp_qty" onchange='setAmount(this)' value="0.00"  >  
+                  <div id="infor"></div>
                 </div>
               </div>
               

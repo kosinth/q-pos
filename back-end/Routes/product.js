@@ -3,8 +3,6 @@ const router = express.Router();
 const mysql = require('mysql2/promise');
 const conn = require('../config/configdb');
 
-
-
 // app.get('/user/:shopid/:id',async(req,res) =>{
 //     const id = req.params.id
 //     const shopid = req.params.shopid
@@ -13,9 +11,10 @@ const conn = require('../config/configdb');
 //     const db = await conn(shopid);
 
 // Get all procudt
-router.get('/getall', async(req, res) => {
+router.get('/product/getall', async(req, res) => {
     
     const db = await conn('TestDB');
+    //console.log( ' HI 555 ')
     if(db){
         try{
             const results = await db.query('SELECT *,DATE_FORMAT(prodt_timestamp, "%d/%m/%Y") AS "dt_name" FROM tbProduct;');
@@ -151,6 +150,39 @@ router.put('/product/:id',async(req,res)=>{
             msg : 'Error:file name->product.js|path api put[/product/:id]| Connection to Database fail ---> Error Access denied'   
         })
     }    
+
+})
+
+// search by Name
+router.get('/product/search/:name',async(req,res)=>{
+
+    let sname = req.params.name
+    const db = await conn('TestDB');
+    if(db){
+        try{
+
+            let replacement = `'%${sname}%'`;
+            let sqlStatement = `SELECT * from  tbProduct where prodt_name LIKE ${replacement}`;
+            const results = await db.query(sqlStatement)
+            //console.log('result : ',results[0].length)
+            res.json(results[0]);
+            db.end();
+
+        }catch(error){
+            res.status(500).json({
+                err : ' มีข้อผิดพลาด ',
+                msg : error.message
+            })
+            db.end();
+            console.error('Error:file name->product.js|path api get[/product/search/:name] =>',err.message)
+        }
+
+    }else{
+        res.status(500).json({
+            err : 'มีข้อผิดพลาด : ',
+            msg : 'Error:file name->product.js|path api get[/product/search/:name]|Connection to Database fail ---> Error Access denied'   
+        })
+    }   
 
 })
 
