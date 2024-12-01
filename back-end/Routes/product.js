@@ -174,7 +174,7 @@ router.get('/product/search/:name',async(req,res)=>{
                 msg : error.message
             })
             db.end();
-            console.error('Error:file name->product.js|path api get[/product/search/:name] =>',err.message)
+            console.error('Error:file name->product.js|path api get[/product/search/:name] =>',error.message)
         }
 
     }else{
@@ -185,6 +185,37 @@ router.get('/product/search/:name',async(req,res)=>{
     }   
 
 })
+
+router.get('/product/searchname/:name',async(req,res)=>{
+
+    let sname = req.params.name
+    const db = await conn('TestDB');
+    if(db){
+        try{
+            //console.log(sname.trim())
+            const results = await db.query('SELECT * FROM  tbProduct WHERE prodt_name = ?',sname.trim())
+            //console.log('output : ',results)
+            res.json(results[0]);
+            db.end();
+
+        }catch(error){
+            res.status(500).json({
+                err : ' มีข้อผิดพลาด ',
+                msg : error.message
+            })
+            db.end();
+            console.error('Error:file name->product.js|path api get[/product/searchname/:name] =>',error.message)
+        }
+
+    }else{
+        res.status(500).json({
+            err : 'มีข้อผิดพลาด : ',
+            msg : 'Error:file name->product.js|path api get[/product/searchname/:name]|Connection to Database fail ---> Error Access denied'   
+        })
+    }   
+
+})
+
 
 
 router.delete('/product/:id',async(req,res)=>{

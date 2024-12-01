@@ -24,7 +24,10 @@ const loadData = async(curr) =>{
 
         }else{
             //call api get all product
+            //console.log(' xxx else ',curr)
             response = await axios.get('http://localhost:5000/api/product/getall')
+            document.getElementById('divsearch').innerText =''
+
         }    
         console.log(' Get data : ',response.data)
         const userDom = document.getElementById('product')
@@ -35,8 +38,9 @@ const loadData = async(curr) =>{
         htmlData += '<th style="width:40%;">ชื่อสินค้า</th>'
         htmlData += '<th style="width:25%;">คีย์ลัดค้นหา</th>'
         htmlData += '<th style="width:40%;">ราคา</th>'
-
         htmlData += '</tr>'
+
+        document.getElementById('totalProduct').innerText = 'รวม ' + response.data.length + '  รายการ'
         for (let i =0;i<response.data.length;i++){
             let product = response.data[i]
                 htmlData += ' <tr>'
@@ -48,15 +52,13 @@ const loadData = async(curr) =>{
                 htmlData += `<td style="text-align:right;">${priceunit}</td>`
                 htmlData += `<td style="width:25%;">  </td>`
                 //htmlData += `<td> <a href='register.html?id=${product.Id}'> <button >Edit </button> </a> </td>`
-                htmlData += `<td> <button class='edit' data-id='${'EDIT'}^${product.prodt_id }^${product.prodt_name }^${product.prodt_short }^${product.prodt_price }'>Edit</button> </td>`
-                htmlData += `<td> <button class='delete' data-id='${product.prodt_id }^${product.prodt_name}'> Delete</button> </td>`
+                htmlData += `<td> <button id='button-edit' class='edit' data-id='${'EDIT'}^${product.prodt_id }^${product.prodt_name }^${product.prodt_short }^${product.prodt_price }'>แก้ไข</button> </td>`
+                htmlData += `<td> <button id='button-delete' class='delete' data-id='${product.prodt_id }^${product.prodt_name}'> ลบ</button> </td>`
                 htmlData += ' </tr>'
-
         }
         htmlData += '</table>'
         htmlData += '</div>'
         userDom.innerHTML = htmlData
-
         const deleteDom = document.getElementsByClassName('delete')
         let id=''
         for(let i =0;i<deleteDom.length;i++){
@@ -105,12 +107,14 @@ const loadData = async(curr) =>{
                 mode = arrEdtId[0] 
                 selectedId = arrEdtId[1]
 
-                console.log('EDIT -->',mode + "  " + selectedId + "  " + arrEdtId[2]+ "  " + arrEdtId[3]+ "  " + arrEdtId[4])
+                console.log(mode + "  " + selectedId + "  " + arrEdtId[2]+ "  " + arrEdtId[3]+ "  " + arrEdtId[4])
                 if(mode=='CREATE'){
                     document.getElementById('title').innerText = 'เพิ่มสินค้า'
+                    document.getElementById('divEdit').value =''
                 }else{
                     document.getElementById('title').innerText = 'แก้ไขสินค้า'
-
+                    document.getElementById('divEdit').innerText = 'รหัสสินค้า  '+ selectedId
+                    //document.getElementById('divEdit').style.font-weight = 'bold'
                     let productDom = document.querySelector('input[name=productName]')
                     let shortcutDom = document.querySelector('input[name=shortcut]')
                     let qtyDom = document.querySelector('input[name=qty]')
@@ -124,7 +128,7 @@ const loadData = async(curr) =>{
                     messageresDom.className = 'message clear'
                     document.getElementById('savebtn').disabled = false;
                     document.getElementById('savebtn').style.backgroundColor = '#04754c'
-                
+                    document.getElementById('btnAdd').style.display = 'none'
 
                 }    
                 displayMoal()
@@ -167,22 +171,47 @@ const onclicksubmit = async() =>{
             
         }
         
-        let msg = 'บันทึกข้อมูลเรียบร้อย !'
+        //let msg = 'บันทึกข้อมูลเรียบร้อย !'
+        let msg = ''
+
         if(mode=='CREATE'){
-            const response = await axios.post('http://localhost:5000/api/product',procudtData)
-            await loadData('')
+            console.log('creat ...' + productDom.value)
+            let alert = document.getElementById('infor')
+            alert.innerText = "";
+            const resp = await axios.get(`http://localhost:5000/api/product/searchname/${productDom.value}`)
+            console.log(resp.data.length)
+            if(resp.data.length>0){
+                alert.style.color = "red";
+                alert.style.fontWeight = 'blod';
+                alert.innerText = "มีสินค้านี้แล้ว !";
+                //document.getElementById("savebtn").disabled = true;
+                //document.getElementById("savebtn").style.backgroundColor = '#a6acaf';
+
+            }else{
+                msg = 'บันทึกข้อมูลเรียบร้อย !'
+                const response = await axios.post('http://localhost:5000/api/product',procudtData)
+                await loadData('')
+                messageresDom.innerText = msg
+                messageresDom.className = 'message success'
+                let btnsave = document.getElementById('savebtn')
+                btnsave.disabled = 'true'
+                btnsave.style.backgroundColor = '#888'        
+        
+            }
+
+            
         }else{
             const response = await axios.put(`http://localhost:5000/api/product/${selectedId}`,procudtData)
             await loadData('')
             msg = 'แก้ไขข้อมูลเรียบร้อย !'
-        }
+            messageresDom.innerText = msg
+            messageresDom.className = 'message success'
+            let btnsave = document.getElementById('savebtn')
+            btnsave.disabled = 'true'
+            btnsave.style.backgroundColor = '#888'        
     
-        messageresDom.innerText = msg
-        messageresDom.className = 'message success'
+        }
 
-        let btnsave = document.getElementById('savebtn')
-        btnsave.disabled = 'true'
-        btnsave.style.backgroundColor = '#888'        
         // console.log('response : ', "  ===>"+response.message )
 
     }catch(error){
@@ -316,5 +345,27 @@ cleardata =()=>{
 
     let searchN = document.getElementById('search').value
     await loadData(searchN)
+
+ }
+
+
+ cleardataProduct = ()=>{
+   //alert('ok')
+
+   let productDom = document.querySelector('input[name=productName]')
+   let shortcutDom = document.querySelector('input[name=shortcut]')
+   let qtyDom = document.querySelector('input[name=qty]')
+   document.getElementById('divEdit').innerHTML =''
+   productDom.value = ''
+   shortcutDom.value =''
+   qtyDom.value ='0.00'
+
+   let alert = document.getElementById('infor').innerHTML =''
+   document.getElementById("savebtn").disabled = false;
+   document.getElementById("savebtn").style.backgroundColor = '#04754c';
+   let messageresDom = document.getElementById('message')
+   messageresDom.className = 'message clear'
+   document.getElementById('productName').focus()
+   
 
  }

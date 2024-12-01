@@ -242,6 +242,96 @@
         .message.clear{
             display: none;
         }
+   .div-edit{
+    color: #dfc532;
+    font-weight: bold;
+   }
+
+   #button-edit{
+          background-image: linear-gradient(#42A1EC, #127dd4);
+          border: 1px solid #0077CC;
+          border-radius: 8px;
+          box-sizing: border-box;
+          color: #FFFFFF;
+          cursor: pointer;
+          direction: ltr;
+          display: block;
+          font-family:  Tahoma;
+          font-size: 16px;
+          font-weight: 40;
+          letter-spacing: -.022em;
+          line-height: 1.47059;
+          
+          overflow: visible;
+          text-align: center;
+          user-select: none;
+          -webkit-user-select: none;
+          touch-action: manipulation;
+          white-space: nowrap;
+      }
+
+        #button-edit:hover {
+            background-image: linear-gradient(#221fc5, #192abb);
+            border-color: #1482D0;
+            text-decoration: none;
+        }
+
+        #button-edit:active {
+            background-image: linear-gradient(#3D94D9, #0067B9);
+            border-color: #006DBC;
+            outline: none;
+        }
+        #button-edit:focus {
+            box-shadow: rgba(131, 192, 253, 0.5) 0 0 0 3px;
+            outline: none;
+        }
+
+        #button-delete{
+            background-image: linear-gradient(#ee8a7d, #dd6945);
+            border: 1px solid #cc6d00;
+            border-radius: 8px;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            direction: ltr;
+            display: block;
+            font-family:  Tahoma;
+            font-size: 16px;
+            font-weight: 40;
+            letter-spacing: -.022em;
+            line-height: 1.47059;
+            
+            overflow: visible;
+            text-align: center;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            white-space: nowrap;
+        }
+
+        #button-delete:hover {
+            background-image: linear-gradient(red, red);
+            border-color: #d01498;
+            text-decoration: none;
+        }
+
+        #button-delete:active {
+            background-image: linear-gradient(#ce5a77, #d15977);
+            border-color: #bc2c00;
+            outline: none;
+        }
+        #button-delete:focus {
+            box-shadow: hsla(0, 78%, 57%, 0.932) 0 0 0 3px;
+            outline: none;
+        }
+
+      .add-product{
+
+
+
+
+      }    
+
 
 </Style>
 
@@ -278,7 +368,7 @@
           </div>
           
           <br>
-        
+        <div id="totalProduct"> </div>
           <div id="product" style="overflow-x:auto;"> </div>
         
           <div id="errMsg" > </div>
@@ -288,9 +378,22 @@
             <!-- Modal content -->
             <div class="modal-content">
               <span class="close" title="--> ปิด">&times;</span>
-              <p class="title" id="title">เพิ่มสินค้า</p>
-              <div class="row">
+              <p class="title" id="title">เพิ่มสินค้า </p>  
+              
+
+              <div class="row" > 
                 <div class="col-25">
+                  <button id="btnAdd" onclick="cleardataProduct()"> เคลียร์หน้าจอ</button> 
+                </div>
+               <div class="col-75">
+                <div id="divEdit" class="div-edit"></div>
+
+              </div>
+             </div>
+             
+              
+              <div class="row" > 
+                 <div class="col-25">
                   <label for="fname">ชื่อสินค้า</label>
                 </div>
                 <div class="col-75">
@@ -311,9 +414,6 @@
                   <label for="lname">ราคาต่อหน่วย</label>
                 </div>
                 <div class="col-75">
-                <!--
-                  <input type="number" id="qty" name="qty" class="inp_qty" min="1" value="0.00" >
-                --> 
                   <input type="text" id="qty" name="qty" class="inp_qty" onchange='setAmount(this)' value="0.00"  >  
                   <div id="infor"></div>
                 </div>
@@ -341,6 +441,8 @@
       console.log(mode)
       if(mode=='CREATE'){
         document.getElementById('title').innerText = 'เพิ่มสินค้า'
+        document.getElementById('btnAdd').style.display = 'block'
+        document.getElementById('divEdit').innerHTML =''
       }
       cleardata()
       displayMoal()
