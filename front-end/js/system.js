@@ -2,9 +2,9 @@
 setAmountFormatDec =(amount)=>{
 
     formattest = new Intl.NumberFormat().format(amount)
-    console.log('xxxx' +formattest); 
+    //console.log('xxxx' +formattest); 
     let idx = formattest.search(/\./);
-    console.log('Serch ' +idx); 
+    //console.log('Serch ' +idx); 
     let returnval = ''
     if(idx==-1){
         returnval = formattest + ".00"
@@ -18,7 +18,7 @@ setAmountFormatDec =(amount)=>{
  setAmoutFormat =(amount)=>{
 
     formattest = new Intl.NumberFormat().format(amount)
-    console.log('xxxx' +formattest); 
+    //console.log('xxxx' +formattest); 
     return formattest
 
  }

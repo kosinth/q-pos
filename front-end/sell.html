@@ -549,8 +549,11 @@ span.psw {
 
 </head>
 
+<!-- 
 <body onload="formLoad()">
-  
+-->  
+<body>
+
 <div class="child">
     
         <div class="topnav" id="myTopnav">
@@ -582,14 +585,14 @@ span.psw {
   <div class="div_select_product_detail">
     <input type="button" id="btnInsert"  onclick="doTheInsert()"  value="เพิ่ม +" > 
     <span id="labelunit" class="span_infoprod"> หน่วย </span>  
-    <span id="unitPrice" class="span_inv_detail"> 1,222.00</span>  
-    <span id="qty" class="span_infoprod"> จำนวน <input type="number" class="btn_qty" min="1" value="1"></span>  
-    <span id="amount" class="span_inv_detail">1,500,123.00</span>  
+    <span id="unitPrice" class="span_inv_detail"> </span>  
+    <span id="qty" class="span_infoprod"> จำนวน <input id="qtybtn" name="qtybtn" type="number" class="btn_qty" min="1" value="1" onchange="changeQty()"></span>  
+    <span id="amount" class="span_inv_detail"></span>  
 
   </div>
     <br> 
     <div>
-      <table id="myTable" border="0">
+      <table id="myTable"  style="border:0"  >
         <thead>
             <tr>
                 <th>สินค้า</th>
@@ -693,52 +696,9 @@ span.psw {
 </div>
 
 
-
 <script>
-
-  const dataProduct = ["เบียร์ช้าง 1","บุรหรี่เขียว","เบียร์ลีโอ","Cat 3","Bat 2", 
-                       "เบียร์ช้าง 1","Marbolrow แดง","เบียร์ลีโอ","Cat 3","Bat 2",
-                       "เบียร์ลีโอ 4","Cat 1","Bat 2","เบียร์ลีโอ","บุหรี่แดง ",
-                       "เบียร์ลีโอ 4","Marbolrow เขียว","Bat 2","เบียร์ลีโอ","บุหรี่แดง "];
-
-  let select = document.getElementById("prod_Select");
-  for(let i =1;i<dataProduct.length;i++){
-    select.add( createOption( i+" "+dataProduct[i], "จำนวนต่อหน่วย "+i, { add1: "foo1", add2: "bar1" } ) );
-  }
-
- select.onchange = function(evt) {
-    let allData = ""; 
-    let option = evt.target.options[evt.target.selectedIndex];
-    allData += option.innerHTML;
-    allData += " value: " + option.value;
-    for ( d in option.dataset ) {
-    	allData += "\n    " + d + ": " + option.dataset[d];
-    }
-    //document.getElementById('Inv').textContent =option.innerHTML;
-
     
-  };
-
-function createOption( text, value, data ) {
-
-	let newOpt = document.createElement( "option" );
-      newOpt.innerHTML = text;
-      newOpt.value = value
-      for ( d in data ) {
-        newOpt.dataset[d] = data[d];
-      }
-      return newOpt;
-}
-
-
-  function formLoad() {
-      
-    // load form
-    document.getElementById('prod_Select').focus();
-
-  }
-    
-  function myFunction() {
+function myFunction() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
       x.className += " responsive";
@@ -784,6 +744,7 @@ function createOption( text, value, data ) {
       document.getElementById('btnInsert').focus();
 
     }
+    
     function loadFrmSaveData(){
 
     //alert(' ok ');
@@ -799,7 +760,6 @@ function createOption( text, value, data ) {
     document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf '; 
     
     getMoney.focus();
-
 
     }
 
@@ -835,7 +795,6 @@ function createOption( text, value, data ) {
     }
 
     function changeMoney(){
-
       
       let getsumall = document.getElementById('sumtotal');
       let price = getsumall.innerText.trim() ;
@@ -880,19 +839,25 @@ function createOption( text, value, data ) {
         document.getElementById('chkbill').disabled = false;
       }
 
+      let domtotal = document.getElementById('amount').innerText
+      //totalamt = domtotal
+      //console.log('Y  : '+totalamt)
+      let domqty = document.querySelector('input[name=qtybtn]')
+      let cntqty = parseInt(domqty.value)
 
       let v_innerHtml="";
       let newRow=document.getElementById('myTable').insertRow();
       
-      v_innerHtml = `<td class='td_1'>  สินค้า </td>`;
-      v_innerHtml += `<td class='td_2'> <input type='number' id ='qty' class='decimal' min='0' max='999' value='1' onchange='changeQty(this)'> </td>`;
-      v_innerHtml += `<td class='td_3'>  </td>`;
+      v_innerHtml = `<td class='td_1'>  ${productName} </td>`;
+      v_innerHtml += `<td class='td_2'> <input type='number' id ='qty' name='qty' class='decimal' min='0' max='999' value=${cntqty} onchange='changeQty(this)'> </td>`;
+      v_innerHtml += `<td class='td_3'>  ${domtotal}</td>`;
       v_innerHtml += `<td class='td_4' > </td>`;
       v_innerHtml += `<td>  <button id='b_edit' class='button-edit' onclick='editRow(this)'> แก้ไข </button> </td>`;
       v_innerHtml += `<td>  <button id='b_delete' class='button-delete' onclick='delRow(this)'> ลบ </button> </td>`;
 
       newRow.innerHTML=v_innerHtml
-      executeCalc(); 
+      //executeCalc(); 
+      calcAmount()
 
     }
 
@@ -913,16 +878,16 @@ function createOption( text, value, data ) {
       //  document.getElementById("myTable").deleteRow(parentRowIndex);
       // }
       document.getElementById("myTable").deleteRow(parentRowIndex);
-      executeCalc();   
+         //executeCalc();   
 
       }
       function changeQty(currElement){
-        executeCalc(); 
+        //executeCalc(); 
 
       }
 
       function editRow(currElement) {
-          executeCalc();   
+          //executeCalc();   
       }
 
     function changeDiscount(currElement){
@@ -964,7 +929,15 @@ function createOption( text, value, data ) {
       let sum_amt =0;
       let contprice=0;
       let amt_discnt = 0;
-      let costPrice = 550;
+      
+      //let costPrice = 5050;
+      let domqty = document.querySelector('input[name=qtybtn]')
+      let domtotal = document.getElementById('amount').innerText
+      //console.log( ' xx ko hi ' + domtotal) 
+      let cntqty = parseInt(domqty.value)
+      let costPrice = domtotal.replace(/[฿,]/g,"")
+      console.log( ' zz ko hi ' + costPrice) 
+
       let sumamtall = document.getElementById('sum_amt_all')
       let sumamt = document.getElementById('sum_amt_obj')
       let bDiscnt = document.getElementById('b_discnt')
@@ -983,6 +956,7 @@ function createOption( text, value, data ) {
               table.rows[i].cells[2].innerText = priceFormat(totalprice);
               let price = (table.rows[i].cells[2].textContent);
               price = price.trim();
+              console.log(' PRice :  ' +price);
               price = price.substring(1,price.length)
               contprice = parseFloat(price.replace(/,/g, ''));
               sum_amt =sum_amt + contprice;
@@ -1036,11 +1010,42 @@ function createOption( text, value, data ) {
   //let val = Math.floor(1000 + Math.random() * 9000);
   //console.log(val);
 
+  /*
+  select.onchange = function(evt) {
+        let allData = ""; 
+        let option = evt.target.options[evt.target.selectedIndex];
+        allData += option.innerHTML;
+        allData += " value: " + option.value;
+        for ( d in option.dataset ) {
+          allData += "\n    " + d + ": " + option.dataset[d];
+          console.log(allData)
+        }
+        //document.getElementById('Inv').textContent =option.innerHTML;
+
+        
+    };
+  */  
+
+
+function createOption( text, value) {
+  console.log('A ',text)
+  console.log('B ',value)
+
+  let newOpt = document.createElement('option');
+      newOpt.innerHTML = text;
+      newOpt.value = value
+  return newOpt;
+}
+
+
+
 </Script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- เพิ่ม script axios -->   
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/front-end/js/sell.js"></script>
+<script src="/front-end/js/system.js"></script>
+<script src="/front-end/js/sell.js"></script> 
 
 </body>
 </html>
