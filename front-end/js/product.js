@@ -39,8 +39,8 @@ const loadData = async(curr) =>{
         htmlData += '<th style="width:25%;">คีย์ลัดค้นหา</th>'
         htmlData += '<th style="width:40%;">ราคา</th>'
         htmlData += '</tr>'
-
-        document.getElementById('totalProduct').innerText = 'รวม ' + response.data.length + '  รายการ'
+        document.getElementById('totalProduct').style.color = '#092cc9'
+        document.getElementById('totalProduct').innerText = 'รวม ' + setAmoutFormat(response.data.length) + '  รายการ'
         for (let i =0;i<response.data.length;i++){
             let product = response.data[i]
                 htmlData += ' <tr>'
@@ -121,7 +121,7 @@ const loadData = async(curr) =>{
                     
                     productDom.value = arrEdtId[2]
                     shortcutDom.value =arrEdtId[3]
-                    qtyDom.value = setAmountFormat(arrEdtId[4])
+                    qtyDom.value = setAmountFormatDec(arrEdtId[4])
                     let alert = document.getElementById('infor')
                     alert.innerText = "";
                     let messageresDom = document.getElementById('message')
@@ -276,16 +276,6 @@ cleardata =()=>{
 
 }
 
- setAmountFormatTh =(amount)=>{
-
-    formattest = Intl.NumberFormat('th-TH', {
-    style: 'currency',
-    currency: 'THB',
-    }).format(amount)
-    return formattest
-
- }
-
  setAmount =(currElement)=>{
 
     let alert = document.getElementById('infor')
@@ -307,7 +297,6 @@ cleardata =()=>{
         }
         document.getElementById("savebtn").disabled = false;
         document.getElementById("savebtn").style.backgroundColor = '#04754c';
-        
 
     }else{
         alert.style.color = "red";
@@ -319,28 +308,6 @@ cleardata =()=>{
 
  }
 
- setAmountFormat =(amount)=>{
-
-    formattest = new Intl.NumberFormat().format(amount)
-    console.log('xxxx' +formattest); 
-    let idx = formattest.search(/\./);
-    console.log('Serch ' +idx); 
-    let returnval = ''
-    if(idx==-1){
-        returnval = formattest + ".00"
-    }else{
-        returnval = formattest + "0"
-    }
-    return returnval
-
- }
-
- clearAmount =(amount)=>{
-    
-    return amount.replace(/,/g, '')
-
- }
-
  const searchName = async()=>{
 
     let searchN = document.getElementById('search').value
@@ -348,10 +315,8 @@ cleardata =()=>{
 
  }
 
-
  cleardataProduct = ()=>{
-   //alert('ok')
-
+   
    let productDom = document.querySelector('input[name=productName]')
    let shortcutDom = document.querySelector('input[name=shortcut]')
    let qtyDom = document.querySelector('input[name=qty]')
@@ -366,6 +331,5 @@ cleardata =()=>{
    let messageresDom = document.getElementById('message')
    messageresDom.className = 'message clear'
    document.getElementById('productName').focus()
-   
 
  }
