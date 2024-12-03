@@ -15,10 +15,12 @@
         domunitprice.innerText = setAmountFormatTh(option.value)
         //let getqty = document.getElementById('qty').value
         let domqty = document.querySelector('input[name=qtybtn]')
+        domqty.value = '1'
         let cntqty = parseInt(domqty.value)
         unitprice =  parseFloat(unitprice)
         let total =  unitprice * cntqty
         domtotal.innerText = setAmountFormatTh(total)
+        document.getElementById('btnInsert').focus()
         //console.log(cntqty + " "+ unitprice  + " "+ total)
 
     };
@@ -66,8 +68,10 @@ changeQty = ()=>{
     let amount = document.getElementById('amount');
 
     let cnvqty = parseInt(domqty.value)
-    //console.log(' 555 '+cnvqty)
-    let cnvunitPrice =  parseFloat(unitprice.innerText.replace(/[฿,]/g,""))
+    //console.log(' 555 '+cnvqty)  clearAmountSymbol
+    let cnvunitPrice =  parseFloat(clearAmountSymbol(unitprice.innerText))
+    //let cnvunitPrice =  parseFloat(unitprice.innerText.replace(/[฿,]/g,""))
+
     //let costPrice = cnvunitPrice.replace(/[฿,]/g,"")
     let result = cnvunitPrice* cnvqty
     //console.log(' 555 '+result)
@@ -94,8 +98,13 @@ calcAmount = ()=>{
             //table.rows[i].cells[2].innerText = priceFormat(totalprice);
             let price = (table.rows[i].cells[2].textContent);
             price = price.trim();
-            console.log(' PRice :  ' +price);
-            totalprice += parseFloat(price.replace(/[฿,]/g,"") )
+            console.log(' ราคา :  ' +price);  
+            //totalprice += parseFloat(price.replace(/[฿,]/g,"") )
+            totalprice += parseFloat(clearAmountSymbol(price))
+
+            let unitprice = (table.rows[i].cells[3].textContent);
+            console.log(' ราคาต่้อหน่วย  :  ' +unitprice); 
+
             //price = price.substring(1,price.length)
             //contprice = parseFloat(price.replace(/,/g, ''));
             //sum_amt =sum_amt + contprice;

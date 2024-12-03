@@ -28,6 +28,13 @@ setAmountFormatDec =(amount)=>{
     return amount.replace(/,/g, '')
 
  }
+ 
+ clearAmountSymbol =(amount)=>{
+    
+   return amount.replace(/[฿,]/g,"")
+
+}
+
 
  setAmountFormatTh =(amount)=>{
 
