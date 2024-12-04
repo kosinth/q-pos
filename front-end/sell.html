@@ -562,10 +562,13 @@ span.psw {
 
 
  .title{
-    font-size: 19px;
+    font-size: 17px;
     color: #092cc9;
     font-weight: bold;
   }
+
+
+
 
 /* Create a custom radio button */
 
@@ -576,7 +579,7 @@ span.psw {
   padding-left: 35px;
   margin-bottom: 12px;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bold;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -747,21 +750,24 @@ span.psw {
             <div class="imgcontainer">
                 <span  onclick="document.getElementById('id01').style.display='none' ;closeClearForm() " class="close" title="->ปิด">&times;</span>
             </div>
-
-                <p class="title" id="title">ชำระเงิน  
+ 
+   
+          
+                <p class="title" id="title">ชำระเงิน  &nbsp;&nbsp; <span id="sumtotal"  style="color:#04754c;font-size: 25px;font-weight: bold;">  </span>
 
                 <table>
                   <tr>
                       <td>
                           <label class="container_rdio">
-                              <input type="radio" name="typecheck" value="cash" checked="true" onchange="changeType(this)"> เงินสด  
+                              <input type="radio" name="typecheck" value="cash" checked="true" onchange="changeType(this)"> เงินสด  &nbsp;
                               <span class="checkmark"></span>
                           </label>
   
                       </td>
+                       
                       <td>
                           <label class="container_rdio">
-                              <input type="radio" name="typecheck" value="tranfer" onchange="changeType(this)"> โอนเงิน
+                              <input type="radio" name="typecheck" value="tranfer" onchange="changeType(this)"> สแกน QR Code 
                               <span class="checkmark"></span>
                           </label>    
               
@@ -773,7 +779,7 @@ span.psw {
 
                 </p>
 
-              
+            <!--  
             <div class="row" > 
                   <div class="col-25">
                     <p class="title" id="title"><b >ยอดรวมทั้งหมด</b> </p> 
@@ -782,11 +788,11 @@ span.psw {
                     <div class="title" id="sumtotal">  </div> 
                   </div>
             </div>
-
+            -->
 
             <div class="row" > 
               <div class="col-25">
-                <p class="title" id="title"><b >รับเงิน</b> </p> 
+                <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >รับเงิน</b> </p> 
               </div>
               <div class="col-75">
                 <input type="text" id="getMoney" class="txtGetMoney" onchange='formatNumber(this)' value="0.00"  > 
@@ -797,12 +803,13 @@ span.psw {
 
             <div class="row" > 
               <div class="col-25">
-                <p class="title" id="title"><b >ทอนเงิน</b> </p> 
+                <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >ทอนเงิน</b> </p> 
               </div>
                 <div class="col-75">
-                <div class="title" id="change"> </div> 
+                <div id="change" style="width: 150px; font-weight: bold;"> </div> 
               </div>
             </div>
+
        
             <div class="row" > 
     
@@ -887,7 +894,7 @@ function myFunction() {
     let sum_all =document.getElementById('sum_amt_all').innerText;
     let getsumall = document.getElementById('sumtotal');
     getsumall.innerText = sum_all;
-    sumtotal.style.color ="blue"
+    //sumtotal.style.color ="blue"
     let getMoney = document.getElementById('getMoney');
     let getchageMoney = document.getElementById('change');
     getchageMoney.innerHTML = "";
@@ -945,7 +952,7 @@ function myFunction() {
         document.getElementById("btnSubmit").disabled = false;
         let moneychange = cntgetMoney - contprice
         chageMoney.style.color = "red";
-        //chageMoney.style.textAlign = 'right';
+        chageMoney.style.textAlign = 'right';
         chageMoney.style.fontSize = '22px';
         chageMoney.style.fontWeight = 'blod';
         chageMoney.innerText =  priceFormat(moneychange);
@@ -955,7 +962,7 @@ function myFunction() {
         let alert = document.getElementById('infor')
         alert.style.color = "red";
         alert.style.fontWeight = 'blod';
-        alert.innerText =" !รับเงินจำนวนน้อยกว่ายอดรวมทั้งหมด"
+        alert.innerText =" !รับเงินจำนวนน้อยกว่ายอดชำระ"
         chageMoney.innerText = ""
 
       }
