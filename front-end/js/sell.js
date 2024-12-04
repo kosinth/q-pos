@@ -98,7 +98,7 @@ calcAmount = ()=>{
     //let totalprice = 0;
     for (var i = 1; i < table.rows.length; i++) {
         buff=''
-        if (table.rows[i].cells.length) {
+        if(table.rows[i].cells.length) {
             let brand = (table.rows[i].cells[0].textContent);
             console.log( ' สินค้า :' +brand)
             let qty = (table.rows[i].cells[1].children[0].value);

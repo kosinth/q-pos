@@ -899,11 +899,9 @@ function myFunction() {
       // }
       document.getElementById("myTable").deleteRow(parentRowIndex);
         calcAmount()
-
       }
       function changeQty(currElement){
         calcAmount()
-
       }
 
       function editRow(currElement) {
@@ -942,69 +940,69 @@ function myFunction() {
 
     }
 
-    function executeCalc() {
+    // function executeCalc() {
 
-      //let buff='';
-      let sum_all=0;
-      let sum_amt =0;
-      let contprice=0;
-      let amt_discnt = 0;
+    //   //let buff='';
+    //   let sum_all=0;
+    //   let sum_amt =0;
+    //   let contprice=0;
+    //   let amt_discnt = 0;
       
-      //let costPrice = 5050;
-      let domqty = document.querySelector('input[name=qtybtn]')
-      let domtotal = document.getElementById('amount').innerText
-      //console.log( ' xx ko hi ' + domtotal) 
-      let cntqty = parseInt(domqty.value)
-      let costPrice = domtotal.replace(/[฿,]/g,"")
-      console.log( ' zz ko hi ' + costPrice) 
+    //   //let costPrice = 5050;
+    //   let domqty = document.querySelector('input[name=qtybtn]')
+    //   let domtotal = document.getElementById('amount').innerText
+    //   //console.log( ' xx ko hi ' + domtotal) 
+    //   let cntqty = parseInt(domqty.value)
+    //   let costPrice = domtotal.replace(/[฿,]/g,"")
+    //   console.log( ' zz ko hi ' + costPrice) 
 
-      let sumamtall = document.getElementById('sum_amt_all')
-      let sumamt = document.getElementById('sum_amt_obj')
-      let bDiscnt = document.getElementById('b_discnt')
-      let disCount = document.getElementById('discount')
-      let sumitem = document.getElementById('item')  
-      var outputDiv = document.querySelector('#output') 
-      var table = document.getElementById('myTable');
-      let item =0;
-      for (var i = 1; i < table.rows.length; i++) {
-          buff=''
-          if (table.rows[i].cells.length) {
-              let brand = (table.rows[i].cells[0].textContent);
-              let qty = (table.rows[i].cells[1].children[0].value);
-              let cntqty = parseInt(qty)
-              let totalprice = costPrice*cntqty ;
-              table.rows[i].cells[2].innerText = priceFormat(totalprice);
-              let price = (table.rows[i].cells[2].textContent);
-              price = price.trim();
-              console.log(' PRice :  ' +price);
-              price = price.substring(1,price.length)
-              contprice = parseFloat(price.replace(/,/g, ''));
-              sum_amt =sum_amt + contprice;
-              item++;
-              //alert(sum_amt)
-              //console.log(sum_amt);
-              //outputDiv.innerHTML =buff;
-          } 
+    //   let sumamtall = document.getElementById('sum_amt_all')
+    //   let sumamt = document.getElementById('sum_amt_obj')
+    //   let bDiscnt = document.getElementById('b_discnt')
+    //   let disCount = document.getElementById('discount')
+    //   let sumitem = document.getElementById('item')  
+    //   var outputDiv = document.querySelector('#output') 
+    //   var table = document.getElementById('myTable');
+    //   let item =0;
+    //   for (var i = 1; i < table.rows.length; i++) {
+    //       buff=''
+    //       if (table.rows[i].cells.length) {
+    //           let brand = (table.rows[i].cells[0].textContent);
+    //           let qty = (table.rows[i].cells[1].children[0].value);
+    //           let cntqty = parseInt(qty)
+    //           let totalprice = costPrice*cntqty ;
+    //           table.rows[i].cells[2].innerText = priceFormat(totalprice);
+    //           let price = (table.rows[i].cells[2].textContent);
+    //           price = price.trim();
+    //           console.log(' PRice :  ' +price);
+    //           price = price.substring(1,price.length)
+    //           contprice = parseFloat(price.replace(/,/g, ''));
+    //           sum_amt =sum_amt + contprice;
+    //           item++;
+    //           //alert(sum_amt)
+    //           //console.log(sum_amt);
+    //           //outputDiv.innerHTML =buff;
+    //       } 
       
-      }
+    //   }
       
-      sumitem.innerText =  item + "  รายการ "
-      let getDist =bDiscnt.value;
-      amt_discnt = sum_amt*getDist/100;
-      sumAll = sum_amt-amt_discnt;
-      // ปัดเศษทศนิยม
-      sumAll = Math.ceil(sumAll);
-      disCount.innerText =  priceFormat(amt_discnt);
-      sum_amt = priceFormat(sum_amt);
-      sumAll = priceFormat(sumAll);
-      sumamt.innerText = sum_amt;
-      sumamtall.innerText = sumAll;
+    //   sumitem.innerText =  item + "  รายการ "
+    //   let getDist =bDiscnt.value;
+    //   amt_discnt = sum_amt*getDist/100;
+    //   sumAll = sum_amt-amt_discnt;
+    //   // ปัดเศษทศนิยม
+    //   sumAll = Math.ceil(sumAll);
+    //   disCount.innerText =  priceFormat(amt_discnt);
+    //   sum_amt = priceFormat(sum_amt);
+    //   sumAll = priceFormat(sumAll);
+    //   sumamt.innerText = sum_amt;
+    //   sumamtall.innerText = sumAll;
 
-      let sumcheckbill = document.getElementById('sumtotal');
-      sumcheckbill.innerText = sumAll;
-      document.getElementById('btnInsert').focus();
+    //   let sumcheckbill = document.getElementById('sumtotal');
+    //   sumcheckbill.innerText = sumAll;
+    //   document.getElementById('btnInsert').focus();
 
-    }
+    // }
 
     $(function() {
       $("select").select2();
