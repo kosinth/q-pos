@@ -82,10 +82,20 @@ changeQty = ()=>{
 
 calcAmount = ()=>{
 
+    //let sum_all=0;
+    let sum_amt =0;
+    let contprice=0;
+    let amt_discnt = 0;
+
+    let sumamtall = document.getElementById('sum_amt_all')
+    let sumamt = document.getElementById('sum_amt_obj')
+    let bDiscnt = document.getElementById('b_discnt')
+    let disCount = document.getElementById('discount')
+    //var outputDiv = document.querySelector('#output') 
 
     var table = document.getElementById('myTable');
     let item =0;
-    let totalprice = 0;
+    //let totalprice = 0;
     for (var i = 1; i < table.rows.length; i++) {
         buff=''
         if (table.rows[i].cells.length) {
@@ -94,36 +104,37 @@ calcAmount = ()=>{
             let qty = (table.rows[i].cells[1].children[0].value);
             let cntqty = parseInt(qty)
             console.log( ' จำนวน :' +cntqty)
-            //let totalprice = costPrice*cntqty ;
-            //table.rows[i].cells[2].innerText = priceFormat(totalprice);
-            let price = (table.rows[i].cells[2].textContent);
-            price = price.trim();
-            console.log(' ราคา :  ' +price);  
-            //totalprice += parseFloat(price.replace(/[฿,]/g,"") )
-            totalprice += parseFloat(clearAmountSymbol(price))
 
             let unitprice = (table.rows[i].cells[3].textContent);
             console.log(' ราคาต่้อหน่วย  :  ' +unitprice); 
-
-            //price = price.substring(1,price.length)
-            //contprice = parseFloat(price.replace(/,/g, ''));
-            //sum_amt =sum_amt + contprice;
+            unitprice = parseFloat(unitprice)
+            let totalprice = unitprice*cntqty ;
+            table.rows[i].cells[2].innerText = setAmountFormatTh(totalprice);
+            
+            let price = (table.rows[i].cells[2].textContent);
+            console.log(' ราคา :  ' +price);  
+            price = price.trim();
+            contprice = parseFloat(clearAmountSymbol(price));
+            sum_amt =sum_amt + contprice;
             item++;
-            //alert(sum_amt)
-            //console.log(sum_amt);
-            //outputDiv.innerHTML =buff;
         } 
     }
     let sumitem = document.getElementById('item') 
-    sumitem.innerText =  item + "  รายการ " 
-    let sumamtall = document.getElementById('sum_amt_all')
-    let sumamt = document.getElementById('sum_amt_obj')
-    sumamt.innerText = setAmountFormatTh(totalprice);
-    sumamtall.innerText = setAmountFormatTh(totalprice);
+    sumitem.innerText =  item + "  รายการ "
+    let getDist =bDiscnt.value;
+    amt_discnt = sum_amt*getDist/100;
+    sumAll = sum_amt-amt_discnt;
+    // ปัดเศษทศนิยม
+    sumAll = Math.ceil(sumAll);
+    disCount.innerText =  priceFormat(amt_discnt);
+    sum_amt = priceFormat(sum_amt);
+    sumAll = priceFormat(sumAll);
+    sumamt.innerText = sum_amt;
+    sumamtall.innerText = sumAll;
 
-
-     console.log('total Price ; ' +totalprice);
-
+    let sumcheckbill = document.getElementById('sumtotal');
+    sumcheckbill.innerText = sumAll;
+    document.getElementById('btnInsert').focus();
 
 
 }
