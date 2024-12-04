@@ -356,45 +356,48 @@ span.psw {
   padding-top: 16px;
 }
 
-/* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */ 
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  padding-top: 60px;
-}
 
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
-  border-radius: 1% ;
-}
+    /* =================== M
+    odal Content */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 10px; /* Location of the box */
+      left: 0px;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin : auto;
+      padding: 40px;
+      border: 1px solid #888;
+      width: 80%;
+      border-radius: 2% ;
 
-/* The Close Button (x) */
-.close {
-  position: absolute;
-  right: 25px;
-  top: 0;
-  color: #000;
-  font-size: 35px;
-  font-weight: bold;
-}
+    }
 
-.close:hover,
-.close:focus {
-  color: red;
-  cursor: pointer;
-}
+    /* The Close Button      */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+  .close:hover,
+  .close:focus {
+    color: red; 
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
 
 /* Add Zoom Animation */
 .animate {
@@ -557,6 +560,81 @@ span.psw {
   color: #04754c;
  }
 
+
+ .title{
+    font-size: 19px;
+    color: #092cc9;
+    font-weight: bold;
+  }
+
+/* Create a custom radio button */
+
+        /* The container   Radio Check   */
+ .container_rdio {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container_rdio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #d4d2d2;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container_rdio:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container_rdio input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container_rdio input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container_rdio .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+   
+
 </style>
 
 </head>
@@ -654,52 +732,98 @@ span.psw {
       </table>
 
 
+           <!-- T
   <div id="id01" class="modal"  >
     <div class="modal-content animate" >
       <div class="imgcontainer">
         <span  onclick="document.getElementById('id01').style.display='none' ;closeClearForm() " class="close" title="===>ปิด">&times;</span>
       </div>
-
-      <div class="container">
+    -->
       
-        <table id="save_data" >
-          <tbody>
-            <tr> 
-                <td class="ftd_1"> <b>ยอดรวมทั้งหมด</b></td>
-                <td class="ftd_sumall"> <div id="sumtotal"></div> </td>
-              <td> </td>
-            </tr>
-              <tr> 
-                <td class="ftd_1"> <b>รับเงิน</b></td>
-                <td class="ftd_2"> <input type="text" id="getMoney" class="txtGetMoney" onchange='formatNumber(this)' value="0.00"  >  </td>
-                <td> </td>
-              </tr>
-              <tr> 
-                <td class="ftd_1">  <b>ทอนเงิน</b> </td>
-                <td class="ftd_2">  <div id="change"></div>  </td>
-                <td> </td>
-              </tr>
-
-          </tbody>
-        </table>
-
-          <br> 
-            <div id="infor"></div>
-          <br>
-
-          <div class="row">
-            <div class="col-75">
-              <button type="submit" id="btnSubmit" class="button_ok" onclick="testClick()"> บันทึกข้อมูล</button>
+           <!-- The Modal -->
+  <div id="id01" class="modal">
+            <!-- Modal content -->
+      <div class="modal-content">
+            <div class="imgcontainer">
+                <span  onclick="document.getElementById('id01').style.display='none' ;closeClearForm() " class="close" title="->ปิด">&times;</span>
             </div>
-        
-          </div>
-          <!-- 
-          <div class="container" style="background-color:#f1f1f1">
-            <button type="button"  onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-          </div>
-          -->
+
+                <p class="title" id="title">ชำระเงิน  
+
+                <table>
+                  <tr>
+                      <td>
+                          <label class="container_rdio">
+                              <input type="radio" name="typecheck" value="cash" checked="true" onchange="changeType(this)"> เงินสด  
+                              <span class="checkmark"></span>
+                          </label>
+  
+                      </td>
+                      <td>
+                          <label class="container_rdio">
+                              <input type="radio" name="typecheck" value="tranfer" onchange="changeType(this)"> โอนเงิน
+                              <span class="checkmark"></span>
+                          </label>    
+              
+                      </td>
+                  </tr>
+  
+                </table>
+
+
+                </p>
+
+              
+            <div class="row" > 
+                  <div class="col-25">
+                    <p class="title" id="title"><b >ยอดรวมทั้งหมด</b> </p> 
+                  </div>
+                  <div class="col-75">
+                    <div class="title" id="sumtotal">  </div> 
+                  </div>
+            </div>
+
+
+            <div class="row" > 
+              <div class="col-25">
+                <p class="title" id="title"><b >รับเงิน</b> </p> 
+              </div>
+              <div class="col-75">
+                <input type="text" id="getMoney" class="txtGetMoney" onchange='formatNumber(this)' value="0.00"  > 
+              </div>
+            </div>
+
+
+
+            <div class="row" > 
+              <div class="col-25">
+                <p class="title" id="title"><b >ทอนเงิน</b> </p> 
+              </div>
+                <div class="col-75">
+                <div class="title" id="change"> </div> 
+              </div>
+            </div>
+       
+            <div class="row" > 
     
-      </div>    
+              <div class="col-75">
+                <div id="infor"></div>
+              </div>
+
+            </div>
+
+              <br>
+              
+              <div class="row">
+                  <button type="submit" id="btnSubmit" class="button_ok" onclick="testClick()"> บันทึกข้อมูล</button>
+              </div>
+
+              <!-- 
+              <div class="container" style="background-color:#f1f1f1">
+                <button type="button"  onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+              </div>
+              -->
+ 
   
     </div>
   
@@ -821,7 +945,7 @@ function myFunction() {
         document.getElementById("btnSubmit").disabled = false;
         let moneychange = cntgetMoney - contprice
         chageMoney.style.color = "red";
-        chageMoney.style.textAlign = 'right';
+        //chageMoney.style.textAlign = 'right';
         chageMoney.style.fontSize = '22px';
         chageMoney.style.fontWeight = 'blod';
         chageMoney.innerText =  priceFormat(moneychange);
@@ -866,7 +990,7 @@ function myFunction() {
         let newRow=document.getElementById('myTable').insertRow();
         
         v_innerHtml = `<td class='td_1'>  ${productName} </td>`;
-        v_innerHtml += `<td class='td_2'> <input type='number' id ='qty' name='qty' class='decimal' min='0' max='999' value=${cntqty} onchange='changeQty(this)'> </td>`;
+        v_innerHtml += `<td class='td_2'> <input type='number' id ='qty' name='qty' class='decimal' min='1' max='999' value=${cntqty} onchange='changeQty(this)'> </td>`;
         v_innerHtml += `<td class='td_3'>  ${domtotal}</td>`;
         v_innerHtml += `<td class='td_4' style='display:none;'> ${domunitprice} </td>`;
         v_innerHtml += `<td class='td_4' > </td>`;
@@ -1027,34 +1151,6 @@ function myFunction() {
   // random 4 digit
   //let val = Math.floor(1000 + Math.random() * 9000);
   //console.log(val);
-
-  /*
-  select.onchange = function(evt) {
-        let allData = ""; 
-        let option = evt.target.options[evt.target.selectedIndex];
-        allData += option.innerHTML;
-        allData += " value: " + option.value;
-        for ( d in option.dataset ) {
-          allData += "\n    " + d + ": " + option.dataset[d];
-          console.log(allData)
-        }
-        //document.getElementById('Inv').textContent =option.innerHTML;
-
-        
-    };
-  */  
-
-
-// function createOption( text, value) {
-//   console.log('A ',text)
-//   console.log('B ',value)
-
-//   let newOpt = document.createElement('option');
-//       newOpt.innerHTML = text;
-//       newOpt.value = value
-//   return newOpt;
-// }
-
 
 
 </Script>
