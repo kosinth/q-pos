@@ -752,14 +752,14 @@ span.psw {
                   <tr>
                       <td>
                           <label class="container_rdio">
-                              <input type="radio" name="typecheck" value="cash" checked="true" onchange="changeType(this)"> เงินสด  &nbsp;
+                              <input type="radio" id="typecheck1"  name="typecheck" value="cash"  onchange="changeType(this)" checked> เงินสด  &nbsp;
                               <span class="checkmark"></span>
                           </label>
   
                       </td>
                       <td>
                           <label class="container_rdio">
-                              <input type="radio" name="typecheck" value="tranfer" onchange="changeType(this)"> สแกน QR  
+                              <input type="radio" id="typecheck2" name="typecheck" value="tranfer" onchange="changeType(this)"> สแกน QR  
                               <span class="checkmark"></span>
                           </label>    
                       </td>
@@ -830,14 +830,14 @@ span.psw {
 
 
               </div>   
+
+              <!--object-fit: contain;-->
  
-              <div id="div_tranfer" > 
+              <div id="div_tranfer" class="row" > 
+                <img id="showimg" src="" style="width: 300px; ">  
 
-
-                 <img id="showimg" src="" style="width: 300px; object-fit: contain;">  
-             </div>   
+              </div>   
  
-
               <br>
              
               <div class="row">
@@ -856,7 +856,6 @@ span.psw {
   
   </div>
 
-   <div id="outmessage"></div>
 
 
 
@@ -926,40 +925,42 @@ function myFunction() {
     document.getElementById("btnSubmit").disabled = true;
     document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf '; 
 
-    document.getElementById('qrcode').innerHTML = "";
-    
-    getMoney.focus();
+    $("#showimg").attr('src', '');
+
+      document.getElementById('typecheck1').checked = true;  
+      document.getElementById("div_cash").style.display = 'inline';
+      document.getElementById("div_tranfer").style.display = 'none';
+      getMoney.focus();
 
     }
 
     function formatNumber(currElement){
 
-    let alert = document.getElementById('infor')
-    alert.innerText = "";
-    let number = currElement.value;
-    number = number.replace(/,/g, '')
-    //console.log(number)
-    if(!isNaN(parseFloat(number)) && !isNaN(number)) {
-    let formatter = new Intl.NumberFormat('en-US');
-    let cstr = number.toString();
-    let formattedNumber = formatter.format(cstr);
-    //console.log(formattedNumber); 
-    let idx = formattedNumber.search(/\./);
-    console.log('Serch' +idx); 
-    if(idx==-1){
-      currElement.value = formattedNumber + ".00"
-    }else{
-      currElement.value = formattedNumber + "0"
-    }
-    changeMoney();
-    }else{
-    document.getElementById("btnSubmit").disabled = true;
-    document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf';
-    alert.style.color = "red";
-    alert.style.fontWeight = 'blod';
-    alert.innerText = "!กรุณา กรอกข้อมูลเป็นตัวเลข..";
-    }
-
+      let alert = document.getElementById('infor')
+      alert.innerText = "";
+      let number = currElement.value;
+      number = number.replace(/,/g, '')
+      //console.log(number)
+      if(!isNaN(parseFloat(number)) && !isNaN(number)) {
+        let formatter = new Intl.NumberFormat('en-US');
+        let cstr = number.toString();
+        let formattedNumber = formatter.format(cstr);
+        //console.log(formattedNumber); 
+        let idx = formattedNumber.search(/\./);
+        console.log('Serch' +idx); 
+      if(idx==-1){
+        currElement.value = formattedNumber + ".00"
+      }else{
+        currElement.value = formattedNumber + "0"
+      }
+      changeMoney();
+      }else{
+        document.getElementById("btnSubmit").disabled = true;
+        document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf';
+        alert.style.color = "red";
+        alert.style.fontWeight = 'blod';
+        alert.innerText = "!กรุณา กรอกข้อมูลเป็นตัวเลข..";
+      }
 
     }
 
@@ -1097,90 +1098,7 @@ function myFunction() {
 
     }
 
-    // function executeCalc() {
 
-    //   //let buff='';
-    //   let sum_all=0;
-    //   let sum_amt =0;
-    //   let contprice=0;
-    //   let amt_discnt = 0;
-      
-    //   //let costPrice = 5050;
-    //   let domqty = document.querySelector('input[name=qtybtn]')
-    //   let domtotal = document.getElementById('amount').innerText
-    //   //console.log( ' xx ko hi ' + domtotal) 
-    //   let cntqty = parseInt(domqty.value)
-    //   let costPrice = domtotal.replace(/[฿,]/g,"")
-    //   console.log( ' zz ko hi ' + costPrice) 
-
-    //   let sumamtall = document.getElementById('sum_amt_all')
-    //   let sumamt = document.getElementById('sum_amt_obj')
-    //   let bDiscnt = document.getElementById('b_discnt')
-    //   let disCount = document.getElementById('discount')
-    //   let sumitem = document.getElementById('item')  
-    //   var outputDiv = document.querySelector('#output') 
-    //   var table = document.getElementById('myTable');
-    //   let item =0;
-    //   for (var i = 1; i < table.rows.length; i++) {
-    //       buff=''
-    //       if (table.rows[i].cells.length) {
-    //           let brand = (table.rows[i].cells[0].textContent);
-    //           let qty = (table.rows[i].cells[1].children[0].value);
-    //           let cntqty = parseInt(qty)
-    //           let totalprice = costPrice*cntqty ;
-    //           table.rows[i].cells[2].innerText = priceFormat(totalprice);
-    //           let price = (table.rows[i].cells[2].textContent);
-    //           price = price.trim();
-    //           console.log(' PRice :  ' +price);
-    //           price = price.substring(1,price.length)
-    //           contprice = parseFloat(price.replace(/,/g, ''));
-    //           sum_amt =sum_amt + contprice;
-    //           item++;
-    //           //alert(sum_amt)
-    //           //console.log(sum_amt);
-    //           //outputDiv.innerHTML =buff;
-    //       } 
-      
-    //   }
-      
-    //   sumitem.innerText =  item + "  รายการ "
-    //   let getDist =bDiscnt.value;
-    //   amt_discnt = sum_amt*getDist/100;
-    //   sumAll = sum_amt-amt_discnt;
-    //   // ปัดเศษทศนิยม
-    //   sumAll = Math.ceil(sumAll);
-    //   disCount.innerText =  priceFormat(amt_discnt);
-    //   sum_amt = priceFormat(sum_amt);
-    //   sumAll = priceFormat(sumAll);
-    //   sumamt.innerText = sum_amt;
-    //   sumamtall.innerText = sumAll;
-
-    //   let sumcheckbill = document.getElementById('sumtotal');
-    //   sumcheckbill.innerText = sumAll;
-    //   document.getElementById('btnInsert').focus();
-
-    // }
-
-    $(function() {
-      $("select").select2();
-      $("#HospitalName").change(function() {
-      //get rel value
-      var rel_ = $(this).find("option:selected").data("rel")
-      $("#DepartmentName").select2("val", ""); //remove any selected value
-      //intialze
-      $("#DepartmentName").select2({
-      matcher: function(term, text, option) {
-        //only show options where rel = value ..
-        return $(option[0].outerHTML).attr("value") == rel_
-      }
-      })
-      });
-    })
-    
-  // split array
-  //let text = "How;areyou;doingtoday?";
-  //const myArray = text.split(";");
-  //document.getElementById("demo").innerHTML = myArray;
   // random 4 digit
   //let val = Math.floor(1000 + Math.random() * 9000);
   //console.log(val);

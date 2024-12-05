@@ -2,6 +2,7 @@
     let sel = document.getElementById('prod_Select');
     let domunitprice = document.getElementById('unitPrice')
     let domtotal = document.getElementById('amount')
+    let selectedRadio = 'cash'
 
     sel.onchange = function(evt) {
 
@@ -125,7 +126,7 @@ calcAmount = ()=>{
     amt_discnt = sum_amt*getDist/100;
     sumAll = sum_amt-amt_discnt;
     // ปัดเศษทศนิยม
-    sumAll = Math.ceil(sumAll);
+    //sumAll = Math.ceil(sumAll);
     disCount.innerText =  priceFormat(amt_discnt);
     sum_amt = priceFormat(sum_amt);
     sumAll = priceFormat(sumAll);
@@ -145,16 +146,19 @@ function changeType(elemThis){
     let div_show = document.getElementById('div_show');
 
     if(tyetrf == "cash"){
-        
+        selectedRadio = 'cash'
         document.getElementById("div_cash").style.display = 'inline';
         document.getElementById("div_tranfer").style.display = 'none';
+        alert('caxh')
 
         // OR
        // div.style.display = 'none';
 
     }else{
     // show
+    alert('trf')
         //call function Tranfer Money
+        selectedRadio = 'tranfer'
         document.getElementById("div_cash").style.display = 'none';
         document.getElementById("div_tranfer").style.display = 'inline';
 
@@ -171,10 +175,10 @@ generateQRCode = async()=>{
 
     try{
         const response = await axios.post(`http://localhost:5000/api/sell/generateQR/${amount}`)
-        let dat = response.data
-        console.log('Qr  :',dat.data)
-        dat = dat.data
-        $("#showimg").attr('src', dat);
+        let result = response.data
+        console.log('Qr  :',result.data)
+        result = result.data
+        $("#showimg").attr('src', result);
 
     }catch(err){
         //console.log(err.message)
@@ -198,25 +202,16 @@ changeType =(elemThis)=>{
         document.getElementById("div_cash").style.display = 'inline';
         document.getElementById("div_tranfer").style.display = 'none';
 
-        // OR
-       // div.style.display = 'none';
-
     }else{
         // show
         //call function Tranfer Money
         document.getElementById("div_cash").style.display = 'none';
         document.getElementById("div_tranfer").style.display = 'inline';
         //console.log('gen Qr')
-
         generateQRCode();
-
 
     }
 
 }
-function _imageEncode (arrayBuffer) {
-    let u8 = new Uint8Array(arrayBuffer)
-    let b64encoded = btoa([].reduce.call(new Uint8Array(arrayBuffer),function(p,c){return p+String.fromCharCode(c)},''))
-    let mimetype="image/jpeg"
-    return "data:"+mimetype+";base64,"+b64encoded
-}
+
+

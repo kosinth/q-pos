@@ -68,7 +68,7 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
                     msg : err.message
                 })
             }else{
-                console.log('serve : ',url)
+                //console.log('serve : ',url)
                 res.status(200).json({
                     data: url
                 })
