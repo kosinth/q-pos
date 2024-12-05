@@ -2,8 +2,8 @@ const express =require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const bodyParse = require('body-parser');
-const {readdirSync} = require('fs');
 
+const {readdirSync} = require('fs');
 const app = express();
 const port = 5000;
 

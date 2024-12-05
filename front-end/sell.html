@@ -294,7 +294,7 @@ table {
         .txtGetMoney{
 
           height: 40px;
-          width: 150px;
+          width: 120px;
           font-size:22px;
           font-weight: bold;
           text-align: right;
@@ -560,26 +560,21 @@ span.psw {
   color: #04754c;
  }
 
-
  .title{
     font-size: 17px;
     color: #092cc9;
     font-weight: bold;
   }
 
-
-
-
 /* Create a custom radio button */
-
-        /* The container   Radio Check   */
+/* The container   Radio Check   */
  .container_rdio {
   display: block;
   position: relative;
   padding-left: 35px;
   margin-bottom: 12px;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: bold;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -751,9 +746,7 @@ span.psw {
                 <span  onclick="document.getElementById('id01').style.display='none' ;closeClearForm() " class="close" title="->ปิด">&times;</span>
             </div>
  
-   
-          
-                <p class="title" id="title">ชำระเงิน  &nbsp;&nbsp; <span id="sumtotal"  style="color:#04754c;font-size: 25px;font-weight: bold;">  </span>
+              <p class="title" id="title">ชำระเงิน &nbsp;&nbsp;&nbsp;&nbsp; <span id="sumtotal"  style="color:#04754c;font-size: 22px;font-weight: bold;">  </span>
 
                 <table>
                   <tr>
@@ -764,63 +757,89 @@ span.psw {
                           </label>
   
                       </td>
-                       
                       <td>
                           <label class="container_rdio">
-                              <input type="radio" name="typecheck" value="tranfer" onchange="changeType(this)"> สแกน QR Code 
+                              <input type="radio" name="typecheck" value="tranfer" onchange="changeType(this)"> สแกน QR  
                               <span class="checkmark"></span>
                           </label>    
-              
                       </td>
                   </tr>
-  
                 </table>
-
-
-                </p>
-
-            <!--  
-            <div class="row" > 
+              </p>
+              
+              <!--
+              
+              <div id="paymentTye"> 
+                
+                <div class="row" > 
                   <div class="col-25">
-                    <p class="title" id="title"><b >ยอดรวมทั้งหมด</b> </p> 
+                    <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >รับเงิน</b> </p> 
                   </div>
                   <div class="col-75">
-                    <div class="title" id="sumtotal">  </div> 
+                    <input type="text" id="getMoney" class="txtGetMoney" onchange='formatNumber(this)' value="0.00"  > 
                   </div>
-            </div>
-            -->
+                </div>
 
-            <div class="row" > 
-              <div class="col-25">
-                <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >รับเงิน</b> </p> 
-              </div>
-              <div class="col-75">
-                <input type="text" id="getMoney" class="txtGetMoney" onchange='formatNumber(this)' value="0.00"  > 
-              </div>
-            </div>
+                <div class="row" > 
+                  <div class="col-25">
+                    <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >ทอนเงิน</b> </p> 
+                  </div>
+                    <div class="col-75">
+                    <div id="change" style="width: 120px; font-weight: bold;"> </div> 
+                  </div>
+                </div>
+
+          
+                <div class="row" > 
+                  <div class="col-75">
+                    <div id="infor"></div>
+                  </div>
+                </div>
+              
+              </div> 
+              
+              -->
+            
+              
+              <div id="div_cash" style="display:inline;"> 
+
+                <div class="row" > 
+                  <div class="col-25">
+                    <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >รับเงิน</b> </p> 
+                  </div>
+                  <div class="col-75">
+                    <input type="text" id="getMoney" class="txtGetMoney" onchange='formatNumber(this)' value="0.00"  > 
+                  </div>
+                </div>
+
+                <div class="row" > 
+                  <div class="col-25">
+                    <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >ทอนเงิน</b> </p> 
+                  </div>
+                    <div class="col-75">
+                    <div id="change" style="width: 120px; font-weight: bold;"> </div> 
+                  </div>
+                </div>
+
+          
+                <div class="row" > 
+                  <div class="col-75">
+                    <div id="infor"></div>
+                  </div>
+                </div>
 
 
+              </div>   
+ 
+              <div id="div_tranfer" > 
 
-            <div class="row" > 
-              <div class="col-25">
-                <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >ทอนเงิน</b> </p> 
-              </div>
-                <div class="col-75">
-                <div id="change" style="width: 150px; font-weight: bold;"> </div> 
-              </div>
-            </div>
 
-       
-            <div class="row" > 
-    
-              <div class="col-75">
-                <div id="infor"></div>
-              </div>
-
-            </div>
+                 <img id="showimg" src="" style="width: 300px; object-fit: contain;">  
+             </div>   
+ 
 
               <br>
-              
+             
               <div class="row">
                   <button type="submit" id="btnSubmit" class="button_ok" onclick="testClick()"> บันทึกข้อมูล</button>
               </div>
@@ -829,12 +848,17 @@ span.psw {
               <div class="container" style="background-color:#f1f1f1">
                 <button type="button"  onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
               </div>
+               object-fit: contain;
               -->
  
   
     </div>
   
   </div>
+
+   <div id="outmessage"></div>
+
+
 
 </div>
 
@@ -901,6 +925,8 @@ function myFunction() {
     getMoney.value = ""
     document.getElementById("btnSubmit").disabled = true;
     document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf '; 
+
+    document.getElementById('qrcode').innerHTML = "";
     
     getMoney.focus();
 
@@ -1165,6 +1191,8 @@ function myFunction() {
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- เพิ่ม script axios -->   
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="/front-end/js/system.js"></script>
 <script src="/front-end/js/sell.js"></script> 
 

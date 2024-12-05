@@ -138,3 +138,85 @@ calcAmount = ()=>{
 
 
 }
+
+function changeType(elemThis){
+
+    let tyetrf = elemThis.value
+    let div_show = document.getElementById('div_show');
+
+    if(tyetrf == "cash"){
+        
+        document.getElementById("div_cash").style.display = 'inline';
+        document.getElementById("div_tranfer").style.display = 'none';
+
+        // OR
+       // div.style.display = 'none';
+
+    }else{
+    // show
+        //call function Tranfer Money
+        document.getElementById("div_cash").style.display = 'none';
+        document.getElementById("div_tranfer").style.display = 'inline';
+
+
+    }
+
+}
+
+generateQRCode = async()=>{
+
+    let amount = document.getElementById('sumtotal').innerText
+    amount = clearAmountSymbol(amount)
+    //console.log(' ยอดเงิน :  ',amount)
+
+    try{
+        const response = await axios.post(`http://localhost:5000/api/sell/generateQR/${amount}`)
+        let dat = response.data
+        console.log('Qr  :',dat.data)
+        dat = dat.data
+        $("#showimg").attr('src', dat);
+
+    }catch(err){
+        //console.log(err.message)
+        if(err.response){
+            console.log(err.response.data.msg)
+            errmsg.innerText = err.response.data.err + " " +err.response.data.msg
+            errmsg.style.color = 'red'
+        }
+    }  
+
+}
+
+
+changeType =(elemThis)=>{
+
+    let tyetrf = elemThis.value
+    //let div_show = document.getElementById('div_show');
+
+    if(tyetrf == "cash"){
+        
+        document.getElementById("div_cash").style.display = 'inline';
+        document.getElementById("div_tranfer").style.display = 'none';
+
+        // OR
+       // div.style.display = 'none';
+
+    }else{
+        // show
+        //call function Tranfer Money
+        document.getElementById("div_cash").style.display = 'none';
+        document.getElementById("div_tranfer").style.display = 'inline';
+        //console.log('gen Qr')
+
+        generateQRCode();
+
+
+    }
+
+}
+function _imageEncode (arrayBuffer) {
+    let u8 = new Uint8Array(arrayBuffer)
+    let b64encoded = btoa([].reduce.call(new Uint8Array(arrayBuffer),function(p,c){return p+String.fromCharCode(c)},''))
+    let mimetype="image/jpeg"
+    return "data:"+mimetype+";base64,"+b64encoded
+}
