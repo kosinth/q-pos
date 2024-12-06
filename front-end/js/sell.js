@@ -12,8 +12,11 @@
         productName = allData.substring(0,allData.search(/\|/))
         //console.log('Print : ',productName)
         allData += " value: " + option.value;
-        let unitprice = option.value
-        domunitprice.innerText = setAmountFormatTh(option.value)
+        //const arrDelId = id.split("^")
+        let unitpricearr = option.value.split("|")
+        let unitprice = unitpricearr[1]
+        console.log('UNitPrice :  ', unitprice)
+        domunitprice.innerText = setAmountFormatTh(unitprice)
         //let getqty = document.getElementById('qty').value
         let domqty = document.querySelector('input[name=qtybtn]')
         domqty.value = '1'
@@ -37,8 +40,8 @@
             options_str += '<option value="' + '0' +'">' + '--- เลือกสินค้า ---- '+  '</option>';
             for (let i =0;i<response.data.length;i++){
               let product = response.data[i]
-              //console.log(product.prodt_name + " "+ product.prodt_price)
-              options_str += '<option value="' + product.prodt_price +'">' + product.prodt_name + " | " +product.prodt_short +  '</option>';
+              console.log('Prduct INFO ; ',product.prodt_id + "  "+product.prodt_name + " "+ product.prodt_price)
+              options_str += '<option value="' + product.prodt_id+"|"+product.prodt_price +'">' + product.prodt_name + " | " +product.prodt_short +  '</option>';
             }
             
             sel.innerHTML = options_str;
@@ -94,7 +97,7 @@ calcAmount = ()=>{
     let disCount = document.getElementById('discount')
     //var outputDiv = document.querySelector('#output') 
 
-    var table = document.getElementById('myTable');
+    let table = document.getElementById('myTable');
     let item =0;
     //let totalprice = 0;
     for (var i = 1; i < table.rows.length; i++) {
@@ -196,3 +199,129 @@ changeType =(elemThis)=>{
 }
 
 
+const onSaveData = async()=>{
+      
+    // JSAlert.confirm("ยืนยันบันทึกข้อมูล..?").then(function(result) {
+    //   if (result){
+    //     JSAlert.alert(' 55 '+result);
+    //     return;
+    //   }else {
+    //     JSAlert.alert(' 666 '+result);
+    //     return;
+    //   }  
+    // })
+
+    let messageresDom = document.getElementById('message')
+    
+    let sumamt = document.getElementById('sum_amt_obj')
+    let pricetotal = sumamt.innerText.trim();
+    pricetotal = clearAmountSymbol(pricetotal)
+
+    let sumamtall = document.getElementById('sum_amt_all').innerText.trim();
+    sumamtall = clearAmountSymbol(sumamtall)
+    
+    let checkgender = document.querySelectorAll('input[name=typecheck]')
+    let result =""
+    for(let i=0;i<checkgender.length;i++){
+        if(checkgender[i].checked){
+            result =checkgender[i].value
+        }
+    }
+    let payment =0
+    if(result='tranfer'){
+        payment=2
+
+    }else{
+        payment=1
+    }
+    //console.log(result)
+
+    let getitem = document.getElementById('item').innerText;
+    getitem = getitem.trim();
+    getitem = getitem.substring(0,1);
+    let cntitem = parseInt(getitem);
+
+    const resultdata =  getDataSell();
+    
+   
+    let sellHeader = {
+        sell_item: cntitem,
+        sell_totalprice: parseFloat(pricetotal),
+        sell_sumtotalprice: parseFloat(sumamtall),
+        sell_payment: payment
+    }
+    resultdata.push(sellHeader)
+
+    console.log('data out xx : ',sellHeader)
+
+     for(let i=0;i<resultdata.length;i++){
+        for(let j=0;j<resultdata[i].length;j++){
+         console.log('Row : ', i + "  " +resultdata[i][j])
+        }  
+    }
+     try{
+            console.log('send Data : ',resultdata)
+            let msg = ''
+            msg = 'บันทึกข้อมูลเรียบร้อย !'
+            const response = await axios.post(`http://localhost:5000/api/sell`,resultdata)
+            
+            messageresDom.innerText = msg
+            messageresDom.className = 'message success'
+            let btnsave = document.getElementById('savebtn')
+            btnsave.disabled = 'true'
+            btnsave.style.backgroundColor = '#888'        
+        
+
+    }catch(error){
+        //console.log(' ERRR ' , error.message)
+        let messageDOM = `มีปัญหาเกิดขึ้น ${error.message}`
+        messageresDom.innerHTML = messageDOM
+        messageresDom.className = 'message danger'
+    }
+    
+
+}
+
+
+const getDataSell = () => {
+    
+   
+    let table = document.getElementById('myTable');
+    let item =1;
+    let arrdata = []; 
+
+    for  (var i = 1; i < table.rows.length; i++) {
+        buff=''
+        if(table.rows[i].cells.length) {
+
+            //let brand = (table.rows[i].cells[0].textContent);
+            //console.log( ' สินค้า :' +brand)
+            let tempArr = [];
+            //arrdata.push(item)
+            tempArr.push(item); 
+            let prodtId = (table.rows[i].cells[4].textContent);
+            prodtId= parseInt(prodtId)
+            //arrdata.push(prodtId)
+            tempArr.push(prodtId); 
+
+            let qty = (table.rows[i].cells[1].children[0].value);
+            let cntqty = parseInt(qty)
+            console.log( ' จำนวน :' +cntqty)
+            //arrdata.push(cntqty)
+            tempArr.push(cntqty); 
+            
+            let price = (table.rows[i].cells[2].textContent);
+            console.log(' ราคา :  ' +price);  
+            price = price.trim();
+            let contprice = parseFloat(clearAmountSymbol(price));
+            //arrdata.push(contprice)
+            tempArr.push(contprice); 
+
+            arrdata.push(tempArr);
+            item++;
+        } 
+    }
+
+    return arrdata;
+
+};

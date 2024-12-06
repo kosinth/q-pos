@@ -40,6 +40,7 @@ const loadData = async(curr) =>{
         htmlData += '<th style="width:40%;">ราคา</th>'
         htmlData += '</tr>'
         document.getElementById('totalProduct').style.color = '#092cc9'
+        document.getElementById('totalProduct').style.fontWeight = 'bold'
         document.getElementById('totalProduct').innerText = 'รวม ' + setAmoutFormat(response.data.length) + '  รายการ'
         for (let i =0;i<response.data.length;i++){
             let product = response.data[i]

@@ -675,7 +675,7 @@ img {
             <!-- Modal content -->
       <div class="modal-content">
             <div class="imgcontainer">
-                <span  onclick="document.getElementById('id01').style.display='none';closeClearForm()" class="close" title="->ปิด">&times;</span>
+              <span  onclick="document.getElementById('id01').style.display='none';" data-dismiss="modal" class="close" title="->ปิด">&times;</span>
             </div>
  
               <p class="title" id="title">ชำระเงิน &nbsp;&nbsp;&nbsp;&nbsp; <span id="sumtotal"  style="color:#04754c;font-size: 25px;font-weight: bold;">  </span>
@@ -734,7 +734,7 @@ img {
               </div>   
 
               <div class="row">
-                  <button type="submit" id="btnSubmit" class="button_ok" onclick="testClick()"> ยืนยันข้อมูล</button>
+                  <button type="submit" id="btnSubmit" class="button_ok" onclick="onSaveData()"> ยืนยันข้อมูล</button>
               </div>
 
               <!-- 
@@ -743,7 +743,7 @@ img {
               </div>
                object-fit: contain;
               -->
-  
+          <div id="message"></div>
     </div>
   
   </div>
@@ -752,6 +752,16 @@ img {
 
 
 <script>
+
+$(document).on('click', '[data-dismiss="modal"]', function(){
+  
+  // if (window.confirm("Do you really want to leave?")) {
+  //    alert('yes')
+  // }else{
+  //   alert('no')
+  // }
+
+})
     
 function myFunction() {
     var x = document.getElementById("myTopnav");
@@ -768,25 +778,10 @@ function myFunction() {
     document.getElementById("input1").focus()
   }
 
-  function testClick(){
-      
-      JSAlert.confirm("ยืนยันบันทึกข้อมูล..?").then(function(result) {
-        if (result){
-          JSAlert.alert(' 55 '+result);
-          return;
-        }else {
-          JSAlert.alert(' 666 '+result);
-          return;
-        }  
-
-      })
-
-    
-  }
 
     function closeClearForm(){
 
-      // Comfirm Box 
+      // Comfirm Box  
       // let result = confirm("ยังไม่ได้ บันทึกข้อมูล ...");
       // if (result === true) {
       //   document.getElementById('id01').style.display='block'
@@ -795,7 +790,7 @@ function myFunction() {
       //   document.getElementById('id01').style.display='none'
       //   //console.log("User clicked Cancel");
       // }
-
+      //alert('close --->')
       document.getElementById('btnInsert').focus();
 
     }
@@ -856,7 +851,7 @@ function myFunction() {
     function changeMoney(){
       
       let getsumall = document.getElementById('sumtotal');
-      let price = getsumall.innerText.trim() ;
+      let price = getsumall.innerText.trim();
       let chageMoney = document.getElementById('change');
       price = price.substring(1,price.length)
       let contprice = parseFloat(price.replace(/,/g, ''));
@@ -887,6 +882,14 @@ function myFunction() {
 
     function doTheInsert() {
 
+      let e = document.getElementById('prod_Select');
+      let val = e.value;
+      //var text = e.options[e.selectedIndex].text;
+      const arrId = val.split("|")
+      console.log(' get ID xx  : ', arrId[0])
+      // get produt ID
+      let product_id = arrId[0]
+
       let domunitprice = document.getElementById('unitPrice').innerText
       //console.log(' get unitprice : ',domunitprice)
       if(domunitprice){
@@ -916,6 +919,7 @@ function myFunction() {
         v_innerHtml += `<td class='td_2'> <input type='number' id ='qty' name='qty' class='decimal' min='1' max='999' value=${cntqty} onchange='changeQtyTable(this)'> </td>`;
         v_innerHtml += `<td class='td_3'>  ${domtotal}</td>`;
         v_innerHtml += `<td class='td_4' style='display:none;'> ${domunitprice} </td>`;
+        v_innerHtml += `<td class='td_4' style='display:none;'> ${product_id} </td>`;
         v_innerHtml += `<td class='td_4' > </td>`;
         v_innerHtml += `<td>  <button id='b_edit' class='button-edit' onclick='editRow(this)'> แก้ไข </button> </td>`;
         v_innerHtml += `<td>  <button id='b_delete' class='button-delete' onclick='delRow(this)'> ลบ </button> </td>`;

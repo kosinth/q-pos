@@ -16,37 +16,69 @@ const generatePayLoad = require('promptpay-qr')
 //post Insert - create
 router.post('/sell', async(req,res)=>{
 
-    let product = req.body
-    //console.log(req.body)
-    const db = await conn('TestDB');
-    if(db){
-        try{
-            const results = await db.query('INSERT INTO tbProduct  SET ?',product)
-            //console.log('result : ',results)
-            // Close the connection
-             res.json({
-                 product : 'insert Ok',
-                 data : results[0]
-             })
-             db.end();
-        
-        }catch(error){
-            res.status(500).json({
-                err : ' มีข้อผิดพลาด ',
-                msg : error.message
-            })
-            db.end();
-            console.error('Error:file name->product.js|path api post[/product] =>',error.message)
+    
+    let sell = req.body
+    //console.log(sell.length)
+    console.log(sell)
+
+    let order_seq=0
+    let prodt_id=0
+    let prodt_qty=0
+    let prodt_price=0
+
+    //insert to table tbOrder
+    console.log(' Jaaa ',sell[sell.length-1].sell_item)
+    console.log(' Jaaa ',sell[sell.length-1].sell_totalprice)
+    console.log(' Jaaa ',sell[sell.length-1].sell_sumtotalprice)
+    console.log(' Jaaa ',sell[sell.length-1].sell_payment)
+
+
+    for(let i=0;i<sell.length-1;i++){
+        for(let j=0;j<sell[i].length;j++){
+            //console.log('Row : ', sell[i][j])
+            order_seq = sell[i][0]
+            prodt_id = sell[i][1]
+            prodt_qty = sell[i][2]
+            prodt_price = sell[i][3]
         }
-    }else{
-        res.status(500).json({
-            err : 'มีข้อผิดพลาด : ',
-            msg : 'Error:file name->product.js|path api post[/product]|Connection to Database fail ---> Error Access denied'   
-        })
-    }    
+        //insert to table tbOrder_detail
+        console.log(order_seq + " " + prodt_id + " " +  prodt_qty + " " + prodt_price)
+    }
+
+    // const db = await conn('TestDB');
+    // if(db){
+    
+
+
+    //     // try{
+    //     //     const results = await db.query('INSERT INTO tbProduct  SET ?',product)
+    //     //     //console.log('result : ',results)
+    //     //     // Close the connection
+    //     //      res.json({
+    //     //          product : 'insert Ok',
+    //     //          data : results[0]
+    //     //      })
+    //     //      db.end();
+        
+    //     // }catch(error){
+    //     //     res.status(500).json({
+    //     //         err : ' มีข้อผิดพลาด ',
+    //     //         msg : error.message
+    //     //     })
+    //     //     db.end();
+    //     //     console.error('Error:file name->product.js|path api post[/product] =>',error.message)
+    //     // }
+    
+    
+    
+    // }else{
+    //     res.status(500).json({
+    //         err : 'มีข้อผิดพลาด : ',
+    //         msg : 'Error:file name->product.js|path api post[/product]|Connection to Database fail ---> Error Access denied'   
+    //     })
+    // }    
 
 })
-
 
 router.post('/sell/generateQR/:amount', async(req,res)=>{
 
@@ -111,5 +143,6 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
     // }    
 
 })
+
 
 module.exports = router;
