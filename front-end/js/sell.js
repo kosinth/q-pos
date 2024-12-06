@@ -137,35 +137,8 @@ calcAmount = ()=>{
     sumcheckbill.innerText = sumAll;
     document.getElementById('btnInsert').focus();
 
-
 }
 
-function changeType(elemThis){
-
-    let tyetrf = elemThis.value
-    let div_show = document.getElementById('div_show');
-
-    if(tyetrf == "cash"){
-        selectedRadio = 'cash'
-        document.getElementById("div_cash").style.display = 'inline';
-        document.getElementById("div_tranfer").style.display = 'none';
-        alert('caxh')
-
-        // OR
-       // div.style.display = 'none';
-
-    }else{
-    // show
-    alert('trf')
-        //call function Tranfer Money
-        selectedRadio = 'tranfer'
-        document.getElementById("div_cash").style.display = 'none';
-        document.getElementById("div_tranfer").style.display = 'inline';
-
-
-    }
-
-}
 
 generateQRCode = async()=>{
 
@@ -191,16 +164,16 @@ generateQRCode = async()=>{
 
 }
 
-
 changeType =(elemThis)=>{
 
     let tyetrf = elemThis.value
-    //let div_show = document.getElementById('div_show');
-
     if(tyetrf == "cash"){
         
         document.getElementById("div_cash").style.display = 'inline';
         document.getElementById("div_tranfer").style.display = 'none';
+        let getMoney = document.getElementById('getMoney');
+        getMoney.focus()
+
 
     }else{
         // show

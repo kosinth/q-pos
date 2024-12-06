@@ -112,5 +112,4 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
 
 })
 
-
 module.exports = router;
