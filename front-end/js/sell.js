@@ -127,9 +127,9 @@ calcAmount = ()=>{
     sumAll = sum_amt-amt_discnt;
     // ปัดเศษทศนิยม
     //sumAll = Math.ceil(sumAll);
-    disCount.innerText =  priceFormat(amt_discnt);
-    sum_amt = priceFormat(sum_amt);
-    sumAll = priceFormat(sumAll);
+    disCount.innerText =  setAmountFormatTh(amt_discnt);
+    sum_amt = setAmountFormatTh(sum_amt);
+    sumAll = setAmountFormatTh(sumAll);
     sumamt.innerText = sum_amt;
     sumamtall.innerText = sumAll;
 
@@ -168,19 +168,27 @@ changeType =(elemThis)=>{
 
     let tyetrf = elemThis.value
     if(tyetrf == "cash"){
-        
         document.getElementById("div_cash").style.display = 'inline';
         document.getElementById("div_tranfer").style.display = 'none';
         let getMoney = document.getElementById('getMoney');
+        if(getMoney.value){
+            //console.log(' zzz',getMoney.value)
+            document.getElementById("btnSubmit").disabled = false;
+            document.getElementById("btnSubmit").style.backgroundColor = '#04754c';
+        }else{
+            document.getElementById("btnSubmit").disabled = true;
+            document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf';
+        }
         getMoney.focus()
-
 
     }else{
         // show
         //call function Tranfer Money
         document.getElementById("div_cash").style.display = 'none';
         document.getElementById("div_tranfer").style.display = 'inline';
-        //console.log('gen Qr')
+        document.getElementById("btnSubmit").disabled = false;
+        document.getElementById("btnSubmit").style.backgroundColor = '#04754c';
+        //call api generate QR code
         generateQRCode();
 
     }

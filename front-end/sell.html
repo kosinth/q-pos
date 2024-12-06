@@ -366,9 +366,9 @@ span.psw {
 
     }
 
-    /* The Close Button      */
-    .close {
-      color: #aaaaaa;
+   /* The Close Button */
+   .close {
+      color: #3a3939;
       float: right;
       font-size: 40px;
       font-weight: bold;
@@ -675,7 +675,7 @@ img {
             <!-- Modal content -->
       <div class="modal-content">
             <div class="imgcontainer">
-                <span  onclick="document.getElementById('id01').style.display='none' ;closeClearForm() " class="close" title="->ปิด">&times;</span>
+                <span  onclick="document.getElementById('id01').style.display='none';closeClearForm()" class="close" title="->ปิด">&times;</span>
             </div>
  
               <p class="title" id="title">ชำระเงิน &nbsp;&nbsp;&nbsp;&nbsp; <span id="sumtotal"  style="color:#04754c;font-size: 25px;font-weight: bold;">  </span>
@@ -698,40 +698,6 @@ img {
                   </tr>
                 </table>
               </p>
-              
-              <!--
-              
-              <div id="paymentTye"> 
-                
-                <div class="row" > 
-                  <div class="col-25">
-                    <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >รับเงิน</b> </p> 
-                  </div>
-                  <div class="col-75">
-                    <input type="text" id="getMoney" class="txtGetMoney" onchange='formatNumber(this)' value="0.00"  > 
-                  </div>
-                </div>
-
-                <div class="row" > 
-                  <div class="col-25">
-                    <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >ทอนเงิน</b> </p> 
-                  </div>
-                    <div class="col-75">
-                    <div id="change" style="width: 120px; font-weight: bold;"> </div> 
-                  </div>
-                </div>
-
-          
-                <div class="row" > 
-                  <div class="col-75">
-                    <div id="infor"></div>
-                  </div>
-                </div>
-              
-              </div> 
-              
-              -->
-            
               
               <div id="div_cash" style="display:inline;"> 
 
@@ -763,12 +729,12 @@ img {
 
               </div>   
 
-              <div id="div_tranfer" > 
-                <img id="showimg" src="" style="width: 300px;">  
+              <div id="div_tranfer"  class="row"  > 
+                <img id="showimg" src="" style="width: 400px;">  
               </div>   
 
               <div class="row">
-                  <button type="submit" id="btnSubmit" class="button_ok" onclick="testClick()"> บันทึกข้อมูล</button>
+                  <button type="submit" id="btnSubmit" class="button_ok" onclick="testClick()"> ยืนยันข้อมูล</button>
               </div>
 
               <!-- 
@@ -905,7 +871,7 @@ function myFunction() {
         chageMoney.style.textAlign = 'right';
         chageMoney.style.fontSize = '22px';
         chageMoney.style.fontWeight = 'blod';
-        chageMoney.innerText =  priceFormat(moneychange);
+        chageMoney.innerText =  setAmountFormatTh(moneychange);
       }else{
         document.getElementById("btnSubmit").disabled = true;
         document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf';
@@ -947,7 +913,7 @@ function myFunction() {
         let newRow=document.getElementById('myTable').insertRow();
         
         v_innerHtml = `<td class='td_1'>  ${productName} </td>`;
-        v_innerHtml += `<td class='td_2'> <input type='number' id ='qty' name='qty' class='decimal' min='1' max='999' value=${cntqty} onchange='changeQty(this)'> </td>`;
+        v_innerHtml += `<td class='td_2'> <input type='number' id ='qty' name='qty' class='decimal' min='1' max='999' value=${cntqty} onchange='changeQtyTable(this)'> </td>`;
         v_innerHtml += `<td class='td_3'>  ${domtotal}</td>`;
         v_innerHtml += `<td class='td_4' style='display:none;'> ${domunitprice} </td>`;
         v_innerHtml += `<td class='td_4' > </td>`;
@@ -989,6 +955,11 @@ function myFunction() {
         calcAmount()
       }
 
+      function changeQtyTable(currElement){
+        calcAmount()
+      }
+  
+
     function changeDiscount(currElement){
 
       let sumamtall = document.getElementById('sum_amt_all')
@@ -1001,25 +972,16 @@ function myFunction() {
       let contprice = parseFloat(price.replace(/,/g, ''));
       let amt_discnt = contprice*getDist/100;
 
-      disCount.innerText =  priceFormat(amt_discnt);
+      disCount.innerText =  setAmountFormatTh(amt_discnt);
       sumAll = contprice-amt_discnt;
       // ปัดเศษทศนิยม
       sumAll = Math.ceil(sumAll);
-      disCount.innerText =  priceFormat(amt_discnt);
-      sumAll = priceFormat(sumAll);
+      disCount.innerText =  setAmountFormatTh(amt_discnt);
+      sumAll = setAmountFormatTh(sumAll);
       sumamtall.innerText = sumAll;
 
     }
 
-    function priceFormat(price){
-
-      formattest = Intl.NumberFormat('th-TH', {
-      style: 'currency',
-      currency: 'THB',
-      }).format(price)
-      return formattest
-
-    }
 
 
   // random 4 digit
