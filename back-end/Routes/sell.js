@@ -14,69 +14,75 @@ const generatePayLoad = require('promptpay-qr')
 //     const db = await conn(shopid);
 
 //post Insert - create
-router.post('/sell', async(req,res)=>{
+router.post('/sell/create', async(req,res)=>{
 
-    
     let sell = req.body
-    //console.log(sell.length)
     console.log(sell)
-
     let order_seq=0
     let prodt_id=0
     let prodt_qty=0
     let prodt_price=0
 
-    //insert to table tbOrder
-    console.log(' Jaaa ',sell[sell.length-1].sell_item)
-    console.log(' Jaaa ',sell[sell.length-1].sell_totalprice)
-    console.log(' Jaaa ',sell[sell.length-1].sell_sumtotalprice)
-    console.log(' Jaaa ',sell[sell.length-1].sell_payment)
+    const db = await conn('TestDB');
+    if(db){
+        //insert to table tbOrder
+        console.log(' deJaaa: ',sell[sell.length-1].sell_item)
+        console.log(' deJaaa: ',sell[sell.length-1].sell_totalprice)
+        console.log(' deJaaa: ',sell[sell.length-1].sell_sumtotalprice)
+        console.log(' deJaaa: ',sell[sell.length-1].sell_payment)
 
+        for(let i=0;i<sell.length-1;i++){
+            let multirow = []
+            let row =''
+            for(let j=0;j<sell[i].length;j++){
+                //console.log('Row : ', sell[i][j])
+                order_seq = sell[i][0]
+                prodt_id = sell[i][1]
+                prodt_qty = sell[i][2]
+                prodt_price = sell[i][3]
+            }
+            let order_id = 1
+            try{
+                row= [order_id,order_seq, prodt_id, prodt_qty,prodt_price]
+                multirow.push(row)
+                //insert to table tbOrder_detail
+                console.log('Hi555 :  ',multirow)
+                const results =await db.query(`insert into tbOrder_details
+                    (order_id,order_seq,prodt_id,prodt_qty,prodt_price)
+                    values ?`,
+                    [multirow]
+                )
+                res.status(200).json({
+                    data: 'Insert Sucess...'
+                })
+                console.log(results)
+                db.end();
 
-    for(let i=0;i<sell.length-1;i++){
-        for(let j=0;j<sell[i].length;j++){
-            //console.log('Row : ', sell[i][j])
-            order_seq = sell[i][0]
-            prodt_id = sell[i][1]
-            prodt_qty = sell[i][2]
-            prodt_price = sell[i][3]
+            }catch(error){
+                res.status(500).json({
+                    err : ' มีข้อผิดพลาด ',
+                    msg : error.message
+                })
+                db.end();
+                console.error('Error:file name->sell.js|path api post[/sell/create] =>',error.message)
+            }
         }
-        //insert to table tbOrder_detail
-        console.log(order_seq + " " + prodt_id + " " +  prodt_qty + " " + prodt_price)
-    }
+    
+    }else{
+        res.status(500).json({
+             err : 'มีข้อผิดพลาด : ',
+             msg : 'Error:file name->sell.js|path api post[/sell/create]|Connection to Database fail ---> Error Access denied'   
+        })
+    } 
 
-    // const db = await conn('TestDB');
-    // if(db){
-    
-
-
-    //     // try{
-    //     //     const results = await db.query('INSERT INTO tbProduct  SET ?',product)
-    //     //     //console.log('result : ',results)
-    //     //     // Close the connection
-    //     //      res.json({
-    //     //          product : 'insert Ok',
-    //     //          data : results[0]
-    //     //      })
-    //     //      db.end();
-        
-    //     // }catch(error){
-    //     //     res.status(500).json({
-    //     //         err : ' มีข้อผิดพลาด ',
-    //     //         msg : error.message
-    //     //     })
-    //     //     db.end();
-    //     //     console.error('Error:file name->product.js|path api post[/product] =>',error.message)
-    //     // }
-    
-    
-    
-    // }else{
-    //     res.status(500).json({
-    //         err : 'มีข้อผิดพลาด : ',
-    //         msg : 'Error:file name->product.js|path api post[/product]|Connection to Database fail ---> Error Access denied'   
-    //     })
-    // }    
+    // random pad string 4 digit
+    /*
+        let val = Math.floor(1000 + Math.random() * 9000);
+        //console.log(val);
+        //pad string
+        const zeroPad = (num, places) => String(num).padStart(places, '0')
+        console.log(zeroPad(val, 4)); // "0005"
+    */
 
 })
 

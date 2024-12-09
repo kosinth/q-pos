@@ -32,6 +32,7 @@
     const products = async() => {
         const arr = [];
         let options_str = '';
+        let errmsg = document.getElementById('errMsg')
 
         try{
 
@@ -43,16 +44,22 @@
               console.log('Prduct INFO ; ',product.prodt_id + "  "+product.prodt_name + " "+ product.prodt_price)
               options_str += '<option value="' + product.prodt_id+"|"+product.prodt_price +'">' + product.prodt_name + " | " +product.prodt_short +  '</option>';
             }
-            
             sel.innerHTML = options_str;
 
         }catch(err){
-            console.log(err.message)
+            let messageErr = ''
             if(err.response){
                 console.log(err.response.data.msg)
-                errmsg.innerText = err.response.data.err + " " +err.response.data.msg
-                errmsg.style.color = 'red'
+                messageErr = err.response.data.err + " " +err.response.data.msg
+                //errmsg.style.color = 'red'
+            }else{
+                messageErr = 'มีข้อผิดพลาด: ' +err.message+ "---> เชื่อมต่อ Server ไม่ได้ "
+                console.log(messageErr)
+
             }
+            errmsg.innerText = messageErr
+            errmsg.style.color = 'red'
+            
         }  
         return arr;
 
@@ -60,10 +67,19 @@
     const resultArr =  products();
 
 window.onload = function() {
+
     document.body.appendChild(sel);
     document.getElementById('prod_Select').focus();
-};
 
+    // random 4 digit
+     let val = Math.floor(1000 + Math.random() * 9000);
+    //console.log(val);
+
+    //pad string
+    const zeroPad = (num, places) => String(num).padStart(places, '0')
+    console.log(zeroPad(val, 4)); // "0005"
+
+};
 
 changeQty = ()=>{
 
@@ -82,7 +98,6 @@ changeQty = ()=>{
     amount.innerText = setAmountFormatTh(result)
 
 }
-
 
 calcAmount = ()=>{
 
@@ -142,7 +157,6 @@ calcAmount = ()=>{
 
 }
 
-
 generateQRCode = async()=>{
 
     let amount = document.getElementById('sumtotal').innerText
@@ -195,9 +209,7 @@ changeType =(elemThis)=>{
         generateQRCode();
 
     }
-
 }
-
 
 const onSaveData = async()=>{
       
@@ -211,8 +223,6 @@ const onSaveData = async()=>{
     //   }  
     // })
 
-    let messageresDom = document.getElementById('message')
-    
     let sumamt = document.getElementById('sum_amt_obj')
     let pricetotal = sumamt.innerText.trim();
     pricetotal = clearAmountSymbol(pricetotal)
@@ -242,7 +252,6 @@ const onSaveData = async()=>{
     let cntitem = parseInt(getitem);
 
     const resultdata =  getDataSell();
-    
    
     let sellHeader = {
         sell_item: cntitem,
@@ -252,31 +261,38 @@ const onSaveData = async()=>{
     }
     resultdata.push(sellHeader)
 
-    console.log('data out xx : ',sellHeader)
+   // console.log('data out xx : ',sellHeader)
+   let messageresDom = document.getElementById('message')
 
-     for(let i=0;i<resultdata.length;i++){
+    for(let i=0;i<resultdata.length;i++){
         for(let j=0;j<resultdata[i].length;j++){
-         console.log('Row : ', i + "  " +resultdata[i][j])
+            console.log('Row : ', i + "  " +resultdata[i][j])
         }  
     }
-     try{
-            console.log('send Data : ',resultdata)
-            let msg = ''
-            msg = 'บันทึกข้อมูลเรียบร้อย !'
-            const response = await axios.post(`http://localhost:5000/api/sell`,resultdata)
-            
-            messageresDom.innerText = msg
-            messageresDom.className = 'message success'
-            let btnsave = document.getElementById('savebtn')
-            btnsave.disabled = 'true'
-            btnsave.style.backgroundColor = '#888'        
+    
+    let response =''
+     let msg = ''
+    try{
+        console.log('send Data : ',resultdata)
+       
+        msg = 'ยืนยันข้อมุลสำเร็จ...!'
+        response = await axios.post(`http://localhost:5000/api/sell/create`,resultdata)
         
+        console.log(response)
+        let messageresDom = document.getElementById('message')
+        messageresDom.innerText = msg
+        messageresDom.className = 'message success'
+        //let btnsave = document.getElementById('chkbill')
+        //btnsave.disabled = 'true'
+        //btnsave.style.backgroundColor = '#888'        
 
-    }catch(error){
-        //console.log(' ERRR ' , error.message)
-        let messageDOM = `มีปัญหาเกิดขึ้น ${error.message}`
-        messageresDom.innerHTML = messageDOM
+    }catch(err){
+        console.log('Err XXXX : ',err.response.data.msg)
+        msg = 'มีข้อผิดพลาด ยืนยันข้อมูลนี้แล้ว : ' + err.response.data.msg
+        messageresDom.innerText = msg
         messageresDom.className = 'message danger'
+     
+
     }
     
 
@@ -325,3 +341,7 @@ const getDataSell = () => {
     return arrdata;
 
 };
+
+
+
+

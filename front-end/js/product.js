@@ -137,12 +137,22 @@ const loadData = async(curr) =>{
         }
 
     }catch(err){
-        console.log(err.message)
+        let messageErr = ''
         if(err.response){
             console.log(err.response.data.message)
-            errmsg.innerText = err.response.data.err + " " +err.response.data.msg
-            errmsg.style.color = 'red'
+            messageErr = err.response.data.err + " " +err.response.data.msg
+            //errmsg.innerText = err.response.data.err + " " +err.response.data.msg
+            //errmsg.style.color = 'red'
+        }else{
+            messageErr = 'มีข้อผิดพลาด: ' +err.message+ "---> เชื่อมต่อ Server ไม่ได้ "
+            console.log(messageErr)
+
         }
+        //console.log(err.response.data.message)
+        errmsg.innerText = messageErr
+        errmsg.style.color = 'red'
+
+
     }
 
 
