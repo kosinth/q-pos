@@ -53,7 +53,7 @@
                 messageErr = err.response.data.err + " " +err.response.data.msg
                 //errmsg.style.color = 'red'
             }else{
-                messageErr = 'มีข้อผิดพลาด: ' +err.message+ "---> เชื่อมต่อ Server ไม่ได้ "
+                messageErr = 'มีข้อผิดพลาด: ' +err.message+ "---> ไม่สามารถเชื่อมต่อ Server ได้...! "
                 console.log(messageErr)
 
             }
@@ -278,7 +278,7 @@ const onSaveData = async()=>{
         msg = 'ยืนยันข้อมุลสำเร็จ...!'
         response = await axios.post(`http://localhost:5000/api/sell/create`,resultdata)
         
-        console.log(response)
+        console.log('out res : ',response)
         let messageresDom = document.getElementById('message')
         messageresDom.innerText = msg
         messageresDom.className = 'message success'
@@ -294,10 +294,8 @@ const onSaveData = async()=>{
      
 
     }
-    
 
 }
-
 
 const getDataSell = () => {
     

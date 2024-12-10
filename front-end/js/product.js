@@ -144,7 +144,7 @@ const loadData = async(curr) =>{
             //errmsg.innerText = err.response.data.err + " " +err.response.data.msg
             //errmsg.style.color = 'red'
         }else{
-            messageErr = 'มีข้อผิดพลาด: ' +err.message+ "---> เชื่อมต่อ Server ไม่ได้ "
+            messageErr = 'มีข้อผิดพลาด: ' +err.message+ "---> ไม่สามารถเชื่อมต่อ Server ได้...! "
             console.log(messageErr)
 
         }
