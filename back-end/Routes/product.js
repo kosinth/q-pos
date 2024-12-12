@@ -216,8 +216,6 @@ router.get('/product/searchname/:name',async(req,res)=>{
 
 })
 
-
-
 router.delete('/product/:id',async(req,res)=>{
 
     let id = req.params.id
@@ -232,13 +230,13 @@ router.delete('/product/:id',async(req,res)=>{
             })
             db.end();
         
-        }catch(error){
+        }catch(err){
             res.status(500).json({
                 err : ' มีข้อผิดพลาด ',
-                msg : error.message
+                msg : err.message
             })
             db.end();
-            console.error('Error,product.js,path api delete[/product/:id] =>',error.message)
+            console.error('Error,product.js,path api delete[/product/:id] =>',err.message)
         }
 
     }else{
