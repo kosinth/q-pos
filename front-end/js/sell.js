@@ -3,6 +3,8 @@
     let domunitprice = document.getElementById('unitPrice')
     let domtotal = document.getElementById('amount')
     let selectedRadio = 'cash'
+    let payment =0
+
 
     sel.onchange = function(evt) {
 
@@ -237,10 +239,8 @@ const onSaveData = async()=>{
             result =checkgender[i].value
         }
     }
-    let payment =0
-    if(result='tranfer'){
+    if(result=='tranfer'){
         payment=2
-
     }else{
         payment=1
     }
@@ -252,7 +252,7 @@ const onSaveData = async()=>{
     let cntitem = parseInt(getitem);
 
     const resultdata =  getDataSell();
-   
+    console.log('Payment xxx :  ',payment )
     let sellHeader = {
         sell_item: cntitem,
         sell_totalprice: parseFloat(pricetotal),
@@ -271,14 +271,16 @@ const onSaveData = async()=>{
     }
     
     let response =''
-     let msg = ''
+    let msg = ''
     try{
         console.log('send Data : ',resultdata)
        
         msg = 'ยืนยันข้อมุลสำเร็จ...!'
         response = await axios.post(`http://localhost:5000/api/sell/create`,resultdata)
         
-        console.log('out res : ',response)
+        console.log('order Id : ',response.data[0].order_id)
+        //get order id
+        let getorder_id = response.data[0].order_id
         let messageresDom = document.getElementById('message')
         messageresDom.innerText = msg
         messageresDom.className = 'message success'

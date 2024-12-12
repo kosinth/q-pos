@@ -16,7 +16,7 @@ const generatePayLoad = require('promptpay-qr')
 router.post('/sell/create', async(req,res)=>{
 
     let sell = req.body
-    console.log('Req sell Body : ',sell)
+    //console.log('Req sell Body : ',sell)
     let order_seq=0
     let prodt_id=0
     let prodt_qty=0
@@ -26,6 +26,7 @@ router.post('/sell/create', async(req,res)=>{
     const db = await conn('TestDB');
     if(db){
         try{
+            let resData =[] 
             const results = await db.query('select case when max(order_id) is null then 0 else max(order_id) end as order_id from tbOrder where order_id')
             order_id = results[0][0].order_id 
             order_id = order_id +1
@@ -37,9 +38,10 @@ router.post('/sell/create', async(req,res)=>{
                 order_sum_total: sell[sell.length-1].sell_sumtotalprice,
                 order_payment: sell[sell.length-1].sell_payment
             }
-            //console.log(' xxxx ',dataorder)
+            console.log('Insert tbOrder : ',dataorder)
+            resData.push(dataorder)
             const resultsInsert = await db.query('INSERT INTO tbOrder  SET ?',dataorder)
-            console.log('Result Insert tbOrder : ',resultsInsert)
+            //console.log('Result Insert tbOrder : ',resultsInsert)
 
            for(let i=0;i<sell.length-1;i++){
                 let multirow = []
@@ -56,6 +58,8 @@ router.post('/sell/create', async(req,res)=>{
                 multirow.push(row)
                 //insert to table tbOrder_detail
                 console.log('deJaaa :  ',multirow)
+                resData.push(multirow)
+
                 const results =await db.query(`insert into tbOrder_details
                     (order_id,order_seq,prodt_id,prodt_qty,prodt_price)
                     values ?`,
@@ -66,15 +70,15 @@ router.post('/sell/create', async(req,res)=>{
             console.log('Result : ',' Insert table tbOrder/tbOrder_details  Success...')
             db.end();
             res.setHeader('Content-Type', 'text/plain');
-            return res.status(200).send('success')
+            return res.status(200).send(resData)
 
-        }catch(error){
+        }catch(err){
             res.status(500).json({
                 err : ' มีข้อผิดพลาด ',
-                msg : error.message
+                msg : err.message
             })
             db.end();
-            console.error('Error:file name->sell.js|path api post[/sell/create] =>',error.message)
+            console.error('Error:file name->sell.js|path api post[/sell/create] =>',err.message)
         }
 
     }else{
@@ -99,6 +103,7 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
 
     let amount = req.params.amount
     amount = parseFloat(amount)
+    // Get promtpay no.
     const mobile_no = '0857144983'
     const payload = generatePayLoad(mobile_no,{amount})
     const option ={
@@ -123,41 +128,6 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
           
         })
 
-
-    // const db = await conn('TestDB');
-    // if(db){
-    //     try{
-    //         // const results = await db.query('INSERT INTO tbProduct  SET ?',product)
-    //         //console.log('result : ',results)
-    //         // Close the connection
-
-            
-            
-            
-    //         res.json({
-    //              product : 'insert Ok',
-    //              data : results[0]
-    //          })
-    //         //db.end();
-        
-
-
-    //     }catch(error){
-    //         res.status(500).json({
-    //             err : ' มีข้อผิดพลาด ',
-    //             msg : error.message
-    //         })
-    //         db.end();
-    //         console.error('Error:file name->product.js|path api post[/product] =>',error.message)
-    //     }
-    // }else{
-    //     res.status(500).json({
-    //         err : 'มีข้อผิดพลาด : ',
-    //         msg : 'Error:file name->product.js|path api post[/product]|Connection to Database fail ---> Error Access denied'   
-    //     })
-    // }    
-
 })
-
 
 module.exports = router;

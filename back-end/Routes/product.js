@@ -21,11 +21,11 @@ router.get('/product/getall', async(req, res) => {
             res.json(results[0]);
             db.end();
 
-        }catch(error){
-            console.error('Error : file name->product.js | api path :/getall' ,error.message);
+        }catch(err){
+            console.error('Error : file name->product.js | api path :/getall' ,err.message);
             res.status(500).json({
                 err : 'มีข้อผิดพลาด : ',
-                msg : error.message
+                msg : err.message
             })
             db.end();
         }
@@ -63,10 +63,10 @@ router.get('/product/:id',async(req,res)=>{
             }
             db.end();
     
-        }catch(error){
+        }catch(err){
             res.status(500).json({
                 err : ' มีข้อผิดพลาด ',
-                msg : error.message
+                msg : err.message
             })
             db.end();
             console.error('Error:file name->product.js|path api get[/product/:id] =>',err.message)
@@ -98,13 +98,13 @@ router.post('/product', async(req,res)=>{
              })
              db.end();
         
-        }catch(error){
+        }catch(err){
             res.status(500).json({
                 err : ' มีข้อผิดพลาด ',
-                msg : error.message
+                msg : err.message
             })
             db.end();
-            console.error('Error:file name->product.js|path api post[/product] =>',error.message)
+            console.error('Error:file name->product.js|path api post[/product] =>',err.message)
         }
     }else{
         res.status(500).json({
@@ -135,13 +135,13 @@ router.put('/product/:id',async(req,res)=>{
             })
             db.end();
         
-        }catch(error){
+        }catch(err){
             res.status(500).json({
                 err : ' มีข้อผิดพลาด ',
-                msg : error.message
+                msg : err.message
             })
             db.end();
-            console.error('Error:file name->product.js|path api put[/product/:id] =>',error.message)
+            console.error('Error:file name->product.js|path api put[/product/:id] =>',err.message)
         }
 
     }else{
@@ -168,13 +168,13 @@ router.get('/product/search/:name',async(req,res)=>{
             res.json(results[0]);
             db.end();
 
-        }catch(error){
+        }catch(err){
             res.status(500).json({
                 err : ' มีข้อผิดพลาด ',
-                msg : error.message
+                msg : err.message
             })
             db.end();
-            console.error('Error:file name->product.js|path api get[/product/search/:name] =>',error.message)
+            console.error('Error:file name->product.js|path api get[/product/search/:name] =>',err.message)
         }
 
     }else{
@@ -198,13 +198,13 @@ router.get('/product/searchname/:name',async(req,res)=>{
             res.json(results[0]);
             db.end();
 
-        }catch(error){
+        }catch(err){
             res.status(500).json({
                 err : ' มีข้อผิดพลาด ',
-                msg : error.message
+                msg : err.message
             })
             db.end();
-            console.error('Error:file name->product.js|path api get[/product/searchname/:name] =>',error.message)
+            console.error('Error:file name->product.js|path api get[/product/searchname/:name] =>',err.message)
         }
 
     }else{

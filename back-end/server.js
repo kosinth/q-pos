@@ -5,9 +5,10 @@ const bodyParse = require('body-parser');
 
 const {readdirSync} = require('fs');
 const app = express();
+//app.use("view engine","jade");
 const port = 5000;
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParse.urlencoded({ extended: true }));
 app.use(bodyParse.json({limit: '10mb'}))
