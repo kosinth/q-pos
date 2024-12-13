@@ -4,6 +4,8 @@ const mysql = require('mysql2/promise');
 const conn = require('../config/configdb');
 const QRCode = require('qrcode')
 const generatePayLoad = require('promptpay-qr')
+const fs = require('fs');
+const PDFDocument = require('pdfkit');
 
 // app.get('/user/:shopid/:id',async(req,res) =>{
 //     const id = req.params.id
@@ -13,6 +15,7 @@ const generatePayLoad = require('promptpay-qr')
 //     const db = await conn(shopid);
 
 //post Insert - create
+
 router.post('/sell/create', async(req,res)=>{
 
     let sell = req.body
@@ -67,7 +70,7 @@ router.post('/sell/create', async(req,res)=>{
                 )
 
             }
-            console.log('Result : ',' Insert table tbOrder/tbOrder_details  Success...')
+            console.log('file:sell.js[ api:/sell/create ]',' Insert tbOrder/tbOrder_details---> ok')
             db.end();
             res.setHeader('Content-Type', 'text/plain');
             return res.status(200).send(resData)
@@ -121,6 +124,7 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
                 })
             }else{
                 //console.log('serve : ',url)
+                console.log('file:sell.js[ api:/sell/enerateQR ]-->','ok')
                 res.status(200).json({
                     data: url
                 })
@@ -129,5 +133,169 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
         })
 
 })
+
+const invoice = {
+	shipping: {
+		name: 'John Doe',
+		address: '1234 Main Street',
+		city: 'San Francisco',
+		state: 'CA',
+		country: 'US',
+		postal_code: 94111,
+	},
+	items: [
+		{
+			item: 'TC 100',
+			description: 'Toner Cartridge',
+			quantity: 2,
+			amount: 6000,
+		},
+		{
+			item: 'USB_EXT',
+			description: 'USB Cable Extender',
+			quantity: 1,
+			amount: 2000,
+		},
+	],
+	subtotal: 8000,
+	paid: 0,
+	invoice_nr: 1234,
+};
+
+
+router.post('/sell/generateInvoice', async(req,res)=>{
+    let inv = req.body  
+    console.log('Inv: ',inv.sell_item)
+    console.log('Inv: ',inv.detail)
+
+    console.log('Inv: ',inv.sell_item)
+    console.log('Inv: ',inv.detail.length)
+
+    
+    //const myArray = text.split(" ");
+
+    //sell_item: cntitem,
+    //sell_totalprice: parseFloat(pricetotal),
+    //sell_sumtotalprice: parseFloat(sumamtall),
+    //sell_payment: payment
+
+
+
+    // for(let i =0;i<myArray.length;i++){
+    //     //for(let j =0;j<myArray[i].length;j++){
+    //         console.log(myArray[i]) 
+    //     //}
+
+    // }
+
+    try{
+        let doc = new PDFDocument({ 
+            margins: { top: 10, bottom: 10, left: 10, right: 10 },
+            size: 'A7',
+            layout: 'portrait' // 'portrait' or 'landscape'
+        });
+
+        //Set fonts
+        doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
+        doc.font('Sarabun')
+
+        generateHeader(doc); // Invoke `generateHeader` function.
+        generateFooter(doc); // Invoke `generateFooter` function.
+        doc.end();
+        //let path = 'pdf/invoice.pdf'
+        //doc.pipe(fs.createWriteStream(path));
+        console.log('file:sell.js[ api:/sell/generateInvoice ]-->','ok')
+        res.contentType('application/pdf');
+        doc.pipe(res);
+
+    }catch(err){
+        res.status(500).json({
+            err : ' มีข้อผิดพลาด ',
+            msg : err.message
+        })
+        console.error('Error,sell.js,path api /sell/generateInvoice] =>',err.message)
+    }
+
+})
+
+generateHeader =(doc) =>{
+	
+	doc.image('exit_2.jpg', 50, 45, { width: 50 })
+		.fillColor('#444444')
+		.fontSize(20)
+		.text('ACME Inc.', 110, 57)
+		.fontSize(10)
+		.text('123 Main Street', 200, 65, { align: 'right' })
+		.text('New York, NY, 10025', 200, 80, { align: 'right' })
+		.moveDown();
+}
+
+generateFooter =(doc)=> {
+	doc.fontSize(
+		10,
+	).text(
+		'ทดสอบภาษาไทย แล้วจ้าเป็นอย่างไรบ้างเน้อ.',
+		50,
+		780,
+		{ align: 'center', width: 500 },
+	);
+}
+
+ generateCustomerInformation =(doc, invoice) =>{
+    const customerInformationTop = 200;
+  
+    doc
+      .fillColor("#444444")
+      .fontSize(20)
+      .text("Invoice", 50, 160);
+  
+    generateHr(doc, 185);
+  
+    doc
+      .fontSize(10)
+      .text("Invoice Number:", 50, customerInformationTop)
+      .font("Helvetica-Bold")
+      .text(invoice.invoice_nr, 150, customerInformationTop)
+      .text("Invoice Date:", 50, customerInformationTop + 15)
+      .text(formatDate(new Date()), 150, customerInformationTop + 15)
+      .text("Balance Due:", 50, customerInformationTop + 30)
+      .text(formatCurrency(invoice.subtotal - invoice.paid), 150, customerInformationTop + 30)
+      .font("Helvetica-Bold")
+      .text(invoice.shipping.name, 300, customerInformationTop)
+      .font("Helvetica")
+      .text(invoice.shipping.address, 300, customerInformationTop + 15)
+      .text(`${invoice.shipping.city}, ${invoice.shipping.state}, ${invoice.shipping.country}`, 300, customerInformationTop + 30)
+      .moveDown();
+  
+    generateHr(doc, 252);
+  }
+
+  generateTableRow =(doc, y, c1, c2, c3, c4, c5) =>{
+	doc.fontSize(10)
+		.text(c1, 50, y)
+		.text(c2, 150, y)
+		.text(c3, 280, y, { width: 90, align: 'right' })
+		.text(c4, 370, y, { width: 90, align: 'right' })
+		.text(c5, 0, y, { align: 'right' });
+}
+
+generateInvoiceTable =(doc, invoice) =>{
+	let i,
+		invoiceTableTop = 330;
+
+	for (i = 0; i < invoice.items.length; i++) {
+		const item = invoice.items[i];
+		const position = invoiceTableTop + (i + 1) * 30;
+		generateTableRow(
+			doc,
+			position,
+			item.item,
+			item.description,
+			item.amount / item.quantity,
+			item.quantity,
+			item.amount,
+		);
+	}
+}
 
 module.exports = router;

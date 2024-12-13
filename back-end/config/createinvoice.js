@@ -1,22 +1,43 @@
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
+const router = express.Router();
 
- createInvoice = (invoice, path)=> {
+router.post('/sell/createinvoice', async(req,res)=>{
+
 	let doc = new PDFDocument({ 
-        margins: { top: 50, bottom: 50, left: 50, right: 50 },
+        margins: { top: 10, bottom: 10, left: 10, right: 10 },
         size: 'A4',
         layout: 'portrait' // 'portrait' or 'landscape'
     });
+
+    //Set fonts
+	doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
+	doc.font('Sarabun')
 
 	generateHeader(doc); // Invoke `generateHeader` function.
 	generateFooter(doc); // Invoke `generateFooter` function.
 
 	doc.end();
 	doc.pipe(fs.createWriteStream(path));
+	//return doc
+    //sent to Http:
+    doc.pipe(res);
+	//show in Html
+    //<embed src="file_name.pdf" width="800px" height="2100px" />
+
+
+
+})
+
+
+
+ createInvoice = async(invoice, path)=> {
+
 }
 
  generateHeader =(doc) =>{
-	doc.image('logo.png', 50, 45, { width: 50 })
+	
+	doc.image('exit_2.jpg', 50, 45, { width: 50 })
 		.fillColor('#444444')
 		.fontSize(20)
 		.text('ACME Inc.', 110, 57)
@@ -30,7 +51,7 @@ generateFooter =(doc)=> {
 	doc.fontSize(
 		10,
 	).text(
-		'Payment is due within 15 days. Thank you for your business.',
+		'ทดสอบภาษาไทย แล้วจ้าเป็นอย่างไรบ้างเน้อ.',
 		50,
 		780,
 		{ align: 'center', width: 500 },
@@ -52,7 +73,6 @@ generateFooter =(doc)=> {
       .text("Invoice Number:", 50, customerInformationTop)
       .font("Helvetica-Bold")
       .text(invoice.invoice_nr, 150, customerInformationTop)
-      .font("Helvetica")
       .text("Invoice Date:", 50, customerInformationTop + 15)
       .text(formatDate(new Date()), 150, customerInformationTop + 15)
       .text("Balance Due:", 50, customerInformationTop + 30)
@@ -97,4 +117,5 @@ generateInvoiceTable =(doc, invoice) =>{
 
 module.exports = {
 	createInvoice,
+	router
 };

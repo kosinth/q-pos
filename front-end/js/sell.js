@@ -252,6 +252,7 @@ const onSaveData = async()=>{
     let cntitem = parseInt(getitem);
 
     const resultdata =  getDataSell();
+    const getrow = getDataSell();
     console.log('Payment xxx :  ',payment )
     let sellHeader = {
         sell_item: cntitem,
@@ -284,7 +285,50 @@ const onSaveData = async()=>{
         let messageresDom = document.getElementById('message')
         messageresDom.innerText = msg
         messageresDom.className = 'message success'
-        //let btnsave = document.getElementById('chkbill')
+
+         //call api create Invoice()
+           try{
+                let dataInvoice =[]
+                dataInvoice.push('10','20','30')
+                dataInvoice.push('11','20','30')
+                dataInvoice.push('12','20','30')
+
+                const pdfResponse = await fetch("http://localhost:5000/api/sell/generateInvoice", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/pdf',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sell_item: cntitem,
+                        sell_totalprice: parseFloat(pricetotal),
+                        sell_sumtotalprice: parseFloat(sumamtall),
+                        sell_payment: payment,
+                        detail : getrow,
+
+                    }),
+                });
+
+                //const pdfResponse = await axios.post(`http://localhost:5000/api/sell/generateInvoice`,resultdata)
+                const resp = await pdfResponse.arrayBuffer();
+                const blob = new Blob([resp], { type: 'application/pdf' });
+                let container = document.getElementById('pdfViewer');
+                let embed = document.getElementById('embedPdf');
+                embed.src = window.URL.createObjectURL(blob);
+                embed.type = 'application/pdf';
+                embed.width = '100%';
+                embed.height = '300px';
+                container.appendChild(embed);
+
+           }catch(err){
+                console.log('Err XXXX : ',err.response.data.msg)
+                msg = 'มีข้อผิดพลาด ยืนยันข้อมูลนี้แล้ว : ' + err.response.data.msg
+                messageresDom.innerText = msg
+                messageresDom.className = 'message danger'
+
+            }
+        
+         //let btnsave = document.getElementById('chkbill')
         //btnsave.disabled = 'true'
         //btnsave.style.backgroundColor = '#888'        
 

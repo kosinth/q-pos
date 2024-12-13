@@ -19,6 +19,7 @@ router.get('/product/getall', async(req, res) => {
         try{
             const results = await db.query('SELECT *,DATE_FORMAT(prodt_timestamp, "%d/%m/%Y") AS "dt_name" FROM tbProduct;');
             res.json(results[0]);
+            console.log('file:product.js[ api:/product/getall ]-->','ok')
             db.end();
 
         }catch(err){
@@ -50,6 +51,8 @@ router.get('/product/:id',async(req,res)=>{
         try{
             const results = await db.query('SELECT * FROM  tbProduct WHERE prodt_id = ?',id)
             //console.log('result : ',results[0].length)
+            console.log('file:product.js[ api:/product/:id ]-->','ok')
+
             if (results[0].length>0){
                 res.json({ 
                     product : 'Get ID Ok',
@@ -91,6 +94,7 @@ router.post('/product', async(req,res)=>{
         try{
             const results = await db.query('INSERT INTO tbProduct  SET ?',product)
             //console.log('result : ',results)
+            console.log('file:product.js[ api:/product ]-->','ok')
             // Close the connection
              res.json({
                  product : 'insert Ok',
@@ -129,6 +133,8 @@ router.put('/product/:id',async(req,res)=>{
                 [updateProduct,id]
             )
             //console.log('result : ',results)
+            console.log('file:product.js[ api:productproduct/:id ]-->','ok ')
+
             res.json({
                 product : 'update Ok',
                 data : results[0]
@@ -164,6 +170,8 @@ router.get('/product/search/:name',async(req,res)=>{
             let replacement = `'%${sname}%'`;
             let sqlStatement = `SELECT * from  tbProduct where prodt_name LIKE ${replacement}`;
             const results = await db.query(sqlStatement)
+            console.log('file:product.js[ api:product/search/:name ]-->','ok ')
+
             //console.log('result : ',results[0].length)
             res.json(results[0]);
             db.end();
@@ -195,6 +203,7 @@ router.get('/product/searchname/:name',async(req,res)=>{
             //console.log(sname.trim())
             const results = await db.query('SELECT * FROM  tbProduct WHERE prodt_name = ?',sname.trim())
             //console.log('output : ',results)
+            console.log('file:product.js[ api:product/searchname/:name ]-->','ok ')
             res.json(results[0]);
             db.end();
 
@@ -224,6 +233,8 @@ router.delete('/product/:id',async(req,res)=>{
         try{
             const results = await db.query('DELETE FROM tbProduct WHERE prodt_id = ?',id)
             //console.log('result : ',results[0].length)
+            console.log('file:product.js[ delete api:/product/:id ]-->','ok ')
+
             res.json({
                 product : 'delete Ok',
                 data : results[0]

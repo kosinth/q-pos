@@ -29,4 +29,4 @@ const invoice = {
 
 const { createInvoice } = require('../config/createinvoice');
 
-createInvoice(invoice, 'invoice.pdf');
+createInvoice(invoice, '../pdf/invoice.pdf');
