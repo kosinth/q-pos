@@ -137,14 +137,14 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
 router.post('/sell/generateInvoice', async(req,res)=>{
 
     let inv = req.body  
-    console.log('Inv: ',inv.order_id)
-    console.log('Inv: ',inv.sell_item)
-    console.log('Inv: ',inv.sell_totalprice)
-    console.log('Inv: ',inv.sell_sumtotalprice)
-    console.log('Inv: ',inv.sell_totalprice_calc)
-    console.log('Inv: ',inv.sell_sumtotalprice_calc)
-    console.log('Inv: ',inv.detail)
-    console.log('Inv: ',inv.detail.length)
+    // console.log('Inv: ',inv.order_id)
+    // console.log('Inv: ',inv.sell_item)
+    // console.log('Inv: ',inv.sell_totalprice)
+    // console.log('Inv: ',inv.sell_sumtotalprice)
+    // console.log('Inv: ',inv.sell_totalprice_calc)
+    // console.log('Inv: ',inv.sell_sumtotalprice_calc)
+    // console.log('Inv: ',inv.detail)
+    // console.log('Inv: ',inv.detail.length)
 
     try{
         let doc = new PDFDocument({ 
@@ -256,20 +256,10 @@ generateInvoice =(doc,inv) =>{
                 doc.text('รวมทั้งหมด   ' +` ${inv.sell_sumtotalprice}`, 80, positionRow +40, { align: 'right' })
     
             }else{
-                //doc.fontSize(9)
-                //doc.text('ส่วนลด   ' +` ${setAmountFormatTh(discnt)}`, 100, positionRow +25, { align: 'right' })
                 doc.fontSize(10)
                 doc.text('รวมทั้งหมด   ' +` ${inv.sell_sumtotalprice}`, 80, positionRow +25, { align: 'right' })
             }
          }
-        //const base64Image = geturl; // your base64 image data here
-         //const imageBuffer = Buffer.from(base64Image, 'base64');
-         //doc.image(imageBuffer, 0, 0, {fit: [250, 300]});
-
-        // doc.image(Buffer.from(geturl.replace('data:image/png;base64,',''), 'base64'), 100, 100); // this will decode your base64 to a new buffer
-
-
-
 
 }
 
