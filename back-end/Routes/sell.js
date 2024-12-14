@@ -134,36 +134,8 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
 
 })
 
-const invoice = {
-	shipping: {
-		name: 'John Doe',
-		address: '1234 Main Street',
-		city: 'San Francisco',
-		state: 'CA',
-		country: 'US',
-		postal_code: 94111,
-	},
-	items: [
-		{
-			item: 'TC 100',
-			description: 'Toner Cartridge',
-			quantity: 2,
-			amount: 6000,
-		},
-		{
-			item: 'USB_EXT',
-			description: 'USB Cable Extender',
-			quantity: 1,
-			amount: 2000,
-		},
-	],
-	subtotal: 8000,
-	paid: 0,
-	invoice_nr: 1234,
-};
-
-
 router.post('/sell/generateInvoice', async(req,res)=>{
+
     let inv = req.body  
     console.log('Inv: ',inv.order_id)
     console.log('Inv: ',inv.sell_item)
@@ -171,28 +143,12 @@ router.post('/sell/generateInvoice', async(req,res)=>{
     console.log('Inv: ',inv.sell_sumtotalprice)
     console.log('Inv: ',inv.sell_totalprice_calc)
     console.log('Inv: ',inv.sell_sumtotalprice_calc)
-
     console.log('Inv: ',inv.detail)
     console.log('Inv: ',inv.detail.length)
-    
-    
-    //const myArray = text.split(" ");
-
-    //sell_item: cntitem,
-    //sell_totalprice: parseFloat(pricetotal),
-    //sell_sumtotalprice: parseFloat(sumamtall),
-    //sell_payment: payment
-
-    // for(let i =0;i<myArray.length;i++){
-    //     //for(let j =0;j<myArray[i].length;j++){
-    //         console.log(myArray[i]) 
-    //     //}
-
-    // }
 
     try{
         let doc = new PDFDocument({ 
-            margins: { top: 0, bottom: 0, left: 0, right: 0 },
+            margins: { top: 0, bottom: 0, left: 2, right: 2 },
             size: 'A7',
             layout: 'portrait', // 'portrait' or 'landscape'
             fillColor:'#050505'
@@ -201,10 +157,9 @@ router.post('/sell/generateInvoice', async(req,res)=>{
         //Set fonts
         doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
         doc.font('Sarabun')
-
-        generateHeader(doc,inv); // Invoke `generateHeader` function.
-        //generateFooter(doc); // Invoke `generateFooter` function.
+        generateInvoice(doc,inv); // Invoke `generateHeader` function.
         doc.end();
+
         //let path = 'pdf/invoice.pdf'
         //doc.pipe(fs.createWriteStream(path));
         console.log('file:sell.js[ api:/sell/generateInvoice ]-->','ok')
@@ -221,121 +176,110 @@ router.post('/sell/generateInvoice', async(req,res)=>{
 
 })
 
-generateHeader =(doc,inv) =>{
+generateInvoice =(doc,inv) =>{
 	
+    // Get promtpay no.
+    let geturl = ''
+    let amount = parseFloat(inv.sell_sumtotalprice_calc)
+    const mobile_no = '0857144983'
+    const payload = generatePayLoad(mobile_no,{amount})
+    const option ={
+            color : {
+            dark : '#000',
+            light : '#fff'
+            }
+          }
+
+          QRCode.toDataURL(payload,option,(err,url) =>{
+            if(err){
+                console.error('file:sell.js[ api:/sell/generateInvoice ]-->',err.message)
+            }else{
+                //console.log('Image Qr : ',url)
+                geturl = url
+
+            }
+          
+        })
+
         let d = new Date();
         let getdt = d.toLocaleString('en-GB').split(',')
         console.log(getdt[0] + " time: " + getdt[1]);
-
-        //doc.registerFont('Sarabun_bold', `fonts/Sarabun-SemiBold.ttf`)
-        //doc.font('Sarabun_bold')
-        //doc.image('exit_2.jpg', 10, 10, { width: 20 })
-		doc.fillColor('#050505')
+        doc.fillColor('#050505')
         doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
         doc.font('Sarabun')
         .fontSize(12)
-		.text('ใบเสร็จรับเงิน', 10, 10, { align: 'center' })
+        .text('ใบเสร็จรับเงิน', 10, 10, { align: 'center' })
         .moveDown()
         doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
         doc.font('Sarabun')
         .fontSize(8)
-		.text(`เลขที่ : ${inv.order_id}`, 10, 30, { align: 'left' })
-		.text(`วันที่ : ${getdt[0] + ' : '+getdt[1]}`, 10, 45, { align: 'left' })
-		.text('----------------------------------------------------------------------------', 1, 55, { align: 'left' })
+        .text(`เลขที่ : ${inv.order_id}`, 10, 30, { align: 'left' })
+        .text(`วันที่ : ${getdt[0] + ' : '+getdt[1]}`, 10, 45, { align: 'left' })
+        .text('---------------------------------------------------------------------------', 1, 55, { align: 'left' })
         .fontSize(9)
-		.text('รายการ', 35, 63, { align: 'left' })
+        .text('รายการ', 35, 63, { align: 'left' })
         .fontSize(9)
-		.text('จำนวน', 115, 63, { align: 'left' })
+        .text('จำนวน', 115, 63, { align: 'left' })
         .fontSize(9)
-		.text('ราคา', 165, 63, { align: 'left' })
-		.text('--------------------------------------------------------------------', 1, 70, { align: 'left' })
+        .text('ราคา', 165, 63, { align: 'left' })
+        .text('-------------------------------------------------------------------', 1, 70, { align: 'left' })
          let positionRow =  80;
          doc.fontSize(8)
+         doc.fillColor('#050505')
          for( let i =0;i<inv.detail.length;i++){
             //console.log(inv.detail[i][0])
             doc.text(`${inv.detail[i][0]}`, 1, positionRow, { align: 'left' })
-            //console.log(inv.detail[i][1])
             .text(`${inv.detail[i][1]}`, 125, positionRow, { align: 'left' })
-            //console.log(inv.detail[i][2])
             .text(`${inv.detail[i][2]}`, 160, positionRow, { align: 'right' })
             positionRow += 15
 
          }
          doc.fontSize(9)
          positionRow = positionRow-5
-         doc.text('--------------------------------------------------------------------', 1, positionRow , { align: 'left' })
+         doc.text('-------------------------------------------------------------------', 1, positionRow , { align: 'left' })
          doc.fontSize(9)
          .text(`รวม  ${inv.sell_item}  รายการ`, 10, positionRow +10, { align: 'left' })
+         doc.fontSize(10)
+         let totalPrice = parseFloat(inv.sell_totalprice_calc)
+         let sumtotalPrice = parseFloat(inv.sell_sumtotalprice_calc)
+         if(totalPrice-sumtotalPrice == 0){
+            doc.text('รวม   ' +` ${inv.sell_sumtotalprice}`, 100, positionRow +10, { align: 'right' })
+         }else{
+            let discnt = totalPrice-sumtotalPrice
+            console.log(discnt)
+            doc.fontSize(9)
+            doc.text('รวม   ' +` ${inv.sell_totalprice}`, 100, positionRow +10, { align: 'right' })
+            if(discnt>0){            
+                doc.fontSize(9)
+                doc.text('ส่วนลด   ' +` ${setAmountFormatTh(discnt)}`, 100, positionRow +25, { align: 'right' })
+                doc.fontSize(10)
+                doc.text('รวมทั้งหมด   ' +` ${inv.sell_sumtotalprice}`, 80, positionRow +40, { align: 'right' })
+    
+            }else{
+                //doc.fontSize(9)
+                //doc.text('ส่วนลด   ' +` ${setAmountFormatTh(discnt)}`, 100, positionRow +25, { align: 'right' })
+                doc.fontSize(10)
+                doc.text('รวมทั้งหมด   ' +` ${inv.sell_sumtotalprice}`, 80, positionRow +25, { align: 'right' })
+            }
+         }
+        //const base64Image = geturl; // your base64 image data here
+         //const imageBuffer = Buffer.from(base64Image, 'base64');
+         //doc.image(imageBuffer, 0, 0, {fit: [250, 300]});
+
+        // doc.image(Buffer.from(geturl.replace('data:image/png;base64,',''), 'base64'), 100, 100); // this will decode your base64 to a new buffer
+
+
 
 
 }
 
-generateFooter =(doc)=> {
-	doc.fontSize(
-		10,
-	).text(
-		'ทดสอบภาษาไทย แล้วจ้าเป็นอย่างไรบ้างเน้อ.',
-		50,
-		780,
-		{ align: 'center', width: 500 },
-	);
-}
+setAmountFormatTh =(amount)=>{
+    formattest = Intl.NumberFormat('th-TH', {
+    style: 'currency',
+    currency: 'THB',
+    }).format(amount)
+    return formattest
 
- generateCustomerInformation =(doc, invoice) =>{
-    const customerInformationTop = 200;
-  
-    doc
-      .fillColor("#444444")
-      .fontSize(20)
-      .text("Invoice", 50, 160);
-  
-    generateHr(doc, 185);
-  
-    doc
-      .fontSize(10)
-      .text("Invoice Number:", 50, customerInformationTop)
-      .font("Helvetica-Bold")
-      .text(invoice.invoice_nr, 150, customerInformationTop)
-      .text("Invoice Date:", 50, customerInformationTop + 15)
-      .text(formatDate(new Date()), 150, customerInformationTop + 15)
-      .text("Balance Due:", 50, customerInformationTop + 30)
-      .text(formatCurrency(invoice.subtotal - invoice.paid), 150, customerInformationTop + 30)
-      .font("Helvetica-Bold")
-      .text(invoice.shipping.name, 300, customerInformationTop)
-      .font("Helvetica")
-      .text(invoice.shipping.address, 300, customerInformationTop + 15)
-      .text(`${invoice.shipping.city}, ${invoice.shipping.state}, ${invoice.shipping.country}`, 300, customerInformationTop + 30)
-      .moveDown();
-  
-    generateHr(doc, 252);
-  }
-
-  generateTableRow =(doc, y, c1, c2, c3, c4, c5) =>{
-	doc.fontSize(10)
-		.text(c1, 50, y)
-		.text(c2, 150, y)
-		.text(c3, 280, y, { width: 90, align: 'right' })
-		.text(c4, 370, y, { width: 90, align: 'right' })
-		.text(c5, 0, y, { align: 'right' });
-}
-
-generateInvoiceTable =(doc, invoice) =>{
-	let i,
-		invoiceTableTop = 330;
-
-	for (i = 0; i < invoice.items.length; i++) {
-		const item = invoice.items[i];
-		const position = invoiceTableTop + (i + 1) * 30;
-		generateTableRow(
-			doc,
-			position,
-			item.item,
-			item.description,
-			item.amount / item.quantity,
-			item.quantity,
-			item.amount,
-		);
-	}
 }
 
 module.exports = router;
