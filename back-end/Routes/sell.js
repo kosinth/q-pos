@@ -165,12 +165,16 @@ const invoice = {
 
 router.post('/sell/generateInvoice', async(req,res)=>{
     let inv = req.body  
+    console.log('Inv: ',inv.order_id)
     console.log('Inv: ',inv.sell_item)
+    console.log('Inv: ',inv.sell_totalprice)
+    console.log('Inv: ',inv.sell_sumtotalprice)
+    console.log('Inv: ',inv.sell_totalprice_calc)
+    console.log('Inv: ',inv.sell_sumtotalprice_calc)
+
     console.log('Inv: ',inv.detail)
-
-    console.log('Inv: ',inv.sell_item)
     console.log('Inv: ',inv.detail.length)
-
+    
     
     //const myArray = text.split(" ");
 
@@ -178,8 +182,6 @@ router.post('/sell/generateInvoice', async(req,res)=>{
     //sell_totalprice: parseFloat(pricetotal),
     //sell_sumtotalprice: parseFloat(sumamtall),
     //sell_payment: payment
-
-
 
     // for(let i =0;i<myArray.length;i++){
     //     //for(let j =0;j<myArray[i].length;j++){
@@ -190,17 +192,18 @@ router.post('/sell/generateInvoice', async(req,res)=>{
 
     try{
         let doc = new PDFDocument({ 
-            margins: { top: 10, bottom: 10, left: 10, right: 10 },
+            margins: { top: 0, bottom: 0, left: 0, right: 0 },
             size: 'A7',
-            layout: 'portrait' // 'portrait' or 'landscape'
+            layout: 'portrait', // 'portrait' or 'landscape'
+            fillColor:'#050505'
         });
 
         //Set fonts
         doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
         doc.font('Sarabun')
 
-        generateHeader(doc); // Invoke `generateHeader` function.
-        generateFooter(doc); // Invoke `generateFooter` function.
+        generateHeader(doc,inv); // Invoke `generateHeader` function.
+        //generateFooter(doc); // Invoke `generateFooter` function.
         doc.end();
         //let path = 'pdf/invoice.pdf'
         //doc.pipe(fs.createWriteStream(path));
@@ -218,16 +221,53 @@ router.post('/sell/generateInvoice', async(req,res)=>{
 
 })
 
-generateHeader =(doc) =>{
+generateHeader =(doc,inv) =>{
 	
-	doc.image('exit_2.jpg', 50, 45, { width: 50 })
-		.fillColor('#444444')
-		.fontSize(20)
-		.text('ACME Inc.', 110, 57)
-		.fontSize(10)
-		.text('123 Main Street', 200, 65, { align: 'right' })
-		.text('New York, NY, 10025', 200, 80, { align: 'right' })
-		.moveDown();
+        let d = new Date();
+        let getdt = d.toLocaleString('en-GB').split(',')
+        console.log(getdt[0] + " time: " + getdt[1]);
+
+        //doc.registerFont('Sarabun_bold', `fonts/Sarabun-SemiBold.ttf`)
+        //doc.font('Sarabun_bold')
+        //doc.image('exit_2.jpg', 10, 10, { width: 20 })
+		doc.fillColor('#050505')
+        doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
+        doc.font('Sarabun')
+        .fontSize(12)
+		.text('ใบเสร็จรับเงิน', 10, 10, { align: 'center' })
+        .moveDown()
+        doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
+        doc.font('Sarabun')
+        .fontSize(8)
+		.text(`เลขที่ : ${inv.order_id}`, 10, 30, { align: 'left' })
+		.text(`วันที่ : ${getdt[0] + ' : '+getdt[1]}`, 10, 45, { align: 'left' })
+		.text('----------------------------------------------------------------------------', 1, 55, { align: 'left' })
+        .fontSize(9)
+		.text('รายการ', 35, 63, { align: 'left' })
+        .fontSize(9)
+		.text('จำนวน', 115, 63, { align: 'left' })
+        .fontSize(9)
+		.text('ราคา', 165, 63, { align: 'left' })
+		.text('--------------------------------------------------------------------', 1, 70, { align: 'left' })
+         let positionRow =  80;
+         doc.fontSize(8)
+         for( let i =0;i<inv.detail.length;i++){
+            //console.log(inv.detail[i][0])
+            doc.text(`${inv.detail[i][0]}`, 1, positionRow, { align: 'left' })
+            //console.log(inv.detail[i][1])
+            .text(`${inv.detail[i][1]}`, 125, positionRow, { align: 'left' })
+            //console.log(inv.detail[i][2])
+            .text(`${inv.detail[i][2]}`, 160, positionRow, { align: 'right' })
+            positionRow += 15
+
+         }
+         doc.fontSize(9)
+         positionRow = positionRow-5
+         doc.text('--------------------------------------------------------------------', 1, positionRow , { align: 'left' })
+         doc.fontSize(9)
+         .text(`รวม  ${inv.sell_item}  รายการ`, 10, positionRow +10, { align: 'left' })
+
+
 }
 
 generateFooter =(doc)=> {

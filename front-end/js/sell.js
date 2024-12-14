@@ -4,6 +4,7 @@
     let domtotal = document.getElementById('amount')
     let selectedRadio = 'cash'
     let payment =0
+    let getrowInv = [];
 
 
     sel.onchange = function(evt) {
@@ -73,13 +74,13 @@ window.onload = function() {
     document.body.appendChild(sel);
     document.getElementById('prod_Select').focus();
 
-    // random 4 digit
-     let val = Math.floor(1000 + Math.random() * 9000);
-    //console.log(val);
+    // // random 4 digit
+    //  let val = Math.floor(1000 + Math.random() * 9000);
+    // //console.log(val);
 
-    //pad string
-    const zeroPad = (num, places) => String(num).padStart(places, '0')
-    console.log(zeroPad(val, 4)); // "0005"
+    // //pad string
+    // const zeroPad = (num, places) => String(num).padStart(places, '0')
+    // console.log(zeroPad(val, 4)); // "0005"
 
 };
 
@@ -224,8 +225,9 @@ const onSaveData = async()=>{
     //     return;
     //   }  
     // })
+     console.log(' get Row  xxx : ',getrowInv)
 
-    let sumamt = document.getElementById('sum_amt_obj')
+     let sumamt = document.getElementById('sum_amt_obj')
     let pricetotal = sumamt.innerText.trim();
     pricetotal = clearAmountSymbol(pricetotal)
 
@@ -252,7 +254,6 @@ const onSaveData = async()=>{
     let cntitem = parseInt(getitem);
 
     const resultdata =  getDataSell();
-    const getrow = getDataSell();
     console.log('Payment xxx :  ',payment )
     let sellHeader = {
         sell_item: cntitem,
@@ -288,28 +289,24 @@ const onSaveData = async()=>{
 
          //call api create Invoice()
            try{
-                let dataInvoice =[]
-                dataInvoice.push('10','20','30')
-                dataInvoice.push('11','20','30')
-                dataInvoice.push('12','20','30')
-
-                const pdfResponse = await fetch("http://localhost:5000/api/sell/generateInvoice", {
+                   const pdfResponse = await fetch("http://localhost:5000/api/sell/generateInvoice", {
                     method: 'POST',
-                    headers: {
+                        headers: {
                         'Accept': 'application/pdf',
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        order_id : getorder_id,
                         sell_item: cntitem,
-                        sell_totalprice: parseFloat(pricetotal),
-                        sell_sumtotalprice: parseFloat(sumamtall),
-                        sell_payment: payment,
-                        detail : getrow,
+                        sell_totalprice: setAmountFormatTh(pricetotal),
+                        sell_sumtotalprice: setAmountFormatTh(sumamtall),
+                        detail : getrowInv,
+                        sell_totalprice_calc: pricetotal,
+                        sell_sumtotalprice_calc: sumamtall,
 
                     }),
                 });
 
-                //const pdfResponse = await axios.post(`http://localhost:5000/api/sell/generateInvoice`,resultdata)
                 const resp = await pdfResponse.arrayBuffer();
                 const blob = new Blob([resp], { type: 'application/pdf' });
                 let container = document.getElementById('pdfViewer');
@@ -337,7 +334,6 @@ const onSaveData = async()=>{
         msg = 'มีข้อผิดพลาด ยืนยันข้อมูลนี้แล้ว : ' + err.response.data.msg
         messageresDom.innerText = msg
         messageresDom.className = 'message danger'
-     
 
     }
 
@@ -345,43 +341,44 @@ const onSaveData = async()=>{
 
 const getDataSell = () => {
     
-   
     let table = document.getElementById('myTable');
     let item =1;
     let arrdata = []; 
+    let arrdataInv = [];
 
     for  (var i = 1; i < table.rows.length; i++) {
         buff=''
         if(table.rows[i].cells.length) {
-
-            //let brand = (table.rows[i].cells[0].textContent);
-            //console.log( ' สินค้า :' +brand)
             let tempArr = [];
+            let tempArrInv = [];
             //arrdata.push(item)
             tempArr.push(item); 
+            let brand = (table.rows[i].cells[0].textContent);
+            //console.log( ' สินค้า :' +brand)
+            tempArrInv.push(brand.trim())
             let prodtId = (table.rows[i].cells[4].textContent);
             prodtId= parseInt(prodtId)
             //arrdata.push(prodtId)
             tempArr.push(prodtId); 
-
             let qty = (table.rows[i].cells[1].children[0].value);
+            tempArrInv.push(qty)
             let cntqty = parseInt(qty)
             console.log( ' จำนวน :' +cntqty)
             //arrdata.push(cntqty)
             tempArr.push(cntqty); 
-            
             let price = (table.rows[i].cells[2].textContent);
+            tempArrInv.push(price)
             console.log(' ราคา :  ' +price);  
             price = price.trim();
             let contprice = parseFloat(clearAmountSymbol(price));
             //arrdata.push(contprice)
             tempArr.push(contprice); 
-
             arrdata.push(tempArr);
+            arrdataInv.push(tempArrInv)
             item++;
         } 
     }
-
+    getrowInv =arrdataInv;
     return arrdata;
 
 };
