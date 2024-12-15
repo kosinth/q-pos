@@ -249,9 +249,11 @@ const onSaveData = async()=>{
     //console.log(result)
 
     let getitem = document.getElementById('item').innerText;
-    getitem = getitem.trim();
-    getitem = getitem.substring(0,1);
+    const arritem = getitem.split(' ');
+    //console.log('xxxxx',arritem[0])
+    getitem = arritem[0].trim();
     let cntitem = parseInt(getitem);
+    console.log('get Item xxx :  ',cntitem )
 
     const resultdata =  getDataSell();
     console.log('Payment xxx :  ',payment )

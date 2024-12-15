@@ -7,6 +7,7 @@ const generatePayLoad = require('promptpay-qr')
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 
+
 // app.get('/user/:shopid/:id',async(req,res) =>{
 //     const id = req.params.id
 //     const shopid = req.params.shopid
@@ -115,6 +116,7 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
             light : '#fff'
             }
           }
+          //QRCode.toString(payload,)
         QRCode.toDataURL(payload,option,(err,url) =>{
             if(err){
                 console.log('generate QRcode fail..')
@@ -146,10 +148,12 @@ router.post('/sell/generateInvoice', async(req,res)=>{
     // console.log('Inv: ',inv.detail)
     // console.log('Inv: ',inv.detail.length)
 
+
     try{
         let doc = new PDFDocument({ 
-            margins: { top: 0, bottom: 0, left: 2, right: 2 },
-            size: 'A7',
+            margins: { top: 0, bottom: 0, left: 5, right: 2 },
+            //size: 'A6',
+            size: [210,600],
             layout: 'portrait', // 'portrait' or 'landscape'
             fillColor:'#050505'
         });
@@ -158,10 +162,11 @@ router.post('/sell/generateInvoice', async(req,res)=>{
         doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
         doc.font('Sarabun')
         generateInvoice(doc,inv); // Invoke `generateHeader` function.
-        doc.end();
+      
 
-        //let path = 'pdf/invoice.pdf'
-        //doc.pipe(fs.createWriteStream(path));
+        let path = 'pdf/invoice.pdf'
+        doc.pipe(fs.createWriteStream(path));
+
         console.log('file:sell.js[ api:/sell/generateInvoice ]-->','ok')
         res.contentType('application/pdf');
         doc.pipe(res);
@@ -176,40 +181,24 @@ router.post('/sell/generateInvoice', async(req,res)=>{
 
 })
 
-generateInvoice =(doc,inv) =>{
+generateInvoice = async(doc,inv) =>{
 	
-    // Get promtpay no.
-    let geturl = ''
-    let amount = parseFloat(inv.sell_sumtotalprice_calc)
-    const mobile_no = '0857144983'
-    const payload = generatePayLoad(mobile_no,{amount})
-    const option ={
-            color : {
-            dark : '#000',
-            light : '#fff'
-            }
-          }
-
-          QRCode.toDataURL(payload,option,(err,url) =>{
-            if(err){
-                console.error('file:sell.js[ api:/sell/generateInvoice ]-->',err.message)
-            }else{
-                //console.log('Image Qr : ',url)
-                geturl = url
-
-            }
-          
-        })
-
+        // Get promtpay no.
+        let geturl = ''
+        let amount = parseFloat(inv.sell_sumtotalprice_calc)
+        const mobile_no = '0857144983'
+        const payload = generatePayLoad(mobile_no,{amount})
+        //console.log(payload)
+         
         let d = new Date();
         let getdt = d.toLocaleString('en-GB').split(',')
         console.log(getdt[0] + " time: " + getdt[1]);
         doc.fillColor('#050505')
         doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
         doc.font('Sarabun')
-        .fontSize(12)
-        .text('ใบเสร็จรับเงิน', 10, 10, { align: 'center' })
-        .moveDown()
+        doc.fontSize(12)
+        doc.text('ใบเสร็จรับเงิน', 10, 10, { align: 'center' })
+        doc.moveDown()
         doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
         doc.font('Sarabun')
         .fontSize(8)
@@ -219,9 +208,9 @@ generateInvoice =(doc,inv) =>{
         .fontSize(9)
         .text('รายการ', 35, 63, { align: 'left' })
         .fontSize(9)
-        .text('จำนวน', 115, 63, { align: 'left' })
+        .text('จำนวน', 125, 63, { align: 'left' })
         .fontSize(9)
-        .text('ราคา', 165, 63, { align: 'left' })
+        .text('ราคา', 170, 63, { align: 'left' })
         .text('-------------------------------------------------------------------', 1, 70, { align: 'left' })
          let positionRow =  80;
          doc.fontSize(8)
@@ -229,8 +218,8 @@ generateInvoice =(doc,inv) =>{
          for( let i =0;i<inv.detail.length;i++){
             //console.log(inv.detail[i][0])
             doc.text(`${inv.detail[i][0]}`, 1, positionRow, { align: 'left' })
-            .text(`${inv.detail[i][1]}`, 125, positionRow, { align: 'left' })
-            .text(`${inv.detail[i][2]}`, 160, positionRow, { align: 'right' })
+            .text(`${inv.detail[i][1]}`, 135, positionRow, { align: 'left' })
+            .text(`${inv.detail[i][2]}`, 155, positionRow, { align: 'right' })
             positionRow += 15
 
          }
@@ -238,7 +227,7 @@ generateInvoice =(doc,inv) =>{
          positionRow = positionRow-5
          doc.text('-------------------------------------------------------------------', 1, positionRow , { align: 'left' })
          doc.fontSize(9)
-         .text(`รวม  ${inv.sell_item}  รายการ`, 10, positionRow +10, { align: 'left' })
+         doc.text(`รวม  ${inv.sell_item}  รายการ`, 5, positionRow +10, { align: 'left' })
          doc.fontSize(10)
          let totalPrice = parseFloat(inv.sell_totalprice_calc)
          let sumtotalPrice = parseFloat(inv.sell_sumtotalprice_calc)
@@ -246,7 +235,7 @@ generateInvoice =(doc,inv) =>{
             doc.text('รวม   ' +` ${inv.sell_sumtotalprice}`, 100, positionRow +10, { align: 'right' })
          }else{
             let discnt = totalPrice-sumtotalPrice
-            console.log(discnt)
+            //console.log(discnt)
             doc.fontSize(9)
             doc.text('รวม   ' +` ${inv.sell_totalprice}`, 100, positionRow +10, { align: 'right' })
             if(discnt>0){            
@@ -258,9 +247,18 @@ generateInvoice =(doc,inv) =>{
             }else{
                 doc.fontSize(10)
                 doc.text('รวมทั้งหมด   ' +` ${inv.sell_sumtotalprice}`, 80, positionRow +25, { align: 'right' })
-            }
-         }
 
+            }
+        }
+        await QRCode.toFile('image/test3.png', String(payload)).then(qr => {      
+            doc.fontSize(8)
+            doc.text('สแกนเพื่อชำระ ' , 10, positionRow +60, { align: 'center' })
+            doc.image('image/test3.png', 50, positionRow +69, {width: 120, height: 100 })   
+        })
+
+        //console.log(payload)
+
+        doc.end();
 }
 
 setAmountFormatTh =(amount)=>{
@@ -272,4 +270,9 @@ setAmountFormatTh =(amount)=>{
 
 }
 
+
 module.exports = router;
+
+
+  
+  
