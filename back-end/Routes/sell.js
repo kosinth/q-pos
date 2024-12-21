@@ -120,7 +120,7 @@ router.post('/sell/generateQR/:amount', async(req,res)=>{
         QRCode.toDataURL(payload,option,(err,url) =>{
             if(err){
                 console.log('generate QRcode fail..')
-                res.status(400).json({
+                res.status(600).json({
                     err : ' มีข้อผิดพลาด generate QRcode fail..  ',
                     msg : err.message
                 })
@@ -152,8 +152,8 @@ router.post('/sell/generateInvoice', async(req,res)=>{
     try{
         let doc = new PDFDocument({ 
             margins: { top: 0, bottom: 0, left: 5, right: 2 },
-            //size: 'A6',
-            size: [210,600],
+            //ze: 'A7',
+            size: [210,680],
             layout: 'portrait', // 'portrait' or 'landscape'
             fillColor:'#050505'
         });
@@ -164,8 +164,8 @@ router.post('/sell/generateInvoice', async(req,res)=>{
         generateInvoice(doc,inv); // Invoke `generateHeader` function.
       
 
-        let path = 'pdf/invoice.pdf'
-        doc.pipe(fs.createWriteStream(path));
+        //let path = 'pdf/invoice.pdf'
+        //doc.pipe(fs.createWriteStream(path));
 
         console.log('file:sell.js[ api:/sell/generateInvoice ]-->','ok')
         res.contentType('application/pdf');
@@ -202,24 +202,24 @@ generateInvoice = async(doc,inv) =>{
         doc.registerFont('Sarabun', `fonts/Sarabun-Thin.ttf`)
         doc.font('Sarabun')
         .fontSize(8)
-        .text(`เลขที่ : ${inv.order_id}`, 10, 30, { align: 'left' })
-        .text(`วันที่ : ${getdt[0] + ' : '+getdt[1]}`, 10, 45, { align: 'left' })
-        .text('---------------------------------------------------------------------------', 1, 55, { align: 'left' })
-        .fontSize(9)
-        .text('รายการ', 35, 63, { align: 'left' })
-        .fontSize(9)
-        .text('จำนวน', 125, 63, { align: 'left' })
-        .fontSize(9)
-        .text('ราคา', 170, 63, { align: 'left' })
-        .text('-------------------------------------------------------------------', 1, 70, { align: 'left' })
+        doc.text(`เลขที่ : ${inv.order_id}`, 10, 30, { align: 'left' })
+        doc.text(`วันที่ : ${getdt[0] + ' : '+getdt[1]}`, 10, 45, { align: 'left' })
+        doc.text('---------------------------------------------------------------------------', 1, 55, { align: 'left' })
+        doc.fontSize(9)
+        doc.text('รายการ', 35, 63, { align: 'left' })
+        doc.fontSize(9)
+        doc.text('จำนวน', 125, 63, { align: 'left' })
+        doc.fontSize(9)
+        doc.text('ราคา', 170, 63, { align: 'left' })
+        doc.text('-------------------------------------------------------------------', 1, 70, { align: 'left' })
          let positionRow =  80;
-         doc.fontSize(8)
+        doc.fontSize(8)
          doc.fillColor('#050505')
          for( let i =0;i<inv.detail.length;i++){
             //console.log(inv.detail[i][0])
             doc.text(`${inv.detail[i][0]}`, 1, positionRow, { align: 'left' })
-            .text(`${inv.detail[i][1]}`, 135, positionRow, { align: 'left' })
-            .text(`${inv.detail[i][2]}`, 155, positionRow, { align: 'right' })
+            doc.text(`${inv.detail[i][1]}`, 135, positionRow, { align: 'left' })
+            doc.text(`${inv.detail[i][2]}`, 155, positionRow, { align: 'right' })
             positionRow += 15
 
          }
@@ -227,7 +227,8 @@ generateInvoice = async(doc,inv) =>{
          positionRow = positionRow-5
          doc.text('-------------------------------------------------------------------', 1, positionRow , { align: 'left' })
          doc.fontSize(9)
-         doc.text(`รวม  ${inv.sell_item}  รายการ`, 5, positionRow +10, { align: 'left' })
+         doc.text(`  ${inv.sell_item}  รายการ`, 5, positionRow +10, { align: 'left' })
+
          doc.fontSize(10)
          let totalPrice = parseFloat(inv.sell_totalprice_calc)
          let sumtotalPrice = parseFloat(inv.sell_sumtotalprice_calc)
@@ -250,16 +251,17 @@ generateInvoice = async(doc,inv) =>{
 
             }
         }
-        await QRCode.toFile('image/test3.png', String(payload)).then(qr => {      
+
+        let imgname = 'inv_'+'1205'
+        await QRCode.toFile(`image/${imgname}.png`, String(payload)).then(qr => {      
             doc.fontSize(8)
-            doc.text('สแกนเพื่อชำระ ' , 10, positionRow +60, { align: 'center' })
-            doc.image('image/test3.png', 50, positionRow +69, {width: 120, height: 100 })   
+            doc.text('สแกนชำระ ' , 10, positionRow +60, { align: 'center' })
+            doc.image(`image/${imgname}.png`, 50, positionRow +69, {width: 120, height: 100 })   
         })
 
-        //console.log(payload)
-
         doc.end();
-}
+
+    }
 
 setAmountFormatTh =(amount)=>{
     formattest = Intl.NumberFormat('th-TH', {
@@ -269,7 +271,6 @@ setAmountFormatTh =(amount)=>{
     return formattest
 
 }
-
 
 module.exports = router;
 

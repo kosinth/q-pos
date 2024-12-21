@@ -566,24 +566,56 @@ img {
 }
 
 .message{
-            background-color:lightslategray;
             padding: 10px;
             margin-bottom: 10px;
             display: none;
 
         }
         .message.success{
-            background-color: rgb(101, 165, 101);
+            color: rgb(10, 80, 230);
+            font-size: medium;
+            font-weight: bold;
             display: block;
         }
 
         .message.danger{
-            background-color:  rgb(228, 86, 86);
+            color:  rgb(228, 86, 86);
+            font-size: medium;
+            font-weight: bold;
             display: block;
         }
         .message.clear{
             display: none;
         }
+
+
+  .blink {
+    animation: blinkIt 1s infinite;
+  }
+
+  @keyframes blinkIt {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }      
+
+  .new_order{
+    background-color: #dfc532;
+    font-weight: bold;
+    height: 30px;
+    border-radius: 8px;
+   }
+   .new_item{
+    background-color: #04754c;
+    color: #e0d0d0;
+    font-weight: bold;
+    height: 30px;
+    border-radius: 8px;
+
+   }
 
 
 </style>
@@ -612,21 +644,31 @@ img {
     
       <br>
       <div class="div_select_product"> 
-          <!-- class กำหนดความสูง  .bootstrap-select > .dropdown-toggle  mySelect prod_Select  -->
-          <select id="prod_Select" class="selectpicker" data-live-search="true">
-            <option>-- ค้นหาสินค้า -- </option>
-          </select>
-          <!--
-          <span class="span_inv_no" >No.</span>    
-          <span class="span_inv_detail" >Inv-123</span>    
-          -->
+          
+          <div class="row" > 
+            <div class="col-50">
+              <!-- class กำหนดความสูง  .bootstrap-select > .dropdown-toggle  mySelect prod_Select  
+              &nbsp;&nbsp; 
+              -->
+              <span>
+                <select id="prod_Select" class="selectpicker" data-live-search="true">
+                  <option>-- ค้นหาสินค้า -- </option>
+                </select>    
+                <span> &nbsp;&nbsp; <input type="button"  class="new_order"    value="คำสั่งซื้อ +"  onclick="clearDataTonewInv()" title="ล้างหน้าจอ เริ่มคำสั่งซื้อใหม่"> </span>
+             </span>
+            </div>
+          </div>
+          
       </div>
+      
       <br>    
   
   <div class="div_select_product_detail">
-    <input type="button" id="btnInsert"  onclick="doTheInsert()"  value="เพิ่ม +" > 
-    <span id="labelunit" class="span_infoprod"> หน่วย </span>  
-    <span id="unitPrice" class="span_inv_detail"> </span>  
+     
+    <span><input type="button" id="btnInsert" class="new_item" onclick="doTheInsert()"  value=" เพิ่มรายการ +" title="เพิ่มสินค้า"> </span>
+
+    <span id="labelunit" class="span_infoprod"> ราคา/หน่วย </span>  
+    <span id="unitPrice" class="span_inv_detail"> 0 </span>  
     <span id="qty" class="span_infoprod"> จำนวน <input id="qtybtn" name="qtybtn" type="number" class="btn_qty" min="1" value="1" onchange="changeQty()"></span>  
     <span id="amount" class="span_inv_detail"></span>  
 
@@ -636,9 +678,9 @@ img {
       <table id="myTable"  style="border:0"  >
         <thead>
             <tr>
-                <th>สินค้า</th>
-                <th>จำนวน</th>
-                <th>ราคา</th>
+                <th >สินค้า</th>
+                <th >จำนวน</th>
+                <th >ราคา</th>
                 </tr>
           </thead>
           <tbody>
@@ -671,12 +713,13 @@ img {
         
    </table>
   </div>
-  <br>
-      <table id="check_sum" >
+  <div id="wait-text" style="font-weight: bold;color: red;">  </div>
+      
+   <table id="check_sum" >
         <tbody>
               <tr> 
                 <td class="ftd_1"> </td>
-                <td class="ftd_2"><button id="chkbill" class="button_Chekbill" onclick="document.getElementById('id01').style.display='block' ;loadFrmSaveData()" disabled=true > คิดเงิน</button>  </td>
+                <td class="ftd_2"><button id="chkbill" class="button_Chekbill" onclick="loadFrmSaveData()" disabled=true > คิดเงิน</button>  </td>
                 <td> </td>
             </tr>
         </tbody>
@@ -696,7 +739,7 @@ img {
             <!-- Modal content -->
       <div class="modal-content">
             <div class="imgcontainer">
-              <span  onclick="document.getElementById('id01').style.display='none';" data-dismiss="modal" class="close" title="->ปิด">&times;</span>
+              <span  onclick="document.getElementById('id01').style.display='none';closeClearForm()" data-dismiss="modal" class="close" title="->ปิด">&times;</span>
             </div>
  
               <p class="title" id="title">ชำระเงิน &nbsp;&nbsp;&nbsp;&nbsp; <span id="sumtotal"  style="color:#04754c;font-size: 25px;font-weight: bold;">  </span>
@@ -727,7 +770,7 @@ img {
                     <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >รับเงิน</b> </p> 
                   </div>
                   <div class="col-75">
-                    <input type="text" id="getMoney" class="txtGetMoney" onchange='formatNumber(this)' value="0.00"  > 
+                    <input type="text" id="getMoney" class="txtGetMoney" onchange='formatNumber(this)' value=""  > 
                   </div>
                 </div>
 
@@ -735,7 +778,7 @@ img {
                   <div class="col-25">
                     <p  id="title" style="color:#0c0c0cb4;font-size: 18px;font-weight: bold;"><b >ทอนเงิน</b> </p> 
                   </div>
-                    <div class="col-75">
+                  <div class="col-75">
                     <div id="change" style="width: 120px; font-weight: bold;"> </div> 
                   </div>
                 </div>
@@ -755,8 +798,8 @@ img {
               </div>   
 
               <div class="row">
-                  <button type="submit" id="btnSubmit" class="button_ok" onclick="onSaveData()"> ยืนยันข้อมูล</button>
-                  <div id="message"> hh </div>
+                <div id="message"> </div>
+                <button type="submit" id="btnSubmit" class="button_ok" onclick="onSaveData()"> ยืนยันข้อมูล</button>
                 </div>
                 <br>
                 <div class="row">
@@ -809,6 +852,7 @@ function myFunction() {
 
     function closeClearForm(){
 
+      //alert('ok')
       // Comfirm Box  
       // let result = confirm("ยังไม่ได้ บันทึกข้อมูล ...");
       // if (result === true) {
@@ -819,34 +863,85 @@ function myFunction() {
       //   //console.log("User clicked Cancel");
       // }
       //alert('close --->')
+      
+      let checkSubmit = document.getElementById('btnSubmit')
+      //console.log(' gogo FFF ',checkSubmit.disabled)
+
+      if(!checkSubmit.disabled){
+        showBlinkMsg(true)
+      }
       document.getElementById('btnInsert').focus();
 
     }
     
     function loadFrmSaveData(){
 
-      //alert(' ok ');
-      let sum_all =document.getElementById('sum_amt_all').innerText;
-      let getsumall = document.getElementById('sumtotal');
-      getsumall.innerText = sum_all;
-      //sumtotal.style.color ="blue"
-      let getMoney = document.getElementById('getMoney');
-      let getchageMoney = document.getElementById('change');
-      getchageMoney.innerHTML = "";
-      getMoney.value = ""
-      document.getElementById("btnSubmit").disabled = true;
-      document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf '; 
-      let messageresDom = document.getElementById('message')
-      messageresDom.innerText = ''
-      messageresDom.className = 'message clear'
+      
+        let unitpric = document.getElementById('sum_amt_all').innerText;
+        parseFloat(clearAmountSymbol(unitpric))
+        unitpric = parseFloat(clearAmountSymbol(unitpric))
+        console.log(' HHH ',unitpric)
+        if(unitpric>0){
+          document.getElementById('id01').style.display='block' ;
+        }
+
+        let sum_all =document.getElementById('sum_amt_all').innerText;
+        let getsumall = document.getElementById('sumtotal');
+        getsumall.innerText = sum_all;
+        //sumtotal.style.color ="blue"
+        let getMoney = document.getElementById('getMoney');
+        let getchageMoney = document.getElementById('change');
+        //getchageMoney.innerHTML = "";
+        //getMoney.value = ""
+
+        // if(fg_validate){
+        //   document.getElementById("btnSubmit").style.backgroundColor = '#04754c';
+        //   document.getElementById("btnSubmit").disabled = false;
+
+        // }else{
+        //   console.log(' SSS OK ',saveSucces)
+        //   if(saveSucces==1){
+        //     document.getElementById("btnSubmit").style.backgroundColor = '#04754c';
+        //   document.getElementById("btnSubmit").disabled = false;
+
+        //   }else{
+        //     document.getElementById("btnSubmit").disabled = true;
+        //   document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf '; 
+
+        //   }
+
+        // }
+        
+          // if(fg_newTrans){
+          //   getMoney.value = '0.00'
+
+          // }
+
+          console.log(' SSS OK ',saveSucces  + "  " + fg_newTrans + " " + fg_validate ) 
+          if(saveSucces==1 ||fg_validate==false){
+            document.getElementById("btnSubmit").disabled = true;
+            document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf '; 
+
+          }else{
+
+            document.getElementById("btnSubmit").style.backgroundColor = '#04754c';
+            document.getElementById("btnSubmit").disabled = false;
 
 
-      $("#showimg").attr('src', '');
+          }
 
-      document.getElementById('typecheck1').checked = true;  
-      document.getElementById("div_cash").style.display = 'inline';
-      document.getElementById("div_tranfer").style.display = 'none';
-      getMoney.focus();
+        //let messageresDom = document.getElementById('message')
+        //messageresDom.innerText = ''
+        //messageresDom.className = 'message clear'
+
+        $("#showimg").attr('src', '');
+
+        document.getElementById('typecheck1').checked = true;  
+        document.getElementById("div_cash").style.display = 'inline';
+        document.getElementById("div_tranfer").style.display = 'none';
+        getMoney.focus();
+
+
 
     }
 
@@ -899,7 +994,9 @@ function myFunction() {
         chageMoney.style.fontSize = '22px';
         chageMoney.style.fontWeight = 'blod';
         chageMoney.innerText =  setAmountFormatTh(moneychange);
+        fg_validate =true
       }else{
+        fg_validate =false
         document.getElementById("btnSubmit").disabled = true;
         document.getElementById("btnSubmit").style.backgroundColor = '#a6acaf';
         let alert = document.getElementById('infor')
@@ -923,9 +1020,9 @@ function myFunction() {
       let product_id = arrId[0]
 
       let domunitprice = document.getElementById('unitPrice').innerText
-      //console.log(' get unitprice : ',domunitprice)
-      if(domunitprice){
-        domunitprice = clearAmountSymbol(domunitprice)
+      domunitprice = parseInt(clearAmountSymbol(domunitprice))
+      console.log(' get unitprice   ZZZ : ',domunitprice)
+      if(domunitprice>0){
         console.log(' get unitprice : ',domunitprice)
         let getitem = document.getElementById('item').innerText;
         getitem = getitem.trim();
@@ -961,6 +1058,13 @@ function myFunction() {
         calcAmount()
 
       }
+      // else{
+      //   //alert('ok') 
+      //   let selOpt =document.getElementById('prod_Select')
+      //   selOpt.onfocus();
+
+      // }
+
 
     }
 
@@ -1004,10 +1108,10 @@ function myFunction() {
       let disCount = document.getElementById('discount')
       let getDist =bDiscnt.value;
       let price = sumamt.innerText.trim();
-      price = price.substring(1,price.length)
-      let contprice = parseFloat(price.replace(/,/g, ''));
-      let amt_discnt = contprice*getDist/100;
+      //console.log(' price xxx ',price)
 
+      let contprice = parseFloat(clearAmountSymbol(price));
+      let amt_discnt = contprice*getDist/100;
       disCount.innerText =  setAmountFormatTh(amt_discnt);
       sumAll = contprice-amt_discnt;
       // ปัดเศษทศนิยม
@@ -1030,6 +1134,9 @@ function myFunction() {
   //console.log(zeroPad(5, 4)); // "0005"
   //console.log(zeroPad(5, 6)); // "000005"
   //console.log(zeroPad(1234, 2)); // "1234"
+
+
+
 
 </Script>
 

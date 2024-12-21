@@ -326,8 +326,21 @@
             outline: none;
         }
 
- 
+      .new_item{
+          background-color: #04754c;
+          color: #e0d0d0;
+          font-weight: bold;
+          height: 30px;
+          border-radius: 8px;
 
+       }
+
+      .new_order{
+        background-color: #dfc532;
+        font-weight: bold;
+        height: 30px;
+        border-radius: 8px;
+      }
 
 </Style>
 
@@ -355,7 +368,7 @@
             
             <table class="tb" >
               <tr>
-                <th class="th1"><button id="myBtn">สินค้า +</button> </th>
+                <th class="th1"><button id="myBtn" class="new_item">สินค้า +</button> </th>
                 <th class="th2"><button type="submit" class="btn_search" title="กดค้นหาสินค้า" onclick="searchName()" > <i class="fa fa-search"></i></button> </th>
                 <th class="th3"><input id="search" placeholder="ค้นหาสินค้า ..." type="text" class="myInput" onchange="searchName()" >  </th>
                 <th class="th4"> <div id="divsearch" style="font-size: 12px;"> </div> </th>
@@ -380,7 +393,7 @@
 
               <div class="row" > 
                 <div class="col-25">
-                  <button id="btnAdd" onclick="cleardataProduct()"> เคลียร์หน้าจอ</button> 
+                  <button id="btnAdd" class="new_order" onclick="cleardataProduct()"> เคลียร์หน้าจอ</button> 
                 </div>
                <div class="col-75">
                 <div id="divEdit" class="div-edit"></div>
