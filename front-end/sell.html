@@ -7,8 +7,12 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 <link rel="stylesheet" href="/front-end/dist/css/bootstrap-select.css">
+<!--  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/front-end/css/menu.css">
+
 <!--  
 <link rel="stylesheet" href="dist/css/search-list.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -212,7 +216,7 @@ table {
             box-shadow: hsla(0, 78%, 57%, 0.932) 0 0 0 3px;
             outline: none;
         }
-
+        /*
         .child {
             height: 1000px;
             margin: 10px;
@@ -220,6 +224,17 @@ table {
             background-color: #f8f8f2; 
 
         }
+        */ 
+        .child {
+          height: auto;
+          margin: 10px;
+          border: 0px solid;
+          background-color: #f8f8f2; 
+        
+        }
+
+        
+
         /*             background-color: #ececea;  */
    
         .lineBorder {
@@ -327,14 +342,18 @@ table {
   position: relative;
 }
 
+
 img.avatar {
   width: 40%;
   border-radius: 50%;
 }
 
+/*
 .container {
   padding: 16px;
 }
+*/
+
 
 span.psw {
   float: right;
@@ -384,6 +403,7 @@ span.psw {
 
 
 /* Add Zoom Animation */
+/*
 .animate {
   -webkit-animation: animatezoom 0.6s;
   animation: animatezoom 0.6s
@@ -399,7 +419,9 @@ span.psw {
   to {transform: scale(1)}
 }
 
+*/
 /* Change styles for span and cancel button on extra small screens */
+/*
 @media screen and (max-width: 600px) {
   span.psw {
      display: block;
@@ -407,6 +429,9 @@ span.psw {
   }
  
 }
+
+*/
+
 
 .showDate{
   font-size: 13px;
@@ -628,21 +653,22 @@ img {
 <body>
 
 <div class="child">
-    
-        <div class="topnav" id="myTopnav">
-          <a href="#home" class="active">Home</a>
-          <a href="/front-end/sell.html">ขาย</a>
-          <a href="/front-end/product.html">สินค้า</a>
-          <a href="#รายงาน">รายงาน</a>
-          <a href="#User">ข้อมูลผู้ใช้</a>
-          <a href="#Exit" ><img src="/front-end/images/exit_2.jpg" alt="ิกลับไปหน้า Login" style="width:40px;height:30px;"></a>
-          <div id="id_date" class="showDate" > 12/12/2054 | Id: 5682 </div>
-          <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-            <i class="fa fa-bars"></i>
-          </a>
-        </div>
-    
-      <br>
+
+  <div class="topnav" id="myTopnav">
+    <a href="#home" class="active">Home</a>
+    <a href="/front-end/sell.html">ขาย</a>
+    <a href="/front-end/product.html">สินค้า</a>
+    <a href="#รายงาน">รายงาน</a>
+    <a href="#User">ข้อมูลผู้ใช้</a>
+    <a href="#Exit" ><img src="/front-end/images/exit_2.jpg" alt="ิกลับไปหน้า Login" style="width:40px;height:30px;"></a>
+    <div id="id_date" class="showDate" > 12/12/2054 | Id: 5682 </div>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+  
+
+    <br>
       <div class="div_select_product"> 
           
           <div class="row" > 
@@ -834,14 +860,17 @@ $(document).on('click', '[data-dismiss="modal"]', function(){
 
 })
     
+
 function myFunction() {
-    var x = document.getElementById("myTopnav");
-    if (x.className === "topnav") {
-      x.className += " responsive";
-    } else {
-      x.className = "topnav";
-    }
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
   }
+}
+
+  
   function selectProduct() {
     
     var x = document.getElementById("select-product").value;
