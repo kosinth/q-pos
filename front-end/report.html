@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q POS|สินค้า</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    
+    
+    <script src="./thai.datepicker.js"></script>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="/front-end/css/menu.css">
+    
+    <script src="/front-end/js/jsalert.min.js"></script>
+
+</head>
+
+<style>
+
+@font-face {
+        font-family:'kanit';
+        src: url('fonts/kanit/Kanit-Regular.ttf');
+    }       
+    body{
+        font-family: 'kanit';
+    }
+
+.child {
+        height: auto;
+        margin: 10px;
+        border: 0px solid;
+        background-color: #f8f8f2; 
+        
+    }
+ .showDate{
+    font-size: 13px;
+    color: #5abdce;
+    font-weight: bold;
+    text-align: left;
+    padding: 17px;
+  
+  }
+
+ /* Style the tab */
+.tab {
+  margin-top: 20px;  
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #639797;
+  border-radius: 10px;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+} 
+
+.col-25 {
+      float: left;
+      width: 25%;
+      margin-top: 6px;
+    }
+
+    .col-75 {
+      float: left;
+      width: 75%;
+      margin-top: 6px;
+    }
+
+
+
+.row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 600px) {
+      .col-25, .col-75, input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+      }
+    }
+ .datePicker{
+    width: 120px;
+    font-weight: bold;
+    background-color: rgb(201, 200, 197); 
+    color: rgb(32, 30, 30);
+    height: 30px ;
+    border-radius: 5px;
+    border-color: rgb(233, 229, 227);
+ }
+
+
+</style>
+
+<body onload="onLoad()">
+
+    <div class="child">
+        <div class="topnav" id="myTopnav">
+            <a href="#home" class="active">Home</a>
+            <a href="/front-end/sell.html">ขาย</a>
+            <a href="/front-end/product.html">สินค้า</a>
+            <a href="/front-end/report.html">รายงาน</a>
+            <a href="#User">ข้อมูลผู้ใช้</a>
+            <a href="#Data">นำเข้าข้อมูล</a>
+            <a href="#Exit" alt="ิกลับไปหน้า Login" ><img src="/front-end/images/exit_2.jpg" alt="ิกลับไปหน้า Login" style="width:40px;height:30px;"></a>
+            <div id="id_date" class="showDate" > 12/12/2054 | Id: 5682   </div>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+              <i class="fa fa-bars"></i>
+            </a>
+        </div>
+         
+          <br>
+
+           <div style="padding-top: 5px; padding-left: 20px;">
+            <div class="row" > 
+                <div class="col-25">
+                  <span>
+                    <label style="font-weight: bold;color: rgb(66, 68, 63);">วันที่ : </label>
+                    <input type="text" id="fromdate"  name="fromdate"  class="datePicker" value=""  >
+                </span>
+            
+                </div>
+                <div class="col-75">
+                   <span> <label style="font-weight: bold;color: rgb(66, 68, 63);">ถึงวันที่ : </label></span>
+                    <span><input type="text" id="todate"  name="todate" class="datePicker"  value="" > </span>
+                  
+                </div>
+              
+            </div>
+ 
+        </div>
+
+          <div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'sell')">ยอดขาย</button>
+            <button class="tablinks" onclick="openCity(event, 'product')">สินค้า</button>
+          </div>
+          
+          <div id="sell" class="tabcontent">
+            <h4>สรุปยอดขาย</h4>
+            <p>สรุปยอดขาย.</p>
+          </div>
+          
+          <div id="product" class="tabcontent">
+            <h4>สรุปสินค้าขาย</h4>
+            <p>สรุปสินค้า.</p> 
+          </div>
+          
+
+
+    </div>    
+<script>
+
+    $(function() {
+        //original datepicker
+        $("#datepicker").datetimepicker()
+        //thai datepicker
+        thaiDatepicker("#fromdate,#todate")
+    })
+
+    function thaiDatepicker(el) {
+        $.datetimepicker.setLocale('th')
+
+        $(el).attr('readonly', true)
+        $(el).addClass('date-readonly')
+        $(el).datetimepicker({
+            timepicker: false,
+            format: 'd/m/Y',
+            lang: 'th',
+            yearOffset : 543,
+            validateOnBlur: false,
+        })
+
+    }
+
+    function onLoad(){
+
+        const date = new Date()
+        const result = date.toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        })
+        document.getElementById('fromdate').value = result
+        document.getElementById('todate').value = result
+
+    }
+
+    function openCity(evt, cityName) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    function myFunction() {
+        let x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+        }
+    }
+ </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- เพิ่ม script axios -->   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/front-end/js/system.js"></script>
+   
+</body>
+</html>

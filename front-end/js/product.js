@@ -148,7 +148,7 @@ const loadData = async(curr) =>{
             console.log(messageErr)
 
         }
-        //console.log(err.response.data.message)
+        console.log(err.message)
         errmsg.innerText = messageErr
         errmsg.style.color = 'red'
 
