@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Q POS|สินค้า</title>
-
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="/front-end/css/menu.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
-    
-    
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script src="./thai.datepicker.js"></script>
-
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="/front-end/css/menu.css">
-    
     <script src="/front-end/js/jsalert.min.js"></script>
 
 </head>
@@ -66,6 +65,8 @@
   transition: 0.3s;
   font-size: 18px;
   font-weight: bold;
+  color: rgb(34, 33, 33);
+
 }
 
 /* Change background color of buttons on hover */
@@ -100,6 +101,9 @@
 
 
 
+    
+
+
 .row:after {
       content: "";
       display: table;
@@ -121,6 +125,7 @@
     height: 30px ;
     border-radius: 5px;
     border-color: rgb(233, 229, 227);
+    text-align:center;
  }
 
 
@@ -143,26 +148,12 @@
             </a>
         </div>
          
-          <br>
 
-           <div style="padding-top: 5px; padding-left: 20px;">
-            <div class="row" > 
-                <div class="col-25">
-                  <span>
-                    <label style="font-weight: bold;color: rgb(66, 68, 63);">วันที่ : </label>
-                    <input type="text" id="fromdate"  name="fromdate"  class="datePicker" value=""  >
-                </span>
-            
-                </div>
-                <div class="col-75">
-                   <span> <label style="font-weight: bold;color: rgb(66, 68, 63);">ถึงวันที่ : </label></span>
-                    <span><input type="text" id="todate"  name="todate" class="datePicker"  value="" > </span>
-                  
-                </div>
-              
-            </div>
- 
-        </div>
+          <div style="padding-top: 5px; padding-left: 40px;">
+                <br>
+                <span style="font-weight: bold; color: rgb(80, 79, 79);">วันที่ : <input type="text" id="fromdate"  name="fromdate"  class="datePicker" value=""  ></span>
+                <span style="font-weight: bold; color: rgb(80, 79, 79);">&nbsp;ถึงวันที่ : <input type="text" id="todate"  name="todate"  class="datePicker" value=""  ></span>
+          </div>
 
           <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'sell')">ยอดขาย</button>
@@ -170,8 +161,15 @@
           </div>
           
           <div id="sell" class="tabcontent">
-            <h4>สรุปยอดขาย</h4>
-            <p>สรุปยอดขาย.</p>
+         
+
+              <span style="color:rgb(50, 51, 49);font-size:17px;font-weight: bold;">สรุปยอดขาย</span>
+              &nbsp;&nbsp;&nbsp; <span  id="dateinfo" style="color:rgb(51, 49, 49);font-weight:bold"></span>
+                  
+              <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+
+
           </div>
           
           <div id="product" class="tabcontent">
@@ -192,7 +190,8 @@
     })
 
     function thaiDatepicker(el) {
-        $.datetimepicker.setLocale('th')
+        
+      $.datetimepicker.setLocale('th')
 
         $(el).attr('readonly', true)
         $(el).addClass('date-readonly')
@@ -207,30 +206,20 @@
     }
 
     function onLoad(){
+      // get date Server Api
+      getDate();
+      let arrdate = sysdate.split(",");
+      const date = new Date(arrdate[0]);
+      //console.log(date )
+      const result = date.toLocaleDateString('th-TH', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      })
+      
+      document.getElementById('fromdate').value = result
+      document.getElementById('todate').value = result
 
-        const date = new Date()
-        const result = date.toLocaleDateString('th-TH', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        })
-        document.getElementById('fromdate').value = result
-        document.getElementById('todate').value = result
-
-    }
-
-    function openCity(evt, cityName) {
-        let i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(cityName).style.display = "block";
-        evt.currentTarget.className += " active";
     }
 
     function myFunction() {
@@ -246,6 +235,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- เพิ่ม script axios -->   
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/front-end/js/system.js"></script>
+    <script src="/front-end/js/report.js"></script>
    
 </body>
 </html>

@@ -45,3 +45,14 @@ setAmountFormatDec =(amount)=>{
     return formattest
 
  }
+
+ setDateEn =(dateIn)=>{
+
+      const result = date.toLocaleDateString('en', {
+         year: 'numeric',
+         month: 'numeric',
+         day: 'numeric',
+      })
+      return result
+
+ }
