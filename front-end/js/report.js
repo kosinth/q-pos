@@ -23,7 +23,7 @@ onActive =(paramIn)=>{
     let convtFromdate = parseInt(arrStrFrmDate[2])
     convtFromdate = convtFromdate - 543
     const  dateFrm = convtFromdate+ "-" + arrStrFrmDate[1] + "-" + arrStrFrmDate[0]
-    console.log(' HHHH ', arrStrFrmDate[0] + "/" + arrStrFrmDate[1] + "/" + dateFrm )
+    //console.log(' HHHH ', arrStrFrmDate[0] + "/" + arrStrFrmDate[1] + "/" + dateFrm )
 
     let arrStrToDate = domTodate.split('/')
     let convtTodate = parseInt(arrStrToDate[2])
@@ -33,9 +33,19 @@ onActive =(paramIn)=>{
 
     if(paramIn=='sell'){
 
-        document.getElementById('dateinfo').innerText = " วันที่ " +domFromdate + "   -   "+ domTodate  + "  to "  + dateFrm  + " -  " + dateTo
+        document.getElementById('dateinfo').innerText = " วันที่ " +domFromdate + "   -   "+ domTodate  
         //showChartDonut();
         const resultArr =  showChart(dateFrm,dateTo);
+          
+        //find Max in array
+        // console.log(Math.max(1, 3, 2));
+        // // Expected output: 3
+        // console.log(Math.max(-1, -3, -2));
+        // // Expected output: -1
+        // const array1 = [1, 3, 2];
+        // console.log(Math.max(...array1));
+        // // Expected output: 3
+
 
         // show chart
         // var xValues = ["1"
