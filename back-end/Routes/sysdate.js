@@ -10,7 +10,7 @@ router.get('/systemdate/getdate', async(req, res) => {
         let year = date_ob.getFullYear();
         const dateSys = date + "/" + month + "/" + year
         //console.log('Sysdate : ',dateSys)
-        let result =  date_ob+","+dateSys
+        let result =  date_ob
         res.json(result);
         console.log(`file:sysdate.js[ api:/systemdate/getdate ] get system date ok -->${dateSys}`)
 

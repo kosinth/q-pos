@@ -99,11 +99,6 @@
       margin-top: 6px;
     }
 
-
-
-    
-
-
 .row:after {
       content: "";
       display: table;
@@ -160,13 +155,17 @@
             <button class="tablinks" onclick="openCity(event, 'product')">สินค้า</button>
           </div>
           
+          <div id="errMsg"></div>
+
           <div id="sell" class="tabcontent">
-         
 
               <span style="color:rgb(50, 51, 49);font-size:17px;font-weight: bold;">สรุปยอดขาย</span>
               &nbsp;&nbsp;&nbsp; <span  id="dateinfo" style="color:rgb(51, 49, 49);font-weight:bold"></span>
-                  
-              <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+              
+              <div style="overflow-x:auto;">
+              <canvas id="myChart" style="width:100%;"></canvas>
+
+              </div>
 
 
 
@@ -208,8 +207,8 @@
     function onLoad(){
       // get date Server Api
       getDate();
-      let arrdate = sysdate.split(",");
-      const date = new Date(arrdate[0]);
+      //let arrdate = sysdate.split(",");
+      const date = new Date(sysdate);
       //console.log(date )
       const result = date.toLocaleDateString('th-TH', {
       year: 'numeric',

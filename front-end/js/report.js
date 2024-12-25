@@ -19,18 +19,51 @@ onActive =(paramIn)=>{
 
     let domFromdate = document.querySelector('input[name=fromdate]').value
     let domTodate = document.querySelector('input[name=todate]').value
-    
-    let arrStrtoDate = domFromdate.split('/')
-    let cont = parseInt(arrStrtoDate[2])
-    cont = cont - 543
-    const  dateBc = arrStrtoDate[0] + "/" + arrStrtoDate[1] + "/" + cont
-    console.log(' HHHH ', arrStrtoDate[0] + "/" + arrStrtoDate[1] + "/" + cont )
+    let arrStrFrmDate = domFromdate.split('/')
+    let convtFromdate = parseInt(arrStrFrmDate[2])
+    convtFromdate = convtFromdate - 543
+    const  dateFrm = convtFromdate+ "-" + arrStrFrmDate[1] + "-" + arrStrFrmDate[0]
+    console.log(' HHHH ', arrStrFrmDate[0] + "/" + arrStrFrmDate[1] + "/" + dateFrm )
+
+    let arrStrToDate = domTodate.split('/')
+    let convtTodate = parseInt(arrStrToDate[2])
+    convtTodate = convtTodate - 543
+    const  dateTo = convtFromdate + "-" + arrStrToDate[1] + "-" + arrStrToDate[0]
+
 
     if(paramIn=='sell'){
 
-        document.getElementById('dateinfo').innerText = " วันที่ " +domFromdate + "   -   "+ domTodate  + "  to "  + dateBc
+        document.getElementById('dateinfo').innerText = " วันที่ " +domFromdate + "   -   "+ domTodate  + "  to "  + dateFrm  + " -  " + dateTo
         //showChartDonut();
-        showChart();
+        const resultArr =  showChart(dateFrm,dateTo);
+
+        // show chart
+        // var xValues = ["1"
+        // ];
+        // var yValues = ["5500.00"
+        // ];
+        // var barColors = ["green"
+        // ];
+    
+    
+        // new Chart("myChart", {
+        //   type: "bar",
+        //   data: {
+        //     labels: xValues,
+        //     datasets: [{
+        //       backgroundColor: barColors,
+        //       data: yValues
+        //     }]
+        //   },
+        //   options: {
+        //     legend: {display: false},
+        //     title: {
+        //       display: true
+        //       //text: "World Wine Production 2018"
+        //     }
+        //   }
+        // });
+
 
 
       }else{
@@ -42,78 +75,62 @@ onActive =(paramIn)=>{
 }
 
 
-showChartDonut=()=>{
+const showChart= async(datefrmIn,datetoIn)=>{
 
-    var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-    var yValues = [55, 49, 44, 24, 15];
-    var barColors = [
-      "#b91d47",
-      "#00aba9",
-      "#2b5797",
-      "#e8c3b9",
-      "#1e7145"
-    ];
-    
-    new Chart("myChart", {
-      type: "doughnut",
-      data: {
-        labels: xValues,
-        datasets: [{
-          backgroundColor: barColors,
-          data: yValues
-        }]
-      },
-      options: {
-        title: {
-          display: true,
-          text: "World Wide Wine Production 2018"
+    // var xValues = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ,
+    //     "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", 
+    //     "21","22", "23", "24", "25", "26", "27", "28", "29", "30"
+
+    // ];
+    // var yValues = [55, 49, 44, 24, 75, 16, 17, 18, 19, 20,
+    //     55, 49, 44, 24, 75, 16, 17, 18, 19, 20,
+    //     55, 49, 44, 24, 75, 16, 17, 18, 19, 20
+
+    // ];
+    // var barColors = ["green", "green","green","green","green","green", "green","green","green","green",
+    //     "green", "green","green","green","green","green", "green","green","green","green",
+    //     "green", "green","green","green","green","green", "green","green","green","green"
+    // ];
+
+    const arr = [];
+    let errmsg = document.getElementById('errMsg')
+    let datefrm_to = datefrmIn+","+datetoIn
+
+    try{
+      //console.log(' Send Date from to XXX :  ',datefrm_to)
+      const response = await axios.post(`http://localhost:5000/api/report/sellreport/${datefrm_to}`)
+      console.log('reports :',response.data)
+      arr.push(response.data)
+
+    }catch(err){
+        let messageErr = ''
+        if(err.response){
+            console.log(err.message)
+            messageErr = err.response.data.err + " " +err.response.data.msg
+            //messageErr = err.message
+            //errmsg.style.color = 'red'
+        }else{
+            messageErr = 'มีข้อผิดพลาด: ' +err.message+ "---> ไม่สามารถเชื่อมต่อ Server ได้...! "
+            console.log(messageErr)
         }
-      }
-    });
-
+        errmsg.innerText = messageErr
+        errmsg.style.color = 'red'
+        
+    }  
+    return arr;
+  
 
 }
 
 
-showChart=()=>{
-
-    var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-    var yValues = [55, 49, 44, 24, 15];
-    var barColors = ["red", "green","blue","orange","brown"];
-    
-    new Chart("myChart", {
-      type: "bar",
-      data: {
-        labels: xValues,
-        datasets: [{
-          backgroundColor: barColors,
-          data: yValues
-        }]
-      },
-      options: {
-        legend: {display: false},
-        title: {
-          display: true,
-          text: "World Wine Production 2018"
-        }
-      }
-    });
-
-}
-
-
- getDate = async() =>{
+getDate = async() =>{
    
-        //let msg = 'บันทึกข้อมูลเรียบร้อย !'
-        let msg = ''
     try{
             const resp = await axios.get(`http://localhost:5000/api/systemdate/getdate`)
-            console.log(resp.data)
+            //console.log(resp.data)
             sysdate = resp.data
-        // console.log('response : ', "  ===>"+response.message )
     }catch(err){
-        console.log(' ERRR ' , err.message)
-
+        console.log(' Err :  ' , err.message)
     }
 
 }
