@@ -30,55 +30,13 @@ onActive =(paramIn)=>{
     convtTodate = convtTodate - 543
     const  dateTo = convtFromdate + "-" + arrStrToDate[1] + "-" + arrStrToDate[0]
 
-
     if(paramIn=='sell'){
 
         document.getElementById('dateinfo').innerText = " วันที่ " +domFromdate + "   -   "+ domTodate  
-        //showChartDonut();
-        const resultArr =  showChart(dateFrm,dateTo);
-          
-        //find Max in array
-        // console.log(Math.max(1, 3, 2));
-        // // Expected output: 3
-        // console.log(Math.max(-1, -3, -2));
-        // // Expected output: -1
-        // const array1 = [1, 3, 2];
-        // console.log(Math.max(...array1));
-        // // Expected output: 3
+        const resultArr  =   showChart(dateFrm,dateTo);
 
-
-        // show chart
-        // var xValues = ["1"
-        // ];
-        // var yValues = ["5500.00"
-        // ];
-        // var barColors = ["green"
-        // ];
-    
-    
-        // new Chart("myChart", {
-        //   type: "bar",
-        //   data: {
-        //     labels: xValues,
-        //     datasets: [{
-        //       backgroundColor: barColors,
-        //       data: yValues
-        //     }]
-        //   },
-        //   options: {
-        //     legend: {display: false},
-        //     title: {
-        //       display: true
-        //       //text: "World Wine Production 2018"
-        //     }
-        //   }
-        // });
-
-
-
-      }else{
+    }else{
         //alert(paramIn)
-
     }
 
 
@@ -87,37 +45,23 @@ onActive =(paramIn)=>{
 
 const showChart= async(datefrmIn,datetoIn)=>{
 
-    // var xValues = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ,
-    //     "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", 
-    //     "21","22", "23", "24", "25", "26", "27", "28", "29", "30"
-
-    // ];
-    // var yValues = [55, 49, 44, 24, 75, 16, 17, 18, 19, 20,
-    //     55, 49, 44, 24, 75, 16, 17, 18, 19, 20,
-    //     55, 49, 44, 24, 75, 16, 17, 18, 19, 20
-
-    // ];
-    // var barColors = ["green", "green","green","green","green","green", "green","green","green","green",
-    //     "green", "green","green","green","green","green", "green","green","green","green",
-    //     "green", "green","green","green","green","green", "green","green","green","green"
-    // ];
-
-    const arr = [];
     let errmsg = document.getElementById('errMsg')
     let datefrm_to = datefrmIn+","+datetoIn
+    const arr = [];
 
     try{
       //console.log(' Send Date from to XXX :  ',datefrm_to)
       const response = await axios.post(`http://localhost:5000/api/report/sellreport/${datefrm_to}`)
       console.log('reports :',response.data)
       arr.push(response.data)
+      await generateReport(arr);
 
     }catch(err){
         let messageErr = ''
         if(err.response){
             console.log(err.message)
             messageErr = err.response.data.err + " " +err.response.data.msg
-            //messageErr = err.message
+            messageErr = err.message
             //errmsg.style.color = 'red'
         }else{
             messageErr = 'มีข้อผิดพลาด: ' +err.message+ "---> ไม่สามารถเชื่อมต่อ Server ได้...! "
@@ -129,18 +73,145 @@ const showChart= async(datefrmIn,datetoIn)=>{
     }  
     return arr;
   
-
 }
-
 
 getDate = async() =>{
    
     try{
-            const resp = await axios.get(`http://localhost:5000/api/systemdate/getdate`)
-            //console.log(resp.data)
-            sysdate = resp.data
+        const resp = await axios.get(`http://localhost:5000/api/systemdate/getdate`)
+        //console.log(resp.data)
+        sysdate = resp.data
     }catch(err){
         console.log(' Err :  ' , err.message)
     }
+
+}
+
+generateReport = async(arrParam)=>{
+    
+    let v_innerHtml="";
+    let domTable = document.getElementById('tableReport')
+
+    let sumTotal =0
+    let cntSell =0
+    let arrday=[]
+    let arrtotal=[]
+    let arrcolor=[]
+
+     for(let row=0;row<3;row++){
+        v_innerHtml += ` <tr>`;
+        switch(row) {
+            case 0:
+                v_innerHtml += `<td class='tdReport' >วันที่</td>`;
+                break;
+            case 1:
+                v_innerHtml += `<td class='tdReport' >จำนวน</td>`;
+                break;
+              case 2:
+                v_innerHtml += `<td class='tdReport' >ขาย</td>`;
+                break;
+        }
+        for(let i=0;i<arrParam[0].length;i++){
+            //console.log( ' COl : xx  ',arrParam[0][i].cntOrder)
+            switch(row) {
+                case 0:
+                    let dateCnvtTh = convertDateTH(arrParam[0][i].Day)
+                    v_innerHtml += `<td>${dateCnvtTh} </td>`;
+                    arrday.push(dateCnvtTh)
+                    break;
+                case 1:
+                    cntSell += parseInt(arrParam[0][i].cntOrder)
+                    v_innerHtml += `<td>${arrParam[0][i].cntOrder} </td>`;
+                    //arrtotal.push(arrParam[0][i].cntOrder)
+                    break;
+                  case 2:
+                    sumTotal += parseFloat(arrParam[0][i].total)
+                    v_innerHtml += `<td>${setAmountFormatTh(arrParam[0][i].total)} </td>`;
+                    arrtotal.push(parseFloat(arrParam[0][i].total))
+                    break;
+              }
+        }
+        v_innerHtml += `  </tr>`;
+    }
+
+    domTable.innerHTML=v_innerHtml
+    document.getElementById('total').innerText =  setAmountFormatTh(sumTotal) 
+    document.getElementById('sumCntsell').innerText =cntSell
+    
+    console.log(arrday)
+    console.log(arrtotal)
+    await generateSellChart(arrday,arrtotal)
+
+
+}
+
+convertDateTH = (dateIn)=>{
+
+    let arrdate = dateIn.split('-')
+    let datecnvt = parseInt(arrdate[0])
+    datecnvt = datecnvt + 543
+    const  dateTh = arrdate[2]+ "/" + arrdate[1] + "/" + datecnvt
+    return   dateTh
+
+}
+
+generateSellChart = (dayin,totalin)=>{
+
+    //console.log(' ArrIN :  ',totalin)
+    let max= Math.max.apply(Array, totalin);
+    console.log(' Max :  ',max)
+    let arrColor=[]
+    let icntColor=1
+    for(let i=0;i<totalin.length;i++){
+        if(max==totalin[i]){
+            arrColor.push("#1e7145")
+        }else{
+            switch (icntColor){
+                case 1:
+                    arrColor.push("#b91d47")
+                    break;
+                case 2:
+                    arrColor.push("#00aba9")
+                    break;
+                break;
+                case 3:
+                    arrColor.push("#2b5797")
+                    break;
+                case 4:
+                    arrColor.push("orange")
+                    break;
+                case 5:
+                    arrColor.push("#e8c3b9")
+                    break;
+            }
+            if(icntColor==5){
+                icntColor = 0
+            }
+            icntColor++;
+        }
+    }
+        
+    let pieChartContent = document.getElementById('pieChartContent');
+    pieChartContent.innerHTML = '&nbsp;';
+    $('#pieChartContent').append('<canvas id="sellChart" ><canvas>');
+    // console.log('day : ',dayin)
+    // console.log('color : ',arrColor)
+    new Chart("sellChart", {
+    type: "bar",
+    data: {
+        labels: dayin,
+        datasets: [{
+            backgroundColor: arrColor,
+            data: totalin
+        }]
+        },
+        options: {
+        legend: {display: false},
+        title: {
+            display: true
+            //text: "World Wine Production 2018"
+            }
+        }
+    });
 
 }

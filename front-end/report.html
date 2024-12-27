@@ -36,6 +36,19 @@
         background-color: #f8f8f2; 
         
     }
+
+    table {
+        border-collapse: collapse;
+      }
+      
+      td{
+        text-align: center;;
+        font-weight: bold;
+        background-color: #ddd;
+        color: rgb(52, 52, 53);
+
+      }
+
  .showDate{
     font-size: 13px;
     color: #5abdce;
@@ -123,6 +136,10 @@
     text-align:center;
  }
 
+ .tdReport{
+  background-color: #4f504f;
+  color: rgb(228, 86, 86);
+ }
 
 </style>
 
@@ -161,13 +178,20 @@
 
               <span style="color:rgb(50, 51, 49);font-size:17px;font-weight: bold;">สรุปยอดขาย</span>
               &nbsp;&nbsp;&nbsp; <span  id="dateinfo" style="color:rgb(51, 49, 49);font-weight:bold"></span>
+              &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold">จำนวนการขาย</span>
+              &nbsp;&nbsp;&nbsp; <span  id="sumCntsell" style="color:#04754c; font-size: large; font-weight:bold"></span>
+              &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold">รวม</span>
+              &nbsp;&nbsp;&nbsp; <span  id="total" style="color:#04754c; font-size: large; font-weight:bold"></span>
               
-              <div style="overflow-x:auto;">
-              <canvas id="myChart" style="width:100%;"></canvas>
+              
+                <div style="overflow-x:auto;">
+                  <table id="tableReport" border="1" >
+                  </table>
+                </div>
+                <div id="pieChartContent" style="overflow-x:auto;">
+                  <canvas id="sellChart" style="width:100%;"></canvas>
 
-              </div>
-
-
+                </div>
 
           </div>
           
@@ -175,10 +199,9 @@
             <h4>สรุปสินค้าขาย</h4>
             <p>สรุปสินค้า.</p> 
           </div>
-          
 
 
-    </div>    
+    </div> <!-- div Child-->   
 <script>
 
     $(function() {
