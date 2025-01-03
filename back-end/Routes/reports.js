@@ -48,7 +48,7 @@ router.post('/report/product/:dateparam', async(req, res) => {
     if(db){
         try{
             const arrDateParam = sell.split(',')
-            console.log('Report sell date from to  : ',arrDateParam[0] + " to " + arrDateParam[1])
+            console.log('Report product date from to  : ',arrDateParam[0] + " to " + arrDateParam[1])
             
             let sqlStr = "SELECT COUNT(a.prodt_id) as cnt ,b.prodt_name ,a.prodt_id "
             sqlStr +=  " FROM tbOrder_details a ,tbProduct b "
@@ -56,11 +56,9 @@ router.post('/report/product/:dateparam', async(req, res) => {
             sqlStr +=  ` and DATE_FORMAT('${arrDateParam[1]}', '%Y-%m-%d') `
             sqlStr +=  " and a.prodt_id = b.prodt_id "
             sqlStr +=  " GROUP by a.prodt_id "
-            sqlStr +=  " ORDER BY b.prodt_name DESC "
+            sqlStr +=  " ORDER BY cnt DESC "
             //console.log(sqlStr)
-           
             const results = await db.query(`${sqlStr}`)
-
             res.setHeader('Content-Type', 'text/plain');
             console.log('file:reports.js[ api:/report/product ] generate reports product ok -->' ,results[0])
             return res.status(200).send(results[0])
@@ -82,14 +80,5 @@ router.post('/report/product/:dateparam', async(req, res) => {
 
 });
 
-
-
 module.exports = router;
 
-
-// SELECT a.prodt_id,a.prodt_qty ,b.prodt_name 
-// FROM tbOrder_details a ,tbProduct b
-// where DATE_FORMAT(a.order_timestamp, '%Y-%m-%d') between DATE_FORMAT('2024-12-25', '%Y-%m-%d')   and DATE_FORMAT('2025-1-2', '%Y-%m-%d')  
-// and a.prodt_id = b.prodt_id
-// GROUP by a.prodt_id,a.prodt_qty
-// order by a.prodt_qty DESC
