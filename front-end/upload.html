@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q POS|นำเข้าข้อมูล</title>
+    <link rel="stylesheet" href="/front-end/css/menu.css">
+    
+    
+    <script src="/front-end/js/jsalert.min.js"></script>
+</head>
+<Style>
+    .child {
+        height: auto;
+        margin: 10px;
+        border: 0px solid;
+        background-color: #f8f8f2; 
+   
+    }
+    .showDate{
+    font-size: 13px;
+    color: #5abdce;
+    font-weight: bold;
+    text-align: left;
+    padding: 17px;
+  
+  }
+
+
+</Style>
+
+<body>
+    <div class="child">
+        <div class="topnav" id="myTopnav">
+            <a href="#home" class="active">Home</a>
+            <a href="/front-end/sell.html">ขาย</a>
+            <a href="/front-end/product.html">สินค้า</a>
+            <a href="/front-end/report.html">รายงาน</a>
+            <a href="#User">ข้อมูลผู้ใช้</a>
+            <a href="/front-end/upload.html">นำเข้าข้อมูล</a>
+            <a href="#Exit" alt="ิกลับไปหน้า Login" ><img src="/front-end/images/exit_2.jpg" alt="ิกลับไปหน้า Login" style="width:40px;height:30px;"></a>
+            <div id="id_date" class="showDate" > 12/12/2054 | Id: 5682   </div>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+              <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <br>
+        
+        <div style="padding: 30px;">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <input type="submit" value="Upload" />
+          </form>
+        </div> 
+    
+    </div> <!-- div Child-->   
+
+</body>
+</html>
