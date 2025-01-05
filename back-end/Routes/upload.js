@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router();
 const mysql = require('mysql2/promise');
 const conn = require('../config/configdb');
+const fs = require('fs')
+
 
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -24,9 +26,9 @@ router.post('/upload',upload.single('loadfile') ,async(req, res) => {
 
     if(db){
         try{
-            console.log('file:upload.js[ api:/upload ] upload ok -->')
+            console.log('file:upload.js[ api:/upload ] upload ok --> ')
             res.status(200).json({
-                message: 'ok Succuess'
+                message:  req.file
             })
 
         }catch(err){
