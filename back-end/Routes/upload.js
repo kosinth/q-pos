@@ -6,12 +6,10 @@ const dt = require('../config/system')
 const multer = require('multer');
 const fs = require('fs')
 const XLSX = require('xlsx');
-const http = require('http');
+//const http = require('http');
 
-
-const { console } = require('inspector');
+//const { console } = require('inspector');
 let filename =''
-
 const storage = multer.diskStorage({
     destination :   function(req,file,cb){
         cb(null,'uploads')
@@ -117,8 +115,6 @@ router.get('/download', async(req, res, next) => {
 
 
 });
-
-
 
 
 module.exports = router;

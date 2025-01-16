@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงทะเบียน</title>
+
+</head>
+<style>
+@font-face {
+        font-family:'kanit';
+        src: url('fonts/kanit/Kanit-Regular.ttf');
+    }       
+    body{
+        font-family: 'kanit';
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+    
+    /* Add padding to containers */
+    .container {
+      padding: 16px;
+      background-color:white
+    }
+    
+    /* Full-width input fields */
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      display: inline-block;
+      border: none;
+      background: #f1f1f1;
+    }
+    
+    input[type=text]:focus, input[type=password]:focus {
+      background-color: #ddd;
+      outline: none;
+    }
+    
+    /* Overwrite default styles of hr */
+    hr {
+      border: 1px solid #f1f1f1;
+      margin-bottom: 25px;
+    }
+    
+    /* Set a style for the submit button */
+    .registerbtn {
+        background-color: #2a803f;
+      color: white;
+      font-size: large;
+      padding: 16px 20px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border-width: 2px;
+      border-color: rgb(238, 203, 48);
+      cursor: pointer;
+      width: 100%;
+      opacity: 0.9;
+    }
+    
+    .registerbtn:hover {
+      opacity: 1;
+      background-color: #04754c;
+
+    }
+    
+    /* Add a blue text color to links */
+    a {
+      color: dodgerblue;
+    }
+    
+    /* Set a grey background color and center the text of the "sign in" section */
+    .signin {
+      background-color: #f1f1f1;
+      text-align: center;
+    }
+    .key_input{
+        font-weight: bold;
+        font-size: 17px;
+        border-radius: 7px;
+    }
+
+    .message{
+            background-color:lightslategray;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .message.success{
+            background-color: rgb(101, 165, 101);
+            display: block;
+        }
+        .message.danger{
+            background-color:  rgb(245, 240, 240);
+            color: rgba(255, 0, 0, 0.911);
+            border-style: groove;
+            display: block;
+            font-weight: bold;
+            border-radius: 10px;
+            border-width: 2px;
+            border-color: rgb(238, 61, 48);
+        }
+        .message.clear{
+            display: none;
+        }
+
+ .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #ec1f4c;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ </style>
+<body>
+  
+    <div class="container">
+        <h1 style="color: rgb(65, 63, 63);">ลงทะเบียน <span style="color:green;"> |</span> <span style="color: red;"> Fast</span>   <span style="color: #25a021;"> - </span> <span style="color: #008cff;">PoS</span>   </h1>
+        <hr color="blue" size="8">
+
+        <label  style="color: rgb(65, 63, 63);" for="shopname"><b>ชื่อร้าน/ห้างร้าน</b></label>
+        <input type="text" id="shopname" name="shopname" class="key_input" placeholder="ชื่อ/ร้าน"  maxlength="50"  required>
+
+        <label  style="color: rgb(65, 63, 63);" for="address"><b>ที่อยู่</b></label>
+        <input type="text" id="address" name="address" class="key_input" placeholder="ที่อยู่" maxlength="100"  required>
+
+        
+        <label  style="color: rgb(65, 63, 63);" for="username"><b>ชื่อเข้าระบบ Login / 6-8 ตัวอักษร</b></label>
+        <input type="text" id="username" name="username" class="key_input" placeholder="ชื่อ login" maxlength="8" required>
+
+        
+        <label style="color: rgb(65, 63, 63);" for="psw"><b>รหัสผ่าน  / 6-8 ตัวอักษร</b></label>
+        <input type="password" id="psw" name="psw" class="key_input" placeholder="รหัสผ่าน"  maxlength="8" required>
+    
+        <label style="color: rgb(65, 63, 63);" for="psw-repeat"><b>ยืนยันรหัสผ่าน</b></label>
+        <input type="password" id="psw-repeat" name="psw-repeat" class="key_input" placeholder="ยืนยันรหัสผ่าน"  maxlength="8" required>
+
+        <label style="color: rgb(65, 63, 63);" for="eขmail"><b>E-mail</b></label>
+        <input type="text" id="email" name="email" class="key_input" placeholder="อีเมล์"  required>
+
+        <label style="color: rgb(65, 63, 63);" for="promtpay"><b>  เลขบัญชี พร้อมเพย์(Prompt-Pay)<span style="color: red;"> * เฉพาะตัวเลข</span> </label>
+        <input type="text" id="promtpay" name="promtpay" class="key_input"   maxlength="15" placeholder="XXXXXXXXXXXXXXX"  onchange='formatNumber(this)' required>
+
+        <!-- Modal -->
+        <div id="myModal" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Some text in the Modal..</p>
+          </div>
+        </div>
+
+        <div id="infor">  </div>     
+        <hr>
+        <!--
+        <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+        -->
+        <button type="submit"  id="btnsubmit" class="registerbtn" onclick="onclicksubmit()">ลงทะเบียน</button>
+      </div>
+      
+      <div class="container signin">
+        
+        <p>Already have an account? <a href="#">Sign in</a>.</p>
+
+        <div>
+           <img src="/front-end/images/Lotus1.png "  style="width: 20px; height: 15px;"> &copy; e-Bua Technologies co.,Ltd.
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      let modal = document.getElementById('myModal');
+      //let btn = document.getElementById('btnsubmit');
+      let span = document.getElementsByClassName('close')[0];
+      // When the user clicks the button, open the modal 
+      // btn.onclick = function() {
+      //   modal.style.display = 'block';
+      // }
+      span.onclick = function() {
+        modal.style.display = 'none';
+      }
+      window.onclick = function(event) {
+        if(event.target == modal){
+          modal.style.display = 'none';
+        }
+      }
+    
+    </script>
+    <script src="/front-end/js/system.js"></script>
+    <script src="/front-end/js/register.js"></script> 
+
+</body>
+</html>
+
+
+
+<!--
+    fpos-frnt
+    fpos-back
+
+
+  app.get("/createDatabase", (req, res) => {
+  
+    let databaseName = "gfg_db";
+  
+    let createQuery = `CREATE DATABASE ${databaseName}`;
+  
+    // use the query to create a Database.
+    database.query(createQuery, (err) => {
+        if(err) throw err;
+  
+        console.log("Database Created Successfully !");
+  
+        let useQuery = `USE ${databaseName}`;
+        database.query(useQuery, (error) => {
+            if(error) throw error;
+              console.log("Using Database");
+              return res.send(`Created and Using ${databaseName} Database`);
+        })
+    });
+});
+
+-->

@@ -1,15 +1,19 @@
 const mysql = require('mysql2/promise');
+require('dotenv').config();;
 
-let connection;
-const connect = async function (dbName) { 
- 
+const connect = async(dbName)=> { 
+    const HOST_NAME = process.env.HOST_NAME
+    const MYSQL_USERNAME = process.env.MYSQL_USERNAME
+    const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD
+    const MYSQL_PORT = process.env.MYSQL_PORT
+    let connection =''
     try {
-        connection = await mysql.createConnection({
-            host : 'localhost',
-            user : 'root',
-            password : 'Kosinth@1001',
+            connection = await mysql.createConnection({
+            host : `${HOST_NAME}`,
+            user : `${MYSQL_USERNAME}`,
+            password : `${MYSQL_PASSWORD}`,
             database : dbName,
-            port:3306,
+            port:`${MYSQL_PORT}`,
             insecureAuth: true,
             multipleStatements: true,
             pool: {
@@ -19,11 +23,11 @@ const connect = async function (dbName) {
                 idle: 10000
             }
         })
-
         // if (connection){
         //     return connection;
         // }
         //connection = await mysql.createConnection(db_config);
+        //console.log('xxx ',connection)
         return connection;
     }catch (error) {
         console.error('Error connecting to Db :', error);

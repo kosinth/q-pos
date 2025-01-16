@@ -31,10 +31,21 @@
     background-color: #04754c;
     color: #f8f543;
     font-weight: bold;
-    height: 30px;
+    height: 40px;
     border-radius: 8px;
     cursor: pointer; 
   }
+
+.button_download {
+
+background-color: #464443;
+color: #4d9af3;
+font-weight: bold;
+height: 40px;
+border-radius: 8px;
+cursor: pointer; 
+}
+
 
 
 
@@ -42,24 +53,26 @@
 
 <body>
     <div class="child">
-        <div class="topnav" id="myTopnav">
-            <a href="#home" class="active">Home</a>
-            <a href="/front-end/sell.html">ขาย</a>
-            <a href="/front-end/product.html">สินค้า</a>
-            <a href="/front-end/report.html">รายงาน</a>
-            <a href="#User">ข้อมูลผู้ใช้</a>
-            <a href="/front-end/upload.html">นำเข้าข้อมูล</a>
-            <a href="#Exit" alt="ิกลับไปหน้า Login" ><img src="/front-end/images/exit_2.jpg" alt="ิกลับไปหน้า Login" style="width:40px;height:30px;"></a>
-            <div id="id_date" class="showDate" > 12/12/2054 | Id: 5682   </div>
-            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-              <i class="fa fa-bars"></i>
-            </a>
-        </div>
-        <br>
+
+      <div class="topnav" id="myTopnav">
+        <a href="#home" class="active"> <img src="/front-end/images/Lotus1.png" alt="ิกลับไปหน้า หลัก"  style="width:45x;height:35px; border-radius: 5px;" > </a>
+        <a href="/front-end/sell.html">ขาย</a>
+        <a href="/front-end/product.html">สินค้า</a>
+        <a href="/front-end/report.html">รายงาน</a>
+        <a href="#User">ข้อมูลผู้ใช้</a>
+        <a href="/front-end/upload.html">นำเข้าข้อมูล</a>
+        <a href="#Exit" alt="ิกลับไปหน้า Login" > <img src="/front-end/images/exit_2.jpg" alt="ิกลับไปหน้า Login" style="width:40px;height:30px; border-radius: 2px;" ></a>
+        <div id="id_date" class="showDate" > 12/12/2054 | Id: 5682   </div>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+          <i class="fa fa-bars"></i>
+        </a>
+    </div>
+
+      <br>
         
         <div style="padding: 30px;">
           
-          <button class="button_upload" onclick="downloadFile()">Download File ตัวอย่าง  </button>
+          <button class="button_download" onclick="downloadFile()">Download File ตัวอย่าง  </button>
           <br>
           <br>
           <input type="file" id="fileInput" accept=".xlsx,.xls,.txt" alt="เลือก File" />

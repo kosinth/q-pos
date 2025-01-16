@@ -137,29 +137,49 @@
  }
 
  .tdReport{
-  background-color: #4f504f;
-  color: rgb(228, 86, 86);
+  background-color: #343534;
+  color: rgb(245, 234, 234);
  }
 
+ .tdReport_date{
+  background-color:#343534;
+  color: rgb(245, 234, 234);
+ }
+
+ .tdReport_amount{
+  background-color:#343534;
+  color: rgb(210, 224, 10);
+ }
+
+ .tdReport_sell{
+  background-color: #343534;
+  color: #00bcd4 
+ }
+
+ .tdReport_selAmount{
+  background-color: #343534;
+  color:rgb(210, 224, 10);
+ }
+ 
 </style>
 
 <body onload="onLoad()">
 
    <div class="child">
-        <div class="topnav" id="myTopnav">
-            <a href="#home" class="active">Home</a>
-            <a href="/front-end/sell.html">ขาย</a>
-            <a href="/front-end/product.html">สินค้า</a>
-            <a href="/front-end/report.html">รายงาน</a>
-            <a href="#User">ข้อมูลผู้ใช้</a>
-            <a href="/front-end/upload.html">นำเข้าข้อมูล</a>
-            <a href="#Exit" alt="ิกลับไปหน้า Login" ><img src="/front-end/images/exit_2.jpg" alt="ิกลับไปหน้า Login" style="width:40px;height:30px;"></a>
-            <div id="id_date" class="showDate" > 12/12/2054 | Id: 5682   </div>
-            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-              <i class="fa fa-bars"></i>
-            </a>
-        </div>
-         
+    <div class="topnav" id="myTopnav">
+      <a href="#home" class="active"> <img src="/front-end/images/Lotus1.png" alt="ิกลับไปหน้า หลัก"  style="width:45x;height:35px; border-radius: 5px;" > </a>
+      <a href="/front-end/sell.html">ขาย</a>
+      <a href="/front-end/product.html">สินค้า</a>
+      <a href="/front-end/report.html">รายงาน</a>
+      <a href="#User">ข้อมูลผู้ใช้</a>
+      <a href="/front-end/upload.html">นำเข้าข้อมูล</a>
+      <a href="#Exit" alt="ิกลับไปหน้า Login" > <img src="/front-end/images/exit_2.jpg" alt="ิกลับไปหน้า Login" style="width:40px;height:30px; border-radius: 2px;" ></a>
+      <div id="id_date" class="showDate" > 12/12/2054 | Id: 5682   </div>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>
+     
 
           <div style="padding-top: 5px; padding-left: 40px;">
                 <br>
@@ -177,12 +197,12 @@
           <div id="sell" class="tabcontent">
 
               <span style="color:rgb(50, 51, 49);font-size:17px;font-weight: bold;">สรุปยอดขาย</span>
-              &nbsp;&nbsp;&nbsp; <span  id="dateinfo" style="color:rgb(51, 49, 49);font-weight:bold"></span>
-              &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold">จำนวนการขาย</span>
-              &nbsp;&nbsp;&nbsp; <span  id="sumCntsell" style="color: #092cc9; font-size: large; font-weight:bold"></span>
-              &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold">รวม</span>
-              &nbsp;&nbsp;&nbsp; <span  id="total" style="color: #092cc9; font-size: large; font-weight:bold"></span>
-              
+              &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold;"> วันที่</span>
+              &nbsp; <span id="dateinfo" style="color:#092cc9;font-weight:bold;"></span>
+              &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold;">จำนวนการขาย</span>
+              &nbsp;&nbsp;&nbsp; <span  id="sumCntsell" style="color: #092cc9; font-size: larger;font-weight:bold;"></span>
+              &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold;">รวม</span>
+              &nbsp;&nbsp;&nbsp; <span  id="total"   style="color: #092cc9; font-size:larger;font-weight:bold;">   </span>
               
                 <div style="overflow-x:auto;">
                   <table id="tableReport" border="1" >
@@ -196,7 +216,12 @@
           <div id="product" class="tabcontent">
 
             <span style="color:rgb(50, 51, 49);font-size:17px;font-weight: bold;">สรุปสินค้าขาย</span>
+
+            &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold;"> วันที่</span>
+            &nbsp;<span id="dateinfoProdt" style="color:#092cc9;font-weight:bold;"></span>
+            <!--
             &nbsp;&nbsp;&nbsp; <span  id="dateinfoProdt" style="color:rgb(51, 49, 49);font-weight:bold"></span>
+            -->
             &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold">จำนวนขาย</span>
             &nbsp;&nbsp;&nbsp; <span  id="sumCntProduct" style="color: #092cc9; font-size: large; font-weight:bold"></span>
             &nbsp;&nbsp;&nbsp; <span  style="color:rgb(51, 49, 49);font-weight:bold">หน่วย</span>

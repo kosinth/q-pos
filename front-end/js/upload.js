@@ -5,7 +5,7 @@ const uploadFile = async () =>{
     const uploadPercentageDisplay = document.getElementById('uploadPercentage')
 
     if (!fileInput.files.length) {
-        return JSAlert.alert('กรุณาเลือก File...!')
+        return JSAlert.alert('กรุณาเลือก File ---> กดปุ่ม Choose File')
     }
 
     const formData = new FormData();

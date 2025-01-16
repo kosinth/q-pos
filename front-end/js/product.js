@@ -269,7 +269,7 @@ const validateData =(prodtData) =>{
 
 }
 
-cleardata =()=>{
+const cleardata =()=>{
 
     let productDom = document.querySelector('input[name=productName]')
     let shortcutDom = document.querySelector('input[name=shortcut]')
@@ -287,7 +287,7 @@ cleardata =()=>{
 
 }
 
- setAmount =(currElement)=>{
+ const setAmount =(currElement)=>{
 
     let alert = document.getElementById('infor')
     alert.innerText = "";
@@ -326,7 +326,7 @@ cleardata =()=>{
 
  }
 
- cleardataProduct = ()=>{
+ const cleardataProduct = ()=>{
    
    let productDom = document.querySelector('input[name=productName]')
    let shortcutDom = document.querySelector('input[name=shortcut]')

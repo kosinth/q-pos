@@ -15,7 +15,7 @@ function openCity(evt, cityName) {
 
 }
 
-onActive =(paramIn)=>{
+const onActive =(paramIn)=>{
 
     let domFromdate = document.querySelector('input[name=fromdate]').value
     let domTodate = document.querySelector('input[name=todate]').value
@@ -34,12 +34,14 @@ onActive =(paramIn)=>{
     //console.log(' XXX ', dateTo)
 
     if(paramIn=='sell'){
-        document.getElementById('dateinfo').innerText = " วันที่ " +domFromdate + "   -   "+ domTodate  
+        document.getElementById('dateinfo').innerText = domFromdate + "   -   "+ domTodate  
+        console.log( domFromdate + "   -   "+ domTodate  )
+        //document.getElementById('dateinfo').innerText = "555"
         showChart(dateFrm,dateTo);
 
     }else{
        //alert(paramIn)
-       document.getElementById('dateinfoProdt').innerText = " วันที่ " +domFromdate + "   -   "+ domTodate  
+       document.getElementById('dateinfoProdt').innerText = domFromdate + "   -   "+ domTodate  
        showChartProduct(dateFrm,dateTo);
     
     }
@@ -47,7 +49,7 @@ onActive =(paramIn)=>{
 }
 
 
-showChart= async(datefrmIn,datetoIn)=>{
+const showChart= async(datefrmIn,datetoIn)=>{
 
     let errmsg = document.getElementById('errMsg')
     errmsg.innerHTML='';
@@ -80,7 +82,7 @@ showChart= async(datefrmIn,datetoIn)=>{
   
 }
 
-getDate = async() =>{
+const getDate = async() =>{
    
     try{
         const resp = await axios.get(`http://localhost:5000/api/systemdate/getdate`)
@@ -92,7 +94,7 @@ getDate = async() =>{
 
 }
 
-generateReport = async(arrParam)=>{
+const generateReport = async(arrParam)=>{
     
     let v_innerHtml="";
     let domTable = document.getElementById('tableReport')
@@ -107,31 +109,42 @@ generateReport = async(arrParam)=>{
         v_innerHtml += ` <tr>`;
         switch(row) {
             case 0:
-                v_innerHtml += `<td class='tdReport' >วันที่</td>`;
+                v_innerHtml += `<td class='tdReport_date' >วันที่</td>`;
                 break;
             case 1:
-                v_innerHtml += `<td class='tdReport' >จำนวน</td>`;
+                v_innerHtml += `<td class='tdReport_amount' >จำนวน</td>`;
                 break;
               case 2:
-                v_innerHtml += `<td class='tdReport' >ขาย</td>`;
+                v_innerHtml += `<td class='tdReport_sell' >ขาย</td>`;
                 break;
         }
+
+        // .tdReport_date{
+        //    }
+          
+        //    .tdReport_amount{
+        //    }
+          
+        //    .tdReport_sell{
+        //    }
+          
+
         for(let i=0;i<arrParam[0].length;i++){
             //console.log( ' COl : xx  ',arrParam[0][i].cntOrder)
             switch(row) {
                 case 0:
                     let dateCnvtTh = convertDateTH(arrParam[0][i].Day)
-                    v_innerHtml += `<td style="background-color:rgb(177, 200, 250););">${dateCnvtTh} </td>`;
+                    v_innerHtml += `<td class='tdReport_date'>${dateCnvtTh} </td>`;
                     arrday.push(dateCnvtTh)
                     break;
                 case 1:
                     cntSell += parseInt(arrParam[0][i].cntOrder)
-                    v_innerHtml += `<td>${arrParam[0][i].cntOrder} </td>`;
+                    v_innerHtml += `<td class='tdReport_amount'>${arrParam[0][i].cntOrder} </td>`;
                     //arrtotal.push(arrParam[0][i].cntOrder)
                     break;
                   case 2:
                     sumTotal += parseFloat(arrParam[0][i].total)
-                    v_innerHtml += `<td style="background-color:rgb(176, 198, 243);">${setAmountFormatTh(arrParam[0][i].total)} </td>`;
+                    v_innerHtml += `<td class='tdReport_sell'>${setAmountFormatTh(arrParam[0][i].total)} </td>`;
                     arrtotal.push(parseFloat(arrParam[0][i].total))
                     break;
               }
@@ -151,7 +164,7 @@ generateReport = async(arrParam)=>{
 }
 
 
-convertDateTH = (dateIn)=>{
+const convertDateTH = (dateIn)=>{
 
     let arrdate = dateIn.split('-')
     let datecnvt = parseInt(arrdate[0])
@@ -161,7 +174,7 @@ convertDateTH = (dateIn)=>{
 
 }
 
-generateSellChart = (dayin,totalin)=>{
+const generateSellChart = (dayin,totalin)=>{
 
     //console.log(' ArrIN :  ',totalin)
     let max= Math.max.apply(Array, totalin);
@@ -222,33 +235,33 @@ generateSellChart = (dayin,totalin)=>{
 
 }
 
-generateProductChart = (arrIn)=>{
+const generateProductChart = (arrIn)=>{
 
     
     let v_innerHtml="";
     let domTable = document.getElementById('tblProductReport')
     let colorMax=[]
 
-     for(let row=0;row<2;row++){
+        for(let row=0;row<2;row++){
         v_innerHtml += ` <tr>`;
         switch(row) {
             case 0:
-                v_innerHtml += `<td class='tdReport' >สินค้า</td>`;
+                v_innerHtml += `<td class='tdReport_date' >สินค้า</td>`;
                 break;
             case 1:
-                v_innerHtml += `<td class='tdReport' >จำนวน</td>`;
+                v_innerHtml += `<td class='tdReport_selAmount' >จำนวน</td>`;
                 break;
         }
         for(let i=0;i<arrIn[0].length;i++){
             //console.log( ' COl : xx  ',arrParam[0][i].cntOrder)
             switch(row) {
                 case 0:
-                    v_innerHtml += `<td style="background-color:rgb(177, 200, 250););">${arrIn[0][i].prodt_name} </td>`;
+                    v_innerHtml += `<td class='tdReport_date'>${arrIn[0][i].prodt_name} </td>`;
                     //arrday.push(dateCnvtTh)
                     break;
                 case 1:
                     //cntSell += parseInt(arrIn[0][i].cntOrder)
-                    v_innerHtml += `<td>${arrIn[0][i].cnt} </td>`;
+                    v_innerHtml += `<td class='tdReport_selAmount' >${arrIn[0][i].cnt} </td>`;
                     colorMax.push(arrIn[0][i].cnt)
                     //arrtotal.push(arrParam[0][i].cntOrder)
                     break;
@@ -328,7 +341,7 @@ generateProductChart = (arrIn)=>{
 
 
 
- showChartProduct= async(datefrmIn,datetoIn)=>{
+ const showChartProduct= async(datefrmIn,datetoIn)=>{
 
     let errmsg = document.getElementById('errMsg')
     errmsg.innerHTML = '';
